@@ -19,25 +19,31 @@ import {
   RoomDetails,
 } from '../styles/CheckoutScreen.style';
 import { FiCheckCircle, FiMail, FiPhone, FiPlus, FiUser } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HotelRules } from '../utils/Data';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleRoom } from '../redux/room/singleRoomSlice';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
-import { makeReservation, reset } from '../redux/room/roomReservationSlice';
+import {
+  makeReservation,
+  reset,
+  startPayment,
+} from '../redux/room/roomReservationSlice';
 import { processPayment } from '../redux/room/roomPaymentSlice';
 import useFetch from '../hooks/useFetch';
 
 const { TextArea } = Input;
 
 const CheckoutScreen = () => {
-  // const userInfo = useSelector((state) => state.userInfo);
-  const { success } = useSelector((state) => state.payment);
+  const {
+    success,
+    message: isMessage,
+    error,
+  } = useSelector((state) => state.payment);
   const { room } = useSelector((state) => state.roomInfo);
-  const { isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.reservation
-  );
+  const { isLoading, isError, isCompleted, isSuccess, message, record } =
+    useSelector((state) => state.reservation);
   let search = JSON.parse(localStorage.getItem('search'));
 
   const checkIn = search
@@ -50,7 +56,7 @@ const CheckoutScreen = () => {
   const kids = search ? search.kids : 0;
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [specialRequest, setSpecialRequest] = useState('');
   const [terms, setTerms] = useState(false);
   const [guestMember, setGuestMember] = useState([
@@ -108,7 +114,7 @@ const CheckoutScreen = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
-    guestMember.map((guest, key) => {
+    guestMember.map((guest) => {
       if (
         !guest.first_name ||
         !guest.last_name ||
@@ -124,16 +130,55 @@ const CheckoutScreen = () => {
     } else {
       const userData = {
         guestMember,
-        special_request: specialRequest,
+        type: 'reserve',
         roomInfo: {
           roomid: id,
           checkin: checkIn,
           checkout: checkOut,
           totalDays: duration,
           totalAmount: totalPrice,
+          special_request: specialRequest,
+          adults: adult,
+          kids: kids,
         },
       };
       dispatch(makeReservation(userData));
+      dispatch(reset());
+    }
+  };
+  //  Submit form
+  const HandlePayment = async (e) => {
+    e.preventDefault();
+    let valid = true;
+    guestMember.map((guest) => {
+      if (
+        !guest.first_name ||
+        !guest.last_name ||
+        !guest.phone ||
+        !guest.email
+      ) {
+        valid = false;
+      }
+      return valid;
+    });
+    if (!valid || !terms) {
+      console.log('Error');
+    } else {
+      const userData = {
+        guestMember,
+        type: 'pay',
+        roomInfo: {
+          roomid: id,
+          checkin: checkIn,
+          checkout: checkOut,
+          totalDays: duration,
+          totalAmount: totalPrice,
+          special_request: specialRequest,
+          adults: adult,
+          kids: kids,
+        },
+      };
+      dispatch(startPayment(userData));
       dispatch(reset());
     }
   };
@@ -143,34 +188,40 @@ const CheckoutScreen = () => {
     window.scrollTo(0, 0);
   }, [dispatch, id]);
 
-  // const initializePayment = usePaystackPayment(config);
+  const initializePayment = usePaystackPayment(config);
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     initializePayment(
-  //       (reference) => {
-  //         const response = reference;
-  //         const data = {
-  //           roomid: id,
-  //           referenceNo: response.reference,
-  //           status: response.status,
-  //           transactionId: response.transaction,
-  //         };
-  //         dispatch(processPayment(data));
-  //       },
-  //       () => console.log('closed')
-  //     );
-  //   }
-  //   dispatch(reset());
-  // }, [dispatch, isSuccess, initializePayment, id]);
+  useEffect(() => {
+    if (isCompleted) {
+      initializePayment(
+        (reference) => {
+          const response = reference;
+          const data = {
+            roomid: record.reservationId,
+            referenceNo: response.reference,
+            status: response.status,
+            transactionId: response.transaction,
+          };
+          dispatch(processPayment(data));
+        },
+        () => console.log('closed')
+      );
+    }
+    dispatch(reset());
+  }, [dispatch, isCompleted, initializePayment, id, record]);
 
   const { data } = useFetch(`/category/${room?.data?.category}`);
-
+  if (isSuccess || success) {
+    navigate(`/room/${id}`);
+  }
   return (
     <>
       {isError && <Notification message={message} type="error" />}
-      {success && (
+      {error && <Notification message={isMessage} type="error" />}
+      {isSuccess && (
         <Notification message="Room reservation successfull." type="success" />
+      )}
+      {success && (
+        <Notification message="Payment successfull." type="success" />
       )}
       <Section>
         <CheckOutWrapper>
@@ -359,7 +410,7 @@ const CheckoutScreen = () => {
                             hoverBg="var(--blue)"
                             hoverColor="#fff"
                             disabled={isLoading}
-                            onClick={HandleSubmit}
+                            onClick={HandlePayment}
                           />
                           <Button
                             label="Pay at the hotel."
@@ -464,7 +515,7 @@ const CheckoutScreen = () => {
                       hoverBg="var(--blue)"
                       hoverColor="#fff"
                       disabled={isLoading}
-                      onClick={HandleSubmit}
+                      onClick={HandlePayment}
                     />
                     <Button
                       bg="var(--blue)"

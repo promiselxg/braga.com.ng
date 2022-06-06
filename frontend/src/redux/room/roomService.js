@@ -47,13 +47,12 @@ const filterRoom = async (data) => {
 const roomReservation = async (data) => {
   const { roomid } = data.roomInfo;
   const response = await axios.post(`/reservation/${roomid}`, data, config);
-  console.log(response.data);
   return response.data;
 };
 const payment = async (data) => {
   const { roomid } = data;
   const response = await axios.put(
-    `${API_URL}/${roomid}/payment`,
+    `/reservation/${roomid}/payment`,
     data,
     config
   );

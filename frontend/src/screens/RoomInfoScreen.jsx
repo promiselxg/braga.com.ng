@@ -44,7 +44,7 @@ const RoomInfoScreen = () => {
     window.scrollTo(0, 0);
   }, [dispatch, id, pathname]);
   const { data } = useFetch(`/category/${room?.data?.category}`);
-  console.log(data);
+
   return (
     <>
       <Section>
