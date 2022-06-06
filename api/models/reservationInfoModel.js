@@ -22,9 +22,19 @@ const reservationInfoSchema = mongoose.Schema(
     checkOut: {
       type: String,
     },
-    paymentStatus: {
-      type: Boolean,
-      default: false,
+    reservationNumber: {
+      type: String,
+      require: true,
+    },
+    status: {
+      type: String,
+      default: 'Reserved',
+    },
+    referenceNo: {
+      type: String,
+    },
+    transactionId: {
+      type: String,
     },
   },
   { timestamps: true }
