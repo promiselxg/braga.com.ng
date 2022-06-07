@@ -36,12 +36,12 @@ const queryFilter = (model, populate) => async (req, res, next) => {
     const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
   } else {
-    query = query.sort({ _id: -1, vote: 1 });
+    query = query.sort({ _id: -1 });
   }
 
   //  Pagination ?page=1&limit=2
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 20;
+  const limit = parseInt(req.query.limit, 10) || 10;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const total = await model.countDocuments();
@@ -51,7 +51,6 @@ const queryFilter = (model, populate) => async (req, res, next) => {
   if (populate) {
     query = query.populate({
       path: `${populate}`,
-      select: 'username _id',
     });
   }
   // executing query

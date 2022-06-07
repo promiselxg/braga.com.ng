@@ -7,7 +7,9 @@ const moment = require('moment');
 const { sendEmail } = require('../utils/sendgrid');
 const Room = require('../models/roomModel');
 
+//   Make reservation
 const roomReservation = asyncHandler(async (req, res) => {
+  let rids = [];
   const { guestMember, roomInfo, type } = req.body;
   const { roomid: id } = req.params;
   const { roomid, checkin, checkout, totalDays, totalAmount, adults, kids } =
@@ -52,18 +54,23 @@ const roomReservation = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Maximum number of occupants exceeded.');
     }
-
     try {
       await guestMember.forEach((guest) =>
-        Reservation.create({
-          first_name: guest.first_name,
-          last_name: guest.last_name,
-          phone: guest.phone,
-          email: guest.email,
-          special_request: roomInfo.special_request,
-          roomid: roomInfo.roomid,
-        })
+        Reservation.create(
+          {
+            first_name: guest.first_name,
+            last_name: guest.last_name,
+            phone: guest.phone,
+            email: guest.email,
+            special_request: roomInfo.special_request,
+            roomid: roomInfo.roomid,
+          },
+          function (error, doc) {
+            rids.push(doc._id);
+          }
+        )
       );
+
       try {
         const reserve = await ReservationInfo.create({
           roomid: roomInfo.roomid,
@@ -73,6 +80,7 @@ const roomReservation = asyncHandler(async (req, res) => {
           checkOut: roomInfo.checkout,
           reservationNumber: reservation_id,
         });
+
         if (reserve) {
           if (type === 'reserve') {
             sendEmail({
@@ -97,11 +105,26 @@ const roomReservation = asyncHandler(async (req, res) => {
               },
             });
           }
-          return res.status(200).json({
-            status: 'success',
-            message: 'Room reservation successfull.',
-            reservationId: reserve._id,
-          });
+          //  update reservationsInfo to include reservation IDs
+          try {
+            await ReservationInfo.findByIdAndUpdate(
+              reserve._id,
+              {
+                $set: {
+                  reservationId: rids,
+                },
+              },
+              { new: true }
+            );
+            return res.status(200).json({
+              status: 'success',
+              message: 'Room reservation successfull.',
+              reservationId: reserve._id,
+            });
+          } catch (error) {
+            res.status(400);
+            throw new Error(error);
+          }
         }
       } catch (error) {
         res.status(400);
@@ -116,6 +139,7 @@ const roomReservation = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+//  Make room Payment
 const completePayment = asyncHandler(async (req, res) => {
   const { roomid } = req.body;
   try {
@@ -148,7 +172,28 @@ const completePayment = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+//  Get all Reservations
+const getAllReservations = asyncHandler(async (req, res) => {
+  res.status(200).json(res.queryResults);
+});
+//  Get all Reservations
+const getAllBookings = asyncHandler(async (req, res) => {
+  res.status(200).json(res.queryResults);
+});
+//  Get reserved room info.
+const getReservedRoomInfo = asyncHandler(async (req, res) => {
+  const { roomid } = req.params;
+  const response = await Reservation.findById(roomid).populate('_id');
+
+  res.status(200).json({
+    status: 'success',
+    response,
+  });
+});
 module.exports = {
   roomReservation,
   completePayment,
+  getAllReservations,
+  getAllBookings,
+  getReservedRoomInfo,
 };

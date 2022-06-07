@@ -7,6 +7,10 @@ const reservationSchema = mongoose.Schema(
       required: true,
       ref: 'Room',
     },
+    reservationid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ReservationInfo',
+    },
     first_name: {
       type: String,
       required: true,

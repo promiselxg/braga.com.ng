@@ -28,13 +28,14 @@ const reservationInfoSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      default: 'Reserved',
     },
     referenceNo: {
       type: String,
     },
-    transactionId: {
-      type: String,
+    reservationId: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: true,
+      ref: 'Reservation',
     },
   },
   { timestamps: true }
