@@ -246,6 +246,11 @@ const generateCookieResponse = (statusCode, res, userId, userRole) => {
     ),
     httpOnly: true,
   };
+
+  if (process.env.NODE_ENV === 'production') {
+    options.secure = true;
+  }
+
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
     token,
@@ -255,7 +260,7 @@ const generateCookieResponse = (statusCode, res, userId, userRole) => {
 //  Generate JWT
 const generateToken = (id, role) => {
   return JWT.sign({ id, role }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: '5d',
   });
 };
 

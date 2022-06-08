@@ -3,6 +3,7 @@ const { cloudinary, removeUploadedImage } = require('../utils/cloudinary');
 const fs = require('fs');
 const Room = require('../models/roomModel');
 const Category = require('../models/categoryModel');
+const Review = require('../models/reviewsModel');
 //  Create new Room
 const createRoom = asyncHandler(async (req, res) => {
   const files = req.files;
@@ -274,7 +275,13 @@ const deleteRoom = asyncHandler(async (req, res) => {
 const getSingleRoom = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
   try {
-    const room = await Room.findById(roomid);
+    const room = await Room.findById(roomid).populate({
+      path: 'category',
+      select: 'id name',
+    });
+    const reviews = await Review.find({ room: roomid })
+      .sort({ _id: -1 })
+      .select('-updatedAt');
     if (!room) {
       res.status(400);
       throw new Error('No record was found with this room ID.');
@@ -282,6 +289,7 @@ const getSingleRoom = asyncHandler(async (req, res) => {
     return res.status(200).json({
       status: 'success',
       data: room,
+      reviews,
     });
   } catch (error) {
     res.status(400);

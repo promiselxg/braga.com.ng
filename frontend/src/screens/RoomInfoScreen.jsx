@@ -20,7 +20,6 @@ import { FiCheck, FiCheckCircle, FiCheckSquare, FiHeart } from 'react-icons/fi';
 import { getSingleRoom } from '../redux/room/singleRoomSlice';
 import { RoomHeader } from '../components/Room/Room.style';
 import PageNotFound from './404';
-import useFetch from '../hooks/useFetch';
 
 const RoomInfoScreen = () => {
   const dispatch = useDispatch();
@@ -43,7 +42,6 @@ const RoomInfoScreen = () => {
     dispatch(getSingleRoom(id));
     window.scrollTo(0, 0);
   }, [dispatch, id, pathname]);
-  const { data } = useFetch(`/category/${room?.data?.category}`);
 
   return (
     <>
@@ -63,8 +61,8 @@ const RoomInfoScreen = () => {
                   </Breadcrumb.Item>
                   <Breadcrumb.Item className="seperator">
                     <Links
-                      to={`/rooms/${room?.data?.category}`}
-                      label={data?.data?.name}
+                      to={`/rooms/${room?.data?.category?._id}`}
+                      label={room?.data?.category?.name}
                     />
                   </Breadcrumb.Item>
                   <Breadcrumb.Item className="seperator">
@@ -166,7 +164,7 @@ const RoomInfoScreen = () => {
                         fontSize=".8rem"
                         style={{ textTransform: 'capitalize' }}
                       >
-                        {room?.data?.category} room
+                        {room?.data?.category?.name} room
                       </Typography>
                       <div className="room__feature">
                         <div className="item">

@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v2/rooms', require('./api/routes/roomRoutes'));
+app.use('/api/v2/reviews', require('./api/routes/reviewRoutes'));
 app.use('/api/v2/reservation', require('./api/routes/reservationRoutes'));
 app.use('/api/v2/category', require('./api/routes/categoryRoutes'));
 app.use('/api/v2/auth', require('./api/routes/authRoutes'));

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const reservationInfoSchema = mongoose.Schema(
   {
     roomid: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       required: true,
       ref: 'Room',
     },
@@ -33,7 +33,7 @@ const reservationInfoSchema = mongoose.Schema(
       type: String,
     },
     reservationId: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: [mongoose.Schema.ObjectId],
       required: true,
       ref: 'Reservation',
     },
