@@ -1,8 +1,8 @@
 import { Breadcrumb, Rate, Skeleton } from 'antd';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Button, Filter, Image, Section, SideBar } from '../components';
 import { Links } from '../components/NavAnchor';
@@ -15,8 +15,8 @@ import {
 } from '../components/Room/Room.style';
 import { Typography } from '../GlobalStyle';
 import useFetch from '../hooks/useFetch';
-import { getRoomByCategory } from '../redux/room/roomCategorySlice';
-import { setSuccess } from '../redux/room/roomSlice';
+// import { getRoomByCategory } from '../redux/room/roomCategorySlice';
+// import { setSuccess } from '../redux/room/roomSlice';
 import {
   RoomCard,
   RoomCardBody,
@@ -26,16 +26,16 @@ import {
 import { FilterBox } from '../styles/Filter.style';
 
 const CategoryScreen = () => {
-  const { isLoading, rooms } = useSelector((state) => state.roomCategory);
-  const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getRoomByCategory(params.category));
-    dispatch(setSuccess());
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }, [dispatch, params.category]);
-  const { data } = useFetch(`/category/${params.category}`);
+  const { loading, data } = useFetch(`/category/${params.category}`);
   return (
     <>
       <Section>
@@ -55,7 +55,7 @@ const CategoryScreen = () => {
                 />
               </Breadcrumb.Item>
               <Breadcrumb.Item className="seperator">
-                <i>{rooms.categoryName} room listing</i>
+                <i>{data.name} room listing</i>
               </Breadcrumb.Item>
             </Breadcrumb>
           </RoomHeader>
@@ -77,17 +77,17 @@ const CategoryScreen = () => {
                     fontWeight="600"
                     style={{ textTransform: 'capitalize' }}
                   >
-                    {rooms.categoryName} Rooms Category Listing (
-                    {rooms.data ? rooms.data.length : 0})
+                    {data?.data?.name} Rooms Category Listing (
+                    {data ? data?.rooms?.length : 0})
                   </Typography>
                 </div>
-                {isLoading ? (
+                {loading ? (
                   <Skeleton />
                 ) : (
                   <>
                     <RoomCardWrapper>
-                      {rooms?.data?.map((room) => (
-                        <Link to={`/room/${room._id}`} key={room._id}>
+                      {data?.rooms?.map((room) => (
+                        <Link to={`/rooms/${room._id}/book`} key={room._id}>
                           <RoomCard>
                             <div className="container">
                               <RoomCardImg>
@@ -103,6 +103,7 @@ const CategoryScreen = () => {
                                     fontSize="0.75rem"
                                     lineHeight="0.9rem"
                                     color="rgba(0,0,0,0.7)"
+                                    style={{ textTransform: 'capitalize' }}
                                   >
                                     {room.title}
                                   </Typography>
@@ -154,9 +155,6 @@ const CategoryScreen = () => {
                                     label="Book now"
                                     hoverBg="var(--yellow)"
                                     hoverColor="#000"
-                                    onClick={() =>
-                                      navigate(`/rooms/${room._id}/book`)
-                                    }
                                   />
                                 </div>
                               </RoomCardBody>

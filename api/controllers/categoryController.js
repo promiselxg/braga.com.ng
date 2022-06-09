@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Category = require('../models/categoryModel');
+const Room = require('../models/roomModel');
 //  get All Category
 const getAllCategory = asyncHandler(async (req, res) => {
   res.status(200).json(res.queryResults);
@@ -116,9 +117,15 @@ const singleCategory = asyncHandler(async (req, res) => {
       });
     }
     const response = await Category.findOne({ _id: id });
+    const rooms = await Promise.all(
+      response.rooms.map((room) => {
+        return Room.findById(room);
+      })
+    );
     return res.status(200).json({
       status: 'success',
       data: response,
+      rooms,
     });
   } catch (error) {
     res.status(400);

@@ -98,7 +98,6 @@ const CardInfo = styled.div`
 `;
 const RoomsSection = () => {
   const { data, loading } = useFetch(`/rooms`);
-  console.log(data);
   return (
     <>
       <Container maxWidth="1000px">
