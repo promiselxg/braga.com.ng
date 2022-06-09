@@ -30,24 +30,64 @@ const addReview = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
 //  Add Review
 const deleteReview = asyncHandler(async (req, res) => {
-  res.status(200).json({ status: 'success', message: 'delete Review' });
+  const { id, roomid } = req.params;
+  if (!id || !roomid) {
+    res.status(404);
+    throw new Error(`Reqested resource was not found.`);
+  }
+  //  check if roomid exist and review id exist
+  if (!(await Room.findById(roomid)) || !(await Review.findById(id))) {
+    res.status(404);
+    throw new Error('Invalid request, please try again later.');
+  }
+  try {
+    await Review.findByIdAndDelete(id);
+    return res.status(200).json({
+      status: 'success',
+      message: 'Review has been deleted.',
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 //  Add Review
 const approveReview = asyncHandler(async (req, res) => {
-  res.status(200).json({ status: 'success', message: 'approve new Review' });
+  const { id, roomid } = req.params;
+  if (!id || !roomid) {
+    res.status(404);
+    throw new Error(`Reqested resource was not found.`);
+  }
+  //  check if roomid exist and review id exist
+  if (!(await Room.findById(roomid)) || !(await Review.findById(id))) {
+    res.status(404);
+    throw new Error('Invalid request, please try again later.');
+  }
+  try {
+    const updateReviews = await Review.findByIdAndUpdate(
+      id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      status: 'success',
+      data: updateReviews,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
 });
 //  Add Review
 const getAllReviews = asyncHandler(async (req, res) => {
   try {
-    const reviews = await Review.find({ status: true })
-      .sort({ _id: -1 })
-      .populate({
-        path: 'room',
-        select: '_id title',
-      });
+    const reviews = await Review.find().sort({ _id: -1 }).populate({
+      path: 'room',
+      select: '_id title',
+    });
     return res.status(200).json({
       status: 'success',
       data: reviews,

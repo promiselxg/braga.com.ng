@@ -1,5 +1,6 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 const cors = require('cors');
 const colors = require('colors');
 const { errorHandler } = require('./api/middleware/errorMiddleware');
@@ -16,7 +17,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+//  Routes
 app.use('/api/v2/rooms', require('./api/routes/roomRoutes'));
 app.use('/api/v2/reviews', require('./api/routes/reviewRoutes'));
 app.use('/api/v2/reservation', require('./api/routes/reservationRoutes'));

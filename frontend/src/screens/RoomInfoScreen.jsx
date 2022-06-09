@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb, Image, Rate, Skeleton } from 'antd';
@@ -16,10 +16,11 @@ import {
   RoomProperties,
   SinglRoomWrapper,
 } from '../styles/SingleRoomScreen.style';
-import { FiCheck, FiCheckCircle, FiCheckSquare, FiHeart } from 'react-icons/fi';
+import { FiCheck, FiCheckCircle, FiCheckSquare } from 'react-icons/fi';
 import { getSingleRoom } from '../redux/room/singleRoomSlice';
 import { RoomHeader } from '../components/Room/Room.style';
 import PageNotFound from './404';
+import NumberFormat from 'react-number-format';
 
 const RoomInfoScreen = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,11 @@ const RoomInfoScreen = () => {
 
   useEffect(() => {
     dispatch(getSingleRoom(id));
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }, [dispatch, id, pathname]);
 
   return (
@@ -91,8 +96,10 @@ const RoomInfoScreen = () => {
                       <Rate disabled defaultValue={2} />
                     </div>
                     <div className="reserve">
-                      <FiHeart className="icon" />
-                      <Button label="Reserve" bg="var(--blue)" />
+                      {/* <FiHeart className="icon" /> */}
+                      <Link to={`/rooms/${room?.data?._id}/book`}>
+                        <Button label="Reserve" bg="var(--blue)" />
+                      </Link>
                     </div>
                   </RoomHeading>
                   {isLoading ? (
@@ -217,7 +224,14 @@ const RoomInfoScreen = () => {
                       <Typography as="h2" fontSize="1rem" fontWeight="600">
                         Price
                       </Typography>
-                      <div className="room__feature"></div>
+                      <div className="room__feature">
+                        &#8358;
+                        <NumberFormat
+                          displayType={'text'}
+                          value={room?.data?.price}
+                          thousandSeparator={true}
+                        />
+                      </div>
                     </div>
                   </RoomInfoBody>
                 </div>

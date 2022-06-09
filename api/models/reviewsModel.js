@@ -37,6 +37,6 @@ const reviewsSchema = mongoose.Schema(
 );
 
 //  Prevent user from submitting one review per Room
-//reviewsSchema.index({ room: 1, user: 1 }, { unique: true });
+reviewsSchema.index({ room: 1, user: 1 }, { unique: true });
 
 module.exports = mongoose.model('reviews', reviewsSchema);

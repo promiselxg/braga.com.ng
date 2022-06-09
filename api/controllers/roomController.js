@@ -279,7 +279,7 @@ const getSingleRoom = asyncHandler(async (req, res) => {
       path: 'category',
       select: 'id name',
     });
-    const reviews = await Review.find({ room: roomid })
+    const reviews = await Review.find({ room: roomid, status: true })
       .sort({ _id: -1 })
       .select('-updatedAt');
     if (!room) {
@@ -311,7 +311,6 @@ const getAllRooms = asyncHandler(async (req, res) => {
   //   throw new Error(error);
   // }
 });
-
 //  Get Rooms by Category
 const getRoomsByCategory = asyncHandler(async (req, res) => {
   const { catid } = req.params;

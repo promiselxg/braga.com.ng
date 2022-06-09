@@ -27,7 +27,7 @@ router
   .get(
     verifyToken,
     verifyUserRoles(ROLES.admin),
-    queryFilter(ReservationInfoModel),
+    queryFilter(ReservationInfoModel, 'roomid'),
     getAllBookings
   );
 router

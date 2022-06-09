@@ -7,15 +7,16 @@ const {
 } = require('../controllers/reviewsController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
+const { verifyUserRoles } = require('../middleware/roleMiddleware');
 const Reviews = require('../models/reviewsModel');
+const ROLES = require('../utils/roles');
 const router = express.Router();
 
-router.route('/').get(getAllReviews);
+router.route('/').get(queryFilter(Reviews), getAllReviews);
 
+router.route('/:roomid').post(verifyToken, addReview);
 router
-  .route('/:roomid')
-  .delete(deleteReview)
-  .put(approveReview)
-  .post(verifyToken, addReview);
-
+  .route('/:roomid/:id')
+  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteReview)
+  .put(verifyToken, verifyUserRoles(ROLES.admin), approveReview);
 module.exports = router;

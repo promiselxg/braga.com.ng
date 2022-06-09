@@ -183,8 +183,7 @@ const getAllBookings = asyncHandler(async (req, res) => {
 //  Get reserved room info.
 const getReservedRoomInfo = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
-  const response = await Reservation.findById(roomid).populate('_id');
-
+  const response = await Reservation.findById(roomid).populate('roomid');
   res.status(200).json({
     status: 'success',
     response,

@@ -31,7 +31,6 @@ import {
   startPayment,
 } from '../redux/room/roomReservationSlice';
 import { processPayment } from '../redux/room/roomPaymentSlice';
-import useFetch from '../hooks/useFetch';
 
 const { TextArea } = Input;
 
@@ -209,7 +208,6 @@ const CheckoutScreen = () => {
     dispatch(reset());
   }, [dispatch, isCompleted, initializePayment, id, record]);
 
-  const { data } = useFetch(`/category/${room?.data?.category}`);
   if (isSuccess || success) {
     navigate(`/room/${id}`);
   }
@@ -235,8 +233,8 @@ const CheckoutScreen = () => {
               </Breadcrumb.Item>
               <Breadcrumb.Item className="seperator">
                 <Links
-                  to={`/rooms/${room?.data?.category}`}
-                  label={data?.data?.name}
+                  to={`/rooms/${room?.data?.category?.name}`}
+                  label={room?.data?.category?.name}
                 />
               </Breadcrumb.Item>
               <Breadcrumb.Item className="seperator">
