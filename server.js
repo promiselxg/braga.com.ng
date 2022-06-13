@@ -1,9 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const RoomRoutes = require('./routes/roomRoutes');
 dotenv.config();
-//const cors = require('cors');
+const cors = require('cors');
 const colors = require('colors');
-// const { errorHandler } = require('./middleware/errorMiddleware');
+const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 
 // DB connection
@@ -17,21 +18,21 @@ const PORT = process.env.PORT || 8080;
 //     ? [process.env.REMOTE_CLIENT_APP, process.env.REMOTE_SERVER_API]
 //     : [process.env.LOCAL_CLIENT_APP, process.env.LOCAL_SERVER_API];
 // //middlewares
-// app.use(cors());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 // //  Routes
-// app.use('/api/v2/rooms', require('./routes/roomRoutes'));
+app.use('/api/v2/rooms', RoomRoutes);
 // app.use('/api/v2/reviews', require('./routes/reviewRoutes'));
 // app.use('/api/v2/reservation', require('./routes/reservationRoutes'));
 // app.use('/api/v2/category', require('./routes/categoryRoutes'));
 // app.use('/api/v2/auth', require('./routes/authRoutes'));
 // //  404 route
-// app.use('*', (req, res) =>
-//   res.status(404).json({ message: 'The requested route does not exist' })
-// );
+app.use('*', (req, res) =>
+  res.status(404).json({ message: 'The requested route does not exist' })
+);
 // //  Error Handler
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.send('working...');
