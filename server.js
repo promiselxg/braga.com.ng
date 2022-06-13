@@ -29,7 +29,7 @@ app.use('/api/v2/rooms', RoomRoutes);
 app.use('/api/v2/reviews', ReviewsRoutes);
 //app.use('/api/v2/reservation', ReservationRoutes);
 app.use('/api/v2/category', CategoryRoutes);
-// app.use('/api/v2/auth', require('./routes/authRoutes'));
+app.use('/api/v2/auth', require('./routes/authRoutes'));
 // //  404 route
 app.use('*', (req, res) =>
   res.status(404).json({ message: 'The requested route does not exist' })
