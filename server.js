@@ -17,7 +17,7 @@ const allowedDomains =
     ? [process.env.REMOTE_CLIENT_APP, process.env.REMOTE_SERVER_API]
     : [process.env.LOCAL_CLIENT_APP, process.env.LOCAL_SERVER_API];
 //middlewares
-app.use(cors({ origin: allowedDomains, credentials: true }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //  Routes
