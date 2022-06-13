@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const RoomRoutes = require('./routes/roomRoutes');
 const ReviewsRoutes = require('./routes/reviewRoutes');
-const ReservationRoutes = require('./routes/reservationRoutes');
+//const ReservationRoutes = require('./routes/reservationRoutes');
+const CategoryRoutes = require('./routes/categoryRoutes');
 dotenv.config();
 const cors = require('cors');
 const colors = require('colors');
@@ -26,8 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 // //  Routes
 app.use('/api/v2/rooms', RoomRoutes);
 app.use('/api/v2/reviews', ReviewsRoutes);
-app.use('/api/v2/reservation', ReservationRoutes);
-// app.use('/api/v2/category', require('./routes/categoryRoutes'));
+//app.use('/api/v2/reservation', ReservationRoutes);
+app.use('/api/v2/category', CategoryRoutes);
 // app.use('/api/v2/auth', require('./routes/authRoutes'));
 // //  404 route
 app.use('*', (req, res) =>
