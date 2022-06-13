@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 //const fs = require('fs');
 const Reservation = require('../models/reservationModel');
-const ReservationInfo = require('../models/ReservationInfoModel');
+const ReservationInfo = require('../models/reservationInfoModel');
 const sgMail = require('@sendgrid/mail');
 //const moment = require('moment');
 const { sendEmail } = require('../utils/sendgrid');

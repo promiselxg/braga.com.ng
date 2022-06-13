@@ -9,7 +9,7 @@ const {
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
 const { verifyUserRoles } = require('../middleware/roleMiddleware');
-const ReservationInfoModel = require('../models/ReservationInfoModel');
+const ReservationInfoModel = require('../models/reservationInfoModel');
 const reservationModel = require('../models/reservationModel');
 const ROLES = require('../utils/roles');
 const router = express.Router();
