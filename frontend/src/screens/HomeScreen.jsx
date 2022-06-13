@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getRooms, reset } from '../redux/room/roomSlice';
-
+import { useLocation } from 'react-router';
 import {
   Category,
   FeaturedRooms,
@@ -12,11 +10,14 @@ import {
 } from '../components';
 
 const HomeScreen = () => {
-  const dispatch = useDispatch();
+  const location = useLocation();
   useEffect(() => {
-    dispatch(reset());
-    dispatch(getRooms('all'));
-  }, [dispatch]);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, [location.path]);
   return (
     <>
       <HeroSection />

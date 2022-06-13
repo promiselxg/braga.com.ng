@@ -15,6 +15,16 @@ export const CheckOutContainer = styled.div`
     font-size: 0.89rem;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 3px;
+
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
+      justify-content: left;
+      padding: 10px;
+
+      button {
+        margin: 10px 0;
+      }
+    }
   }
 `;
 export const CheckoutUserInfo = styled.div`
@@ -22,6 +32,10 @@ export const CheckoutUserInfo = styled.div`
   display: flex;
   gap: 2px;
   margin-top: 5px;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+  }
 `;
 export const Left = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -35,6 +49,11 @@ export const Left = styled.div`
     margin-bottom: 20px;
     padding: 20px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    @media screen and (max-width: 760px) {
+      width: 100%;
+      font-size: 0.9rem;
+      justify-content: space-between;
+    }
   }
   .formFields {
     width: 100%;
@@ -57,6 +76,9 @@ export const Left = styled.div`
       width: 50%;
       gap: 5px;
       margin: 10px 0;
+      @media screen and (max-width: 760px) {
+        width: 100%;
+      }
     }
     .wrapper {
       span,
@@ -91,6 +113,9 @@ export const Left = styled.div`
     .btn {
       margin: 20px 0;
     }
+  }
+  @media screen and (max-width: 760px) {
+    flex: 1;
   }
 `;
 export const Right = styled.div`

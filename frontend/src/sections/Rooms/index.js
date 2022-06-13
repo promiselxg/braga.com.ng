@@ -18,6 +18,9 @@ const Wrapper = styled.div`
 
   h2 {
     margin-bottom: 3px;
+    @media screen and (min-width: 320px) and (max-width: 768px) {
+      font-size: 1.4rem;
+    }
   }
 `;
 const SectionWrapper = styled.div`
@@ -56,6 +59,8 @@ const SectionContainer = styled.div`
   gap: 10px;
   @media screen and (min-width: 320px) and (max-width: 768px) {
     position: relative;
+
+    gap: 0px;
   }
 `;
 const RoomCard = styled.div`
@@ -67,9 +72,10 @@ const RoomCard = styled.div`
 
   @media screen and (min-width: 320px) and (max-width: 768px) {
     margin-bottom: 20px;
+    width: 100%;
   }
   @media screen and (min-width: 376px) and (max-width: 480px) {
-    width: 350px;
+    width: 100%;
   }
 `;
 const CardHeading = styled.div`
@@ -97,7 +103,7 @@ const CardInfo = styled.div`
   }
 `;
 const RoomsSection = () => {
-  const { data, loading } = useFetch(`/rooms`);
+  const { data, loading } = useFetch(`/rooms?limit=4`);
   return (
     <>
       <Container maxWidth="1000px">

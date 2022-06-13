@@ -6,6 +6,9 @@ export const FilterBox = styled.div`
   margin-top: 40px;
   border-radius: 5px 5px 0 0;
   width: 100%;
+  @media screen and (max-width: 760px) {
+    display: none;
+  }
 `;
 
 export const FilterWrapper = styled.div`

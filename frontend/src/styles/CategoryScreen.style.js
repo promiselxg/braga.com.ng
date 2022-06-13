@@ -6,6 +6,11 @@ export const RoomCardWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    gap: 0px;
+  }
 `;
 export const RoomCard = styled.div`
   flex: 0 0 31%;
@@ -21,6 +26,10 @@ export const RoomCard = styled.div`
   .container {
     display: flex;
     flex-direction: column;
+  }
+  @media screen and (max-width: 760px) {
+    flex: 1;
+    width: 100%;
   }
 `;
 export const RoomCardImg = styled.div`

@@ -14,9 +14,23 @@ export const SinglRoomWrapper = styled.div`
       background: var(--yellow);
       height: 360px;
       border-radius: 5px;
+
+      @media screen and (max-width: 760px) {
+        flex: 1;
+        width: 95%;
+        margin: 0px auto;
+      }
     }
     .center {
       flex: 0.75;
+      @media screen and (max-width: 760px) {
+        flex: 1;
+        width: 95%;
+        margin: 0 auto;
+      }
+    }
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
     }
   }
 `;
@@ -29,7 +43,9 @@ export const RoomProperties = styled.div`
     display: flex;
     width: 100%;
     align-items: center;
-
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
+    }
     a {
       background-color: var(--light-blue);
       padding: 10px;
@@ -39,8 +55,15 @@ export const RoomProperties = styled.div`
       font-size: 14px;
       color: var(--blue);
       font-weight: 600;
+      transition: all 0.3s ease-out;
       &:last-child {
         margin-right: 0px;
+      }
+      @media screen and (max-width: 760px) {
+        :hover {
+          background: var(--blue);
+          color: #fff;
+        }
       }
     }
   }
@@ -94,13 +117,23 @@ export const ImageWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  @media screen and (max-width: 760px) {
+    height: max-content;
+  }
 `;
 
 export const RoomImageWrapper = styled.div`
   width: 100%;
   height: 400px;
   overflow: hidden;
+  @media screen and (max-width: 760px) {
+    height: max-content;
 
+    img {
+      height: 300px !important;
+    }
+  }
   .container {
     display: flex;
     width: 100%;
@@ -149,15 +182,23 @@ export const RoomInfoBody = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
   .card {
     flex: 0 0 25%;
     width: 100%;
     padding: 20px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
-
+    @media screen and (max-width: 760px) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
     &:last-child {
       border-right: none;
+      @media screen and (max-width: 760px) {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
     }
     .room__feature {
       padding: 4px 0;
@@ -173,6 +214,14 @@ export const RoomInfoBody = styled.div`
         margin: 3px 0;
         svg {
           margin-right: 5px;
+        }
+        @media screen and (max-width: 760px) {
+          line-height: 1.4rem;
+          color: rgba(0, 0, 0, 0.8);
+
+          svg {
+            display: none;
+          }
         }
       }
 

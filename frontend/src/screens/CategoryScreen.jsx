@@ -1,7 +1,6 @@
 import { Breadcrumb, Rate, Skeleton } from 'antd';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Button, Filter, Image, Section, SideBar } from '../components';
@@ -27,15 +26,15 @@ import { FilterBox } from '../styles/Filter.style';
 
 const CategoryScreen = () => {
   const params = useParams();
-  const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: 'smooth',
     });
-  }, [dispatch, params.category]);
+  }, [params.category]);
   const { loading, data } = useFetch(`/category/${params.category}`);
+
   return (
     <>
       <Section>
@@ -51,7 +50,7 @@ const CategoryScreen = () => {
               <Breadcrumb.Item className="seperator">
                 <Links
                   to={`/rooms/${params.category}`}
-                  label={data?.data?.name}
+                  label={data?.data?.type}
                 />
               </Breadcrumb.Item>
               <Breadcrumb.Item className="seperator">

@@ -247,7 +247,7 @@ const CheckoutScreen = () => {
               Not ready to submit Your reservation?
               <Button
                 label="Save for later"
-                color="#000"
+                color="#fff"
                 bg="var(--blue)"
                 hoverBg="var(--yellow)"
                 hoverColor="#000"

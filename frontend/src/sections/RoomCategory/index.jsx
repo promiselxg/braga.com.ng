@@ -78,6 +78,10 @@ const Card = styled.div`
       text-transform: capitalize;
     }
   }
+  @media screen and (max-width: 320px) {
+    width: 100%;
+    margin: 0 auto;
+  }
   @media screen and (min-width: 376px) and (max-width: 480px) {
     margin: 0 auto;
     width: 350px;

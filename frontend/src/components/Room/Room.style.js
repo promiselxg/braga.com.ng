@@ -31,6 +31,9 @@ export const RoomHeader = styled.div`
     color: var(--blue) !important;
     font-size: 12px;
   }
+  @media screen and (max-width: 760px) {
+    margin: 10px 10px;
+  }
 `;
 export const RoomContent = styled.div`
   width: 100%;
@@ -38,9 +41,12 @@ export const RoomContent = styled.div`
   .container {
     display: flex;
     width: 100%;
+
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
+    }
   }
 `;
-
 export const LeftWrapper = styled.aside`
   flex: 0.3;
   width: 100%;
@@ -56,8 +62,11 @@ export const LeftWrapper = styled.aside`
     margin-top: 0px;
     border: none;
   }
+  @media screen and (max-width: 760px) {
+    width: 95%;
+    margin: 0 auto;
+  }
 `;
-
 export const SearchBox = styled.div`
   width: 100%;
   display: flex;
@@ -120,7 +129,10 @@ export const RightWrapper = styled.div`
   width: 100%;
   flex: 1;
   margin-left: 20px;
-
+  @media screen and (max-width: 760px) {
+    margin: 0 auto;
+    width: 90%;
+  }
   .room {
     width: 100%;
     padding: 10px;
@@ -134,9 +146,16 @@ export const RightWrapper = styled.div`
       box-shadow: 0 2px 8px rgba(0 113 194 / 15%);
       cursor: pointer;
     }
+    @media screen and (max-width: 760px) {
+      height: max-content;
+    }
   }
   .heading {
     padding: 15px 0 0 0;
+
+    @media screen and (max-width: 760px) {
+      padding: 20px 0;
+    }
   }
   .sort {
     width: 100%;
@@ -160,6 +179,9 @@ export const RightWrapper = styled.div`
         }
       }
     }
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -179,6 +201,10 @@ export const RoomWrapper = styled.div`
         width: 100%;
         height: 100%;
         object-fit: cover;
+
+        @media screen and (max-width: 760px) {
+          height: 300px;
+        }
       }
     }
     .room__center {
@@ -188,6 +214,11 @@ export const RoomWrapper = styled.div`
         a {
           margin-left: -8px;
         }
+      }
+      @media screen and (max-width: 760px) {
+        flex: 1;
+
+        margin: 10px 0;
       }
       .room__features {
         display: flex;
@@ -213,6 +244,9 @@ export const RoomWrapper = styled.div`
         display: flex;
         align-items: center;
         margin-bottom: 8px;
+        @media screen and (max-width: 760px) {
+          justify-content: space-between;
+        }
         .rating {
           display: flex;
           align-items: center;
@@ -226,6 +260,15 @@ export const RoomWrapper = styled.div`
           margin-left: 10px;
           display: flex;
           color: #fff;
+        }
+      }
+      @media screen and (max-width: 760px) {
+        flex: 1;
+
+        margin: 10px 0;
+
+        button {
+          width: 100%;
         }
       }
     }

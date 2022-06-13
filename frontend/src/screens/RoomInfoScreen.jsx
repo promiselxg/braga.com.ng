@@ -67,7 +67,7 @@ const RoomInfoScreen = () => {
                   <Breadcrumb.Item className="seperator">
                     <Links
                       to={`/rooms/${room?.data?.category?._id}`}
-                      label={room?.data?.category?.name}
+                      label={room?.data?.category?.type}
                     />
                   </Breadcrumb.Item>
                   <Breadcrumb.Item className="seperator">
