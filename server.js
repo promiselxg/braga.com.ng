@@ -35,6 +35,6 @@ app.use('*', (req, res) =>
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
-  res.send('working...');
+  res.send('room routes...');
 });
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
