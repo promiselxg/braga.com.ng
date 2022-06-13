@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/rooms';
+const API_URL = 'https://api.braga.com.ng/api/v2/rooms';
 const config = {
   'Content-Type': 'appilcation/json',
   'Access-Control-Allow-Origin': '*',
@@ -46,13 +46,17 @@ const filterRoom = async (data) => {
 
 const roomReservation = async (data) => {
   const { roomid } = data.roomInfo;
-  const response = await axios.post(`/reservation/${roomid}`, data, config);
+  const response = await axios.post(
+    `https://api.braga.com.ng/api/v2/reservation/${roomid}`,
+    data,
+    config
+  );
   return response.data;
 };
 const payment = async (data) => {
   const { roomid } = data;
   const response = await axios.put(
-    `/reservation/${roomid}/payment`,
+    `https://api.braga.com.ng/api/v2/reservation/${roomid}/payment`,
     data,
     config
   );
