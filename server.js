@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const RoomRoutes = require('./routes/roomRoutes');
+const ReviewsRoutes = require('./routes/reviewRoutes');
 dotenv.config();
 const cors = require('cors');
 const colors = require('colors');
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // //  Routes
 app.use('/api/v2/rooms', RoomRoutes);
-// app.use('/api/v2/reviews', require('./routes/reviewRoutes'));
+app.use('/api/v2/reviews', ReviewsRoutes);
 // app.use('/api/v2/reservation', require('./routes/reservationRoutes'));
 // app.use('/api/v2/category', require('./routes/categoryRoutes'));
 // app.use('/api/v2/auth', require('./routes/authRoutes'));
