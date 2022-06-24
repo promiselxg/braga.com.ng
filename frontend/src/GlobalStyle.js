@@ -25,6 +25,17 @@ body {
   transition: all 0.5s ease;
   
 }
+.title_{
+  text-align:center;
+  align-items:center ;
+  justify-content:center ;
+  width:100%;
+  display:flex ;
+  margin-bottom:20px ;
+}
+.ant-image{
+  width:100% !important;
+}
 h2{
   font-family:'Kinn' ;
 }

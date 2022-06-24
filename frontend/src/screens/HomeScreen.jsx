@@ -7,7 +7,9 @@ import {
   Search,
   Services,
   About,
+  Slider,
 } from '../components';
+import { Typography } from '../GlobalStyle';
 
 const HomeScreen = () => {
   const location = useLocation();
@@ -26,6 +28,10 @@ const HomeScreen = () => {
       <Category />
       <FeaturedRooms />
       <Services />
+      <Typography as="h2" fontSize="2rem" fontWeight="800" className="title_">
+        Our Gallery
+      </Typography>
+      <Slider />
     </>
   );
 };
