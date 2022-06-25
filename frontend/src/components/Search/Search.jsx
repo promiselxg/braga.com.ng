@@ -34,7 +34,7 @@ const Search = () => {
 
   const checkRoomAvailability = () => {
     if (!checkin || !checkout || !adult) {
-      alert('Error');
+      console.log('error');
     } else {
       const data = {
         checkIn: checkin,

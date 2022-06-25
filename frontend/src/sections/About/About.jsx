@@ -5,16 +5,20 @@ import { Typography } from '../../GlobalStyle';
 
 const AboutSectionWrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 80px);
   margin-top: 40px;
   h1 {
     text-align: center;
     margin-bottom: 30px;
+    @media screen and (min-width: 320px) and (max-width: 768px) {
+      font-size: 1.6rem;
+    }
   }
   .container {
     width: 100%;
     display: flex;
     height: 400px;
+
     .image__wrapper {
       flex: 0.6;
       width: 100%;
@@ -47,6 +51,22 @@ const AboutSectionWrapper = styled.div`
         color: var(--yellow);
       }
     }
+    @media screen and (min-width: 320px) and (max-width: 768px) {
+      height: 100%;
+      flex-direction: column;
+      .image__wrapper {
+        flex: 1;
+      }
+      .about__wrapper {
+        flex: 1;
+        transform: translateX(0px);
+      }
+    }
+  }
+  @media screen and (min-width: 320px) and (max-width: 768px) {
+    height: 100%;
+    width: 95%;
+    margin: 0 auto;
   }
 `;
 const AboutSection = () => {

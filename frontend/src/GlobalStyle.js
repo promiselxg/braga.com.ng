@@ -36,6 +36,9 @@ body {
 .ant-image{
   width:100% !important;
 }
+.ant-drawer-content-wrapper{
+  width:calc(100% - 50px) !important
+}
 h2{
   font-family:'Kinn' ;
 }

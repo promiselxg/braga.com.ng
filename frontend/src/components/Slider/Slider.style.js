@@ -11,7 +11,7 @@ export const SliderWrapper = styled.div`
   }
   img {
     height: 250px !important;
-    width: 100% !important;
+    width: 100%;
     object-fit: cover;
   }
 `;

@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb, Image, Rate, Skeleton } from 'antd';
 import { Button, Section, SideBar, Image as Img } from '../components';
-import { Links } from '../components/NavAnchor';
+import { Links, LinkScroll } from '../components/NavAnchor';
 import { Typography } from '../GlobalStyle';
+
 import {
   ImageWrapper,
   RoomHeading,
@@ -82,10 +83,37 @@ const RoomInfoScreen = () => {
                 <div className="center">
                   <RoomProperties>
                     <div className="room__properties">
-                      <Links to="/" label="Info &amp; price" />
-                      <Links to="/" label="Room facilities" />
-                      <Links to="/" label="Lodging rules" />
-                      <Links to="/" label="Guest reviews (50,000)" />
+                      <LinkScroll
+                        to="info"
+                        label="Info &amp; price"
+                        spy={true}
+                        smooth={true}
+                        offset={50}
+                        duration={500}
+                      />
+                      <LinkScroll
+                        to="room_facility"
+                        label="Room facilities"
+                        spy={true}
+                        smooth={true}
+                        duration={500}
+                      />
+                      <LinkScroll
+                        to="lodgin_rules"
+                        label="Lodging rules"
+                        spy={true}
+                        smooth={true}
+                        offset={50}
+                        duration={500}
+                      />
+                      <LinkScroll
+                        to="reiews"
+                        label="Guest reviews (50,000)"
+                        spy={true}
+                        smooth={true}
+                        offset={50}
+                        duration={500}
+                      />
                     </div>
                   </RoomProperties>
                   <RoomHeading>
@@ -154,7 +182,7 @@ const RoomInfoScreen = () => {
                   )}
                 </div>
               </div>
-              <RoomInfo>
+              <RoomInfo id="info">
                 <div className="room__info__container">
                   <RoomInfoHeader>
                     <Typography as="h2" fontSize="1.5rem" fontWeight="600">
@@ -236,7 +264,7 @@ const RoomInfoScreen = () => {
                   </RoomInfoBody>
                 </div>
               </RoomInfo>
-              <RoomInfo>
+              <RoomInfo id="room_facility">
                 <div className="room__info__container">
                   <RoomInfoHeader>
                     <Typography as="h2" fontSize="1.5rem" fontWeight="600">
@@ -261,7 +289,7 @@ const RoomInfoScreen = () => {
                   </RoomInfoBody>
                 </div>
               </RoomInfo>
-              <RoomInfo>
+              <RoomInfo id="lodgin_rules">
                 <div className="room__info__container">
                   <RoomInfoHeader>
                     <Typography as="h2" fontSize="1.5rem" fontWeight="600">

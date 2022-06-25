@@ -22,6 +22,12 @@ const CategoryWrapper = styled.div`
     h2 {
       margin-bottom: 2px;
     }
+    p,
+    h2 {
+      @media screen and (min-width: 320px) and (max-width: 768px) {
+        text-align: center;
+      }
+    }
   }
   .card {
     display: flex;
