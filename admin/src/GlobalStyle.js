@@ -46,13 +46,40 @@ const GlobalStyle = createGlobalStyle`
   width:300px;
   padding:10px 20px;
 }
+.ant-menu-inline{
+  border-right:none !important
+}
+.ant-menu{
+  width:100% !important;
+  color: #ccc;
+  background:transparent !important;
+}
+.ant-menu-submenu{
+  margin:10px 0
+}
+.ant-menu-sub.ant-menu-inline {
+  background:rgba(0, 0, 0, .5) !important
+}
+.ant-menu-sub.ant-menu-inline>.ant-menu-item{
+  color:rgba(255,255,255,0.5) !important
+}
+.ant-menu-sub.ant-menu-inline>.ant-menu-item:hover{
+  color: #6e82a5 !important;
+}
+.ant-menu-submenu-arrow{
+  color:var(--light-blue) !important;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: transparent !important;
+}
 body {
   
   font-family: 'Nunito', sans-serif;
   font-size:16px;
   overflow-x:hidden ;
-  background:#f5f6fa ;
-  color:#364a63;
+  transition: all 0.5s;
+    background-color: #f0f3fb;
+    font-size: 14px;
   /* transition: all 0.5s ease; */
 }
 a{
@@ -100,7 +127,7 @@ export const TableHeader = styled.div`
     align-items: center;
 
     .search__wrapper {
-      flex: 0.6;
+      flex: 1;
       width: 100%;
       display: flex;
       padding: 10px;

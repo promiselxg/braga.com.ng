@@ -21,7 +21,7 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-export const Form = styled.form`
+export const Form = styled.div`
   padding: 2rem 1rem;
   .gutter-row {
     padding: 0px 10px !important;

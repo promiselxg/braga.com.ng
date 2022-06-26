@@ -13,6 +13,7 @@ const StyledButton = styled.button`
   display: ${(props) => (props.display ? props.display : 'flex')};
   font-size: ${(props) => (props.fontSize ? props.fontSize : '0.9rem')};
   line-height: ${(props) => (props.lineHeight ? props.lineHeight : '')};
+  box-shadow: ${(props) => (props.boxShadow ? props.boxShadow : '')};
   align-items: ${(props) =>
     props.alignItems ? props.alignItems : 'flex-start'};
   justify-content: ${(props) =>

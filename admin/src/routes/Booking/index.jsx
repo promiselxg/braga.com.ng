@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd';
 import React from 'react';
-import { FiDownloadCloud, FiPlus } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import { Button } from '../../component';
 import RecentBooking from '../../component/Table/RecentBooking';
 import {
@@ -23,18 +23,12 @@ const Bookings = () => {
                   <p>You have total 2,959 booking's.</p>
                 </div>
                 <div className="right">
-                  <Button
-                    icon={<FiDownloadCloud className="icon" />}
-                    label="Export"
-                    bg="#fff"
-                    border="1px solid rgba(0,0,0,0.1)"
-                    padding="10px 20px"
-                  />
                   <Tooltip title="Add New Booking">
                     <Button
                       icon={<FiPlus />}
                       bg="#fff"
                       border="1px solid rgba(0,0,0,0.1)"
+                      boxShadow="5px 7px 26px -5px #cdd4e7"
                     />
                   </Tooltip>
                 </div>

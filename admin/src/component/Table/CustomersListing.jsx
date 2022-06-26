@@ -5,6 +5,8 @@ import { FiMail, FiMoreHorizontal, FiSearch, FiTrash2 } from 'react-icons/fi';
 import styled from 'styled-components';
 import { TableHeader } from '../../GlobalStyle';
 const RoomListingWrapper = styled.div`
+  border: 1px solid #deebfd;
+  box-shadow: -8px 12px 18px 0 #dadee8;
   .action__btn {
     cursor: pointer;
     font-size: 1.4rem;

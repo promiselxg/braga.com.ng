@@ -1,6 +1,6 @@
 import { Avatar } from 'antd';
 import React from 'react';
-import { FiBell, FiMail, FiMenu, FiSearch, FiUser } from 'react-icons/fi';
+import { FiMenu, FiSearch, FiUser } from 'react-icons/fi';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { Sidebar } from './index';
@@ -23,23 +23,15 @@ const LayoutWrapper = styled.section`
     overflow: hidden;
 
     ul {
-      li:nth-child(1) {
-        padding: 0.4rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-      }
       li {
         padding: 5px 0;
         width: 100%;
-        display: flex;
         align-items: center;
       }
       a {
         padding: 0.625rem 40px 0.625rem 24px;
         color: #6e82a5;
-        font-family: Nunito, sans-serif;
+        font-family: 'Nunito', sans-serif;
         font-weight: 700;
         font-size: 15px;
         letter-spacing: 0.01em;
@@ -48,7 +40,7 @@ const LayoutWrapper = styled.section`
         cursor: pointer;
         width: max-content;
         width: 100%;
-        display: flex;
+
         align-items: center;
         gap: 20px;
 
@@ -85,7 +77,8 @@ const LayoutWrapper = styled.section`
     z-index: 888;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid #dee4ec;
+    box-shadow: 5px 7px 26px -5px #cdd4e7;
     background: #fff;
     height: 60px;
     padding: 0 2rem;
@@ -121,12 +114,6 @@ const Layout = () => {
               <div className="topbar__rightnav">
                 <div className="topbar__rightnav__item">
                   <FiSearch className="menu__icon" />
-                </div>
-                <div className="topbar__rightnav__item">
-                  <FiMail className="menu__icon" />
-                </div>
-                <div className="topbar__rightnav__item">
-                  <FiBell className="menu__icon" />
                 </div>
                 <div className="topbar__rightnav__item">
                   <Avatar icon={<FiUser />} className="menu__icon" />

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Content,
   DashboardTableStats,
   DashboardWrapper,
 } from '../../Dashboard/Dashboard.styled';
 import { ContentWrapper, Form } from '../../Booking/Booking.styled';
-import { Col, Row, Select } from 'antd';
+import { Col, Row, Select, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { Button } from '../../../component';
 const { Option } = Select;
 const handleChange = (value) => {
@@ -13,6 +14,31 @@ const handleChange = (value) => {
 };
 
 const AddRoom = () => {
+  const [fileList, setfileList] = useState([]);
+
+  const handleUpload = () => {
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('files[]', file);
+      console.log(file);
+    });
+  };
+
+  const props = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setfileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setfileList([...fileList, file]);
+      return false;
+    },
+    fileList,
+  };
+
+  console.log(fileList);
   return (
     <>
       <DashboardWrapper>
@@ -197,11 +223,49 @@ const AddRoom = () => {
                       ></textarea>
                     </Col>
                   </Row>
+                  <Row
+                    gutter={{
+                      xs: 8,
+                      sm: 16,
+                      md: 24,
+                      lg: 32,
+                    }}
+                  >
+                    <Col span={24}>
+                      {/* <Upload
+                        action=""
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleImageChange}
+                      >
+                        {fileList.length >= 10 ? null : uploadButton}
+                      </Upload>
+                      <Modal
+                        visible={previewVisible}
+                        title={previewTitle}
+                        footer={null}
+                        onCancel={handleCancel}
+                      >
+                        <img
+                          alt="example"
+                          style={{
+                            width: '100%',
+                          }}
+                          src={previewImage}
+                        />
+                      </Modal> */}
+                      <Upload {...props} listType="picture-card">
+                        <Button icon={<UploadOutlined />}>Select File</Button>
+                      </Upload>
+                    </Col>
+                  </Row>
                   <Row>
                     <Button
                       label="Add Room"
                       bg="var(--blue)"
                       color="var(--white)"
+                      onClick={handleUpload}
                     />
                   </Row>
                 </Form>

@@ -12,7 +12,7 @@ export const DashboardWrapper = styled.div`
       align-items: center;
 
       h2 {
-        font-family: Nunito, sans-serif;
+        font-family: 'Nunito', sans-serif;
         font-size: 1.5rem;
         font-weight: 700;
       }
@@ -38,31 +38,62 @@ export const DashboardCards = styled.div`
     .cards {
       position: relative;
       background: var(--white);
-      padding: 2rem 1.2rem;
-      border-radius: 3px;
-      border: 1px solid rgba(0, 0, 0, 0.125);
-
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-radius: 10px;
+      position: relative;
+      margin-bottom: 30px;
+      border: 1px solid #deebfd;
+      box-shadow: -8px 12px 18px 0 #dadee8;
       .card__info {
         display: flex;
         flex-direction: column;
         text-align: right;
-
-        span:nth-child(1) {
-          font-size: 1.4rem;
-          font-weight: 800;
-          font-family: Nunito, sans-serif;
-        }
+        margin-right: 20px;
         span:nth-child(2) {
-          font-size: 0.7rem;
+          font-size: 1.2rem;
+          font-weight: 800;
+        }
+        span:nth-child(1) {
+          font-size: 1rem;
           color: rgba(0, 0, 0, 0.7);
+          font-weight: 800;
+          font-family: 'Nunito', sans-serif;
         }
       }
-      .card__icons {
-        font-size: 2.4rem !important;
+      .card__icon {
         color: rgba(0, 0, 0, 0.35);
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        margin: 25px;
+        box-shadow: 5px 3px 10px 0 rgb(21 15 15 / 30%);
+        border-radius: 10px;
+
+        .card__icons {
+          font-size: 25px !important;
+          font-weight: 800 !important;
+        }
+        &.bg-orange {
+          background-color: #fd7e14 !important;
+          color: #fff;
+        }
+        &.bg-green {
+          background-color: #198754 !important;
+          color: #fff;
+        }
+        &.bg-cyan {
+          background-color: #0dcaf0 !important;
+          color: #fff;
+        }
+        &.bg-purple {
+          background-color: #6f42c1 !important;
+          color: #fff;
+        }
       }
     }
   }
@@ -110,7 +141,8 @@ export const TableWrapper = styled.div`
   width: 100%;
 
   padding: 2rem;
-
+  border: 1px solid #deebfd;
+  box-shadow: -8px 12px 18px 0 #dadee8;
   h1 {
     margin-bottom: 20px;
   }
