@@ -75,4 +75,9 @@ export const Form = styled.div`
   .ant-picker {
     width: 100%;
   }
+  select {
+    width: 100%;
+    padding: 0.4375rem 1rem;
+    cursor: pointer;
+  }
 `;

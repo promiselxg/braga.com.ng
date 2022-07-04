@@ -134,6 +134,62 @@ export const DashboardTableStats = styled.div`
         border-top: 1px solid #f0f0f0;
       }
     }
+    .file {
+      display: none;
+    }
+    .upload__group {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      .image__preview {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 10px;
+
+        .image__box {
+          margin-right: 8px;
+          border: 1px solid #ccc;
+          padding: 2px;
+          width: 80px;
+          height: 80px;
+          border-radius: 5px;
+          margin-bottom: 10px;
+
+          .ant-image {
+            height: 74px !important;
+            width: 100% !important;
+            overflow: hidden !important ;
+            img {
+              width: 100% !important;
+              height: 100% !important;
+              border-radius: 5px;
+              object-fit: cover !important;
+            }
+          }
+        }
+      }
+    }
+    .label-holder {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .upload {
+      border: 1px dashed #ccc;
+      border-radius: 10px;
+      transition: all 0.3s;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      :hover {
+        border-color: var(--blue);
+      }
+    }
   }
 `;
 

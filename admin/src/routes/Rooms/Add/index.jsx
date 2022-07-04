@@ -4,41 +4,131 @@ import {
   DashboardTableStats,
   DashboardWrapper,
 } from '../../Dashboard/Dashboard.styled';
+import { LoadingOutlined } from '@ant-design/icons';
 import { ContentWrapper, Form } from '../../Booking/Booking.styled';
-import { Col, Row, Select, Upload } from 'antd';
+import { Col, Row, Image, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { Button } from '../../../component';
-const { Option } = Select;
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
+import { Button, Spinner } from '../../../component';
+import useFetch from '../../../hooks/useFetch';
+import axios from 'axios';
 
 const AddRoom = () => {
-  const [fileList, setfileList] = useState([]);
-
-  const handleUpload = () => {
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file);
-      console.log(file);
-    });
+  const [selectedImages, setselectedImages] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [inputForm, setInputForm] = useState({
+    title: '',
+    price: '',
+    roomNumbers: '',
+    category: '',
+    bed_size: '',
+    ac: '',
+    adults: '',
+    kids: '',
+    cancellation: '',
+    children: '',
+    room_features: '',
+    description: '',
+  });
+  const config = {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+    },
+  };
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 24,
+      }}
+      spin
+    />
+  );
+  const handleChange = (e) => {
+    setInputForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const imageHandleChange = (e) => {
+    setselectedImages([]);
+    if (e.target.files) {
+      setFiles(e.target.files);
+      const fileArray = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setselectedImages((prevImages) => prevImages.concat(fileArray));
+      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
+    }
+  };
+  const renderImages = (source) => {
+    return source.map((image, i) => (
+      <div className="image__box" key={i}>
+        <Image src={image} alt={`images ${i}`} />
+      </div>
+    ));
   };
 
-  const props = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setfileList(newFileList);
-    },
-    beforeUpload: (file) => {
-      setfileList([...fileList, file]);
-      return false;
-    },
-    fileList,
-  };
+  const {
+    title,
+    price,
+    roomNumbers,
+    category,
+    bed_size,
+    ac,
+    adults,
+    kids,
+    cancellation,
+    children,
+    room_features,
+    description,
+  } = inputForm;
 
-  console.log(fileList);
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    try {
+      setUploading(true);
+      const list = await Promise.all(
+        Object.values(files).map(async (file) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'braga_rooms');
+          formData.append('timestamp', timestamp);
+          formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+          const uploadRes = await axios.post(
+            `https://api.cloudinary.com/v1_1/promiselxg/image/upload`,
+            formData
+          );
+
+          const { data } = uploadRes;
+          return data;
+        })
+      );
+
+      const newRoom = {
+        ...inputForm,
+        photos: list,
+      };
+
+      try {
+        const response = await axios.post('/api/v2/rooms/new', newRoom, config);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+        message.success(response.data.message);
+        setselectedImages([]);
+      } catch (error) {
+        message.error(error.response.data.message);
+      }
+      setUploading(false);
+    } catch (error) {
+      message.error(error.response.data.message);
+    }
+  };
+  const { loading, data: response } = useFetch('/category?select=type');
+
   return (
     <>
       <DashboardWrapper>
@@ -69,6 +159,8 @@ const AddRoom = () => {
                         type="text"
                         placeholder="Room Title"
                         name="title"
+                        value={title}
+                        onChange={handleChange}
                         className="form__control"
                       />
                     </Col>
@@ -78,6 +170,8 @@ const AddRoom = () => {
                         type="text"
                         placeholder="Price per Night."
                         name="price"
+                        value={price}
+                        onChange={handleChange}
                         className="form__control"
                       />
                     </Col>
@@ -94,36 +188,61 @@ const AddRoom = () => {
                     <Col className="form__group" span={6}>
                       <div className="label">Room No.</div>
                       <input
-                        type="text"
+                        type="number"
                         placeholder="Room No."
-                        name="room_no"
+                        name="roomNumbers"
+                        value={roomNumbers}
                         className="form__control"
+                        onChange={handleChange}
                       />
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">Room Type</div>
-                      <Select defaultValue="Room Type" onChange={handleChange}>
-                        <Option value="executive">Executive</Option>
-                        <Option value="presidential">Presidential</Option>
-                        <Option value="exclusive">Exclusive</Option>
-                        <Option value="delux">Delux</Option>
-                        <Option value="domestic">Domestic</Option>
-                      </Select>
+                      <select
+                        name="category"
+                        value={category}
+                        className="form__control"
+                        onChange={handleChange}
+                      >
+                        <option></option>
+                        {!loading &&
+                          response?.data?.map((category) => (
+                            <option
+                              value={category?._id}
+                              style={{ textTransform: 'capitalize' }}
+                              key={category?._id}
+                            >
+                              {category.type}
+                            </option>
+                          ))}
+                      </select>
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">Bed Size</div>
-                      <Select defaultValue="Bed Size" onChange={handleChange}>
-                        <Option value="king_size">King Size</Option>
-                        <Option value="king">King</Option>
-                        <Option value="double">Double</Option>
-                      </Select>
+                      <select
+                        name="bed_size"
+                        value={bed_size}
+                        className="form__control"
+                        onChange={handleChange}
+                      >
+                        <option></option>
+                        <option value="king_size">King Size</option>
+                        <option value="king">King</option>
+                        <option value="double">Double</option>
+                      </select>
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">AC</div>
-                      <Select defaultValue="AC" onChange={handleChange}>
-                        <Option value="true">YES</Option>
-                        <Option value="false">NO</Option>
-                      </Select>
+                      <select
+                        name="ac"
+                        value={ac}
+                        className="form__control"
+                        onChange={handleChange}
+                      >
+                        <option></option>
+                        <option value="true">YES</option>
+                        <option value="false">NO</option>
+                      </select>
                     </Col>
                   </Row>
                   <Row
@@ -137,48 +256,58 @@ const AddRoom = () => {
                   >
                     <Col className="form__group" span={6}>
                       <div className="label">Adults.</div>
-                      <Select
-                        defaultValue="Adults"
+                      <select
+                        className="form__control"
+                        value={adults}
                         onChange={handleChange}
                         name="adults"
                       >
-                        <Option value="1">1</Option>
-                        <Option value="2">2</Option>
-                        <Option value="3">3</Option>
-                      </Select>
+                        <option></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                      </select>
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">Kids.</div>
-                      <Select
-                        defaultValue="Kids"
+                      <select
+                        className="form__control"
                         onChange={handleChange}
+                        value={kids}
                         name="kids"
                       >
-                        <Option value="0">0</Option>
-                        <Option value="1">1</Option>
-                        <Option value="2">2</Option>
-                        <Option value="3">3</Option>
-                      </Select>
+                        <option></option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                      </select>
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">Cancellation</div>
-                      <Select
-                        defaultValue="Cancellation"
+                      <select
+                        name="cancellation"
+                        className="form__control"
                         onChange={handleChange}
+                        value={cancellation}
                       >
-                        <Option value="true">Free Cancellation</Option>
-                        <Option value="false">10% Charge</Option>
-                      </Select>
+                        <option></option>
+                        <option value="true">Free Cancellation</option>
+                        <option value="false">10% Charge</option>
+                      </select>
                     </Col>
                     <Col className="form__group" span={6}>
                       <div className="label">Allow Children</div>
-                      <Select
-                        defaultValue="Allow Children"
+                      <select
+                        name="children"
+                        className="form__control"
                         onChange={handleChange}
+                        value={children}
                       >
-                        <Option value="true">YES</Option>
-                        <Option value="false">NO</Option>
-                      </Select>
+                        <option></option>
+                        <option value="true">YES</option>
+                        <option value="false">NO</option>
+                      </select>
                     </Col>
                   </Row>
                   <Row
@@ -199,6 +328,8 @@ const AddRoom = () => {
                         rows={2}
                         placeholder="Ventilation,packing space, etc"
                         name="room_features"
+                        value={room_features}
+                        onChange={handleChange}
                         className="form__control"
                       ></textarea>
                     </Col>
@@ -219,6 +350,8 @@ const AddRoom = () => {
                         rows={4}
                         placeholder="Room Description"
                         name="description"
+                        value={description}
+                        onChange={handleChange}
                         className="form__control"
                       ></textarea>
                     </Col>
@@ -230,43 +363,51 @@ const AddRoom = () => {
                       md: 24,
                       lg: 32,
                     }}
+                    className="form__row"
                   >
-                    <Col span={24}>
-                      {/* <Upload
-                        action=""
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleImageChange}
-                      >
-                        {fileList.length >= 10 ? null : uploadButton}
-                      </Upload>
-                      <Modal
-                        visible={previewVisible}
-                        title={previewTitle}
-                        footer={null}
-                        onCancel={handleCancel}
-                      >
-                        <img
-                          alt="example"
-                          style={{
-                            width: '100%',
-                          }}
-                          src={previewImage}
+                    <Col span={24} className="form__group upload__group">
+                      <div className="image__preview">
+                        {renderImages(selectedImages)}
+                      </div>
+
+                      <div className="label-holder">
+                        <input
+                          type="file"
+                          name="files"
+                          id="files"
+                          multiple
+                          className="file"
+                          accept="image/*"
+                          onChange={imageHandleChange}
                         />
-                      </Modal> */}
-                      <Upload {...props} listType="picture-card">
-                        <Button icon={<UploadOutlined />}>Select File</Button>
-                      </Upload>
+                        <label htmlFor="files" className="upload">
+                          <UploadOutlined />
+                        </label>
+                      </div>
                     </Col>
                   </Row>
                   <Row>
-                    <Button
-                      label="Add Room"
-                      bg="var(--blue)"
-                      color="var(--white)"
-                      onClick={handleUpload}
-                    />
+                    {uploading ? (
+                      <Spinner indicator={antIcon} />
+                    ) : (
+                      <Button
+                        label="Add Room"
+                        bg="var(--blue)"
+                        color="var(--white)"
+                        hoverBg="var(--yellow)"
+                        hoverColor="var(--black)"
+                        onClick={submitForm}
+                        disabled={
+                          uploading ||
+                          !title ||
+                          !price ||
+                          !roomNumbers ||
+                          !bed_size ||
+                          !description ||
+                          !files[0]
+                        }
+                      />
+                    )}
                   </Row>
                 </Form>
               </div>

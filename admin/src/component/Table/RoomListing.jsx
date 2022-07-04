@@ -1,4 +1,5 @@
 import { Dropdown, Menu, Skeleton, Space, Table } from 'antd';
+import axios from 'axios';
 import { useState } from 'react';
 import { FiEdit, FiMoreHorizontal, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -23,7 +24,11 @@ const RoomListingWrapper = styled.div`
     }
   }
 `;
-
+const config = {
+  headers: {
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+  },
+};
 const columns = [
   {
     title: 'Room Title',
@@ -74,34 +79,28 @@ const columns = [
                     onClick={() =>
                       Swal.fire({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: `You won't be able to revert this!`,
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes, delete it!',
                         showLoaderOnConfirm: true,
-                        preConfirm: (login) => {
-                          return fetch(`//api.github.com/users/${login}`)
-                            .then((response) => {
-                              if (!response.ok) {
-                                throw new Error(response.statusText);
-                              }
-                              return response.json();
-                            })
-                            .catch((error) => {
-                              Swal.showValidationMessage(
-                                `Request failed: ${error}`
-                              );
-                            });
+                        preConfirm: async () => {
+                          const response = await axios.delete(
+                            `api/v2/rooms/${record.key}`,
+                            config
+                          );
+                          return response;
                         },
                         allowOutsideClick: () => !Swal.isLoading(),
                       }).then((result) => {
                         if (result.isConfirmed) {
                           Swal.fire({
-                            title: `${result.value.login}'s avatar`,
-                            imageUrl: result.value.avatar_url,
+                            icon: 'success',
+                            text: `${result.value.data.message}`,
                           });
+                          return (window.location = '/rooms');
                         }
                       })
                     }

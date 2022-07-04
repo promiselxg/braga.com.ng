@@ -1,8 +1,10 @@
 import { Tooltip } from 'antd';
-import React from 'react';
+import axios from 'axios';
+import React, { useContext, useEffect } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { Button } from '../../component';
 import RecentBooking from '../../component/Table/RecentBooking';
+import { RoomContext } from '../../context/RoomContext';
 import {
   Content,
   DashboardTableStats,
@@ -11,6 +13,36 @@ import {
 import { ContentWrapper } from './Booking.styled';
 
 const Bookings = () => {
+  const { loading, roomInfo, error, dispatch } = useContext(RoomContext);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+      },
+    };
+    const fetchAllRooms = async () => {
+      dispatch({ type: 'ROOM_INFO_START' });
+      try {
+        const res = await axios.get(
+          'api/v2/reservation/booking?limit=100',
+          config
+        );
+        if (res.data.success) {
+          dispatch({ type: 'ROOM_INFO_SUCCESS', payload: res.data });
+        } else {
+          dispatch({
+            type: 'ROOM_INFO_FAILURE',
+            payload: { message: `${error.message}` },
+          });
+        }
+      } catch (err) {
+        dispatch({ type: 'ROOM_INFO_FAILURE', payload: err.response.data });
+      }
+    };
+    fetchAllRooms();
+  }, [dispatch, error?.message]);
+
   return (
     <>
       <DashboardWrapper>
@@ -20,7 +52,9 @@ const Bookings = () => {
               <div className="dashboard__overview__info">
                 <div className="left">
                   <h2>Booking Lists</h2>
-                  <p>You have total 2,959 booking's.</p>
+                  {!loading && (
+                    <p>You have total {roomInfo?.count} booking's.</p>
+                  )}
                 </div>
                 <div className="right">
                   <Tooltip title="Add New Booking">

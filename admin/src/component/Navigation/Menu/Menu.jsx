@@ -59,7 +59,6 @@ const rootSubmenuKeys = [
 
 const App = () => {
   const [openKeys, setOpenKeys] = useState(['sub1']);
-
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
 
@@ -68,7 +67,6 @@ const App = () => {
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
-    console.log(openKeys);
   };
 
   return (
