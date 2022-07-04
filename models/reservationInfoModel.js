@@ -28,8 +28,14 @@ const reservationInfoSchema = mongoose.Schema(
     },
     status: {
       type: String,
+      enum: ['succcess', 'pending', 'failed'],
+      default: 'pending',
+      required: true,
     },
     referenceNo: {
+      type: String,
+    },
+    transactionId: {
       type: String,
     },
     reservationId: {

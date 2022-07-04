@@ -6,10 +6,9 @@ const Category = require('../models/categoryModel');
 const Review = require('../models/reviewsModel');
 //  Create new Room
 const createRoom = asyncHandler(async (req, res) => {
-  const files = req.files;
-  const urls = [];
+  const urls = req.files || req.body.photos;
   try {
-    if (files.length > 0 && req.body.title !== '') {
+    if (req.body.title !== '') {
       const {
         title,
         price,
@@ -39,6 +38,7 @@ const createRoom = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Category ID does not exist.');
       }
+
       //    check db to see if record already exist
       const roomExist = await Room.findOne({
         // where: {
@@ -60,26 +60,14 @@ const createRoom = asyncHandler(async (req, res) => {
           `Room ${title} already exist in the selected category.`
         );
       }
-      //    check if image is > 5MB
-      for (const file of files) {
-        const { path } = file;
-        if (file.size > process.env.IMAGE_MAX_SIZE) {
-          res.status(400);
-          throw new Error('Selected Images Must be less than 5MB.');
-        }
-        //  upload image to cloudinary
-        const newPath = await cloudinaryImageUploadMethod(path);
-        urls.push(newPath);
-        fs.unlinkSync(path);
-      }
       //create new Room
       const room = await Room.create({
         title,
         description,
         category,
-        imgThumbnail: urls[0].img.secure_url,
-        otherImg: urls.map((url) => url.img.secure_url),
-        imageId: urls.map((url) => url.img.public_id.split('/')[1]),
+        imgThumbnail: urls[0].secure_url,
+        otherImg: urls.map((url) => url.secure_url),
+        imageId: urls.map((url) => url.public_id.split('/')[1]),
         price,
         bedSize: bed_size,
         roomFeatures: room_features,
@@ -101,7 +89,7 @@ const createRoom = asyncHandler(async (req, res) => {
           });
         } catch (error) {
           res.status(400);
-          throw new Error(error);
+          throw new Error('Error occured');
         }
       }
     } else {
@@ -116,8 +104,8 @@ const createRoom = asyncHandler(async (req, res) => {
 //  Update Room
 const updateRoom = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
-  const files = req.files;
-  const urls = [];
+  const urls = req.files || req.body.photos;
+
   if (!roomid) {
     res.status(400);
     throw new Error('Invalid Room ID.');
@@ -130,7 +118,7 @@ const updateRoom = asyncHandler(async (req, res) => {
   }
 
   try {
-    if (files.length > 0 && req.body.title !== '') {
+    if (req.body.title !== '') {
       const {
         title,
         price,
@@ -173,17 +161,19 @@ const updateRoom = asyncHandler(async (req, res) => {
         removeUploadedImage(roomExist.imageId, 'rooms');
       }
 
-      //    check if image is > 5MB
-      for (const file of files) {
-        const { path } = file;
-        if (file.size > process.env.IMAGE_MAX_SIZE) {
-          res.status(400);
-          throw new Error('Selected Images Must be less than 5MB.');
+      if (req.files) {
+        //    check if image is > 5MB
+        for (const file of files) {
+          const { path } = file;
+          if (file.size > process.env.IMAGE_MAX_SIZE) {
+            res.status(400);
+            throw new Error('Selected Images Must be less than 5MB.');
+          }
+          //  upload image to cloudinary
+          const newPath = await cloudinaryImageUploadMethod(path);
+          urls.push(newPath);
+          fs.unlinkSync(path);
         }
-        //  upload image to cloudinary
-        const newPath = await cloudinaryImageUploadMethod(path);
-        urls.push(newPath);
-        fs.unlinkSync(path);
       }
       //  update record
       const response = await Room.findByIdAndUpdate(
@@ -193,9 +183,9 @@ const updateRoom = asyncHandler(async (req, res) => {
             title,
             description,
             category,
-            imgThumbnail: urls[0].img.secure_url,
-            otherImg: urls.map((url) => url.img.secure_url),
-            imageId: urls.map((url) => url.img.public_id.split('/')[1]),
+            imgThumbnail: urls[0].secure_url,
+            otherImg: urls.map((url) => url.secure_url),
+            imageId: urls.map((url) => url.public_id.split('/')[1]),
             price,
             bedSize: bed_size,
             roomFeatures: room_features,
@@ -259,7 +249,7 @@ const deleteRoom = asyncHandler(async (req, res) => {
         $pull: { rooms: roomid },
       });
       return res.status(200).json({
-        status: 'success',
+        response: true,
         message: 'Room successfully deleted.',
       });
     } catch (error) {
@@ -299,17 +289,6 @@ const getSingleRoom = asyncHandler(async (req, res) => {
 //  Get all Rooms
 const getAllRooms = asyncHandler(async (req, res) => {
   res.status(200).json(res.queryResults);
-  // try {
-  //   const rooms = await Room.find().sort({ _id: -1 }).select('-__v');
-  //   return res.status(200).json({
-  //     status: 'success',
-  //     count: rooms.length,
-  //     data: rooms,
-  //   });
-  // } catch (error) {
-  //   res.status(400);
-  //   throw new Error(error);
-  // }
 });
 //  Get Rooms by Category
 const getRoomsByCategory = asyncHandler(async (req, res) => {

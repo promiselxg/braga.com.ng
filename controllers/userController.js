@@ -73,7 +73,7 @@ const loginUser = asyncHandler(async (req, res) => {
     generateCookieResponse(200, res, user.id, roles);
   } else {
     res.status(400);
-    throw new Error('Incorrect username or password.');
+    throw new Error('Incorrect username or passwordd.');
   }
 });
 

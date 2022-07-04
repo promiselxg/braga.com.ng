@@ -4,6 +4,7 @@ const RoomRoutes = require('./routes/roomRoutes');
 const ReviewsRoutes = require('./routes/reviewRoutes');
 const ReservationRoutes = require('./routes/reservationRoutes');
 const CategoryRoutes = require('./routes/categoryRoutes');
+
 dotenv.config();
 const cors = require('cors');
 const colors = require('colors');
@@ -16,14 +17,10 @@ connectDB();
 const app = express();
 
 const PORT = process.env.PORT || 8080;
-// const allowedDomains =
-//   process.env.NODE_ENV === 'production'
-//     ? [process.env.REMOTE_CLIENT_APP, process.env.REMOTE_SERVER_API]
-//     : [process.env.LOCAL_CLIENT_APP, process.env.LOCAL_SERVER_API];
 // //middlewares
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 // //  Routes
 app.use('/api/v2/rooms', RoomRoutes);
 app.use('/api/v2/reviews', ReviewsRoutes);
@@ -37,7 +34,4 @@ app.use('*', (req, res) =>
 // //  Error Handler
 app.use(errorHandler);
 
-app.get('/', (req, res) => {
-  res.send('room routes...');
-});
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

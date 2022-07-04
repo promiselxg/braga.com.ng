@@ -20,7 +20,6 @@ const RoomSchema = new mongoose.Schema(
     },
     roomFeatures: {
       type: String,
-      required: true,
     },
     ac: {
       type: Boolean,
