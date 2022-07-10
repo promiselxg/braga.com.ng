@@ -105,7 +105,6 @@ const createRoom = asyncHandler(async (req, res) => {
 const updateRoom = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
   const urls = req.files || req.body.photos;
-
   if (!roomid) {
     res.status(400);
     throw new Error('Invalid Room ID.');
@@ -163,14 +162,17 @@ const updateRoom = asyncHandler(async (req, res) => {
 
       if (req.files) {
         //    check if image is > 5MB
-        for (const file of files) {
+        for (const file of urls) {
           const { path } = file;
           if (file.size > process.env.IMAGE_MAX_SIZE) {
             res.status(400);
             throw new Error('Selected Images Must be less than 5MB.');
           }
           //  upload image to cloudinary
-          const newPath = await cloudinaryImageUploadMethod(path);
+          const newPath = await cloudinaryImageUploadMethod(
+            path,
+            'braga_rooms'
+          );
           urls.push(newPath);
           fs.unlinkSync(path);
         }
@@ -330,14 +332,14 @@ const getRoomsByCategory = asyncHandler(async (req, res) => {
   }
 });
 //  upload multiple image function
-const cloudinaryImageUploadMethod = asyncHandler(async (file) => {
+const cloudinaryImageUploadMethod = asyncHandler(async (file, preset) => {
   return new Promise((resolve) => {
     cloudinary.uploader.upload(
       file,
-      { upload_preset: 'rooms' },
+      { upload_preset: `${preset}` },
       (err, result) => {
         if (err) {
-          throw new Error(err);
+          console.log(err);
         }
         resolve({
           img: result,
@@ -354,4 +356,5 @@ module.exports = {
   deleteRoom,
   getSingleRoom,
   getRoomsByCategory,
+  cloudinaryImageUploadMethod,
 };
