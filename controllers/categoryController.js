@@ -4,19 +4,6 @@ const Room = require('../models/roomModel');
 //  get All Category
 const getAllCategory = asyncHandler(async (req, res) => {
   res.status(200).json(res.queryResults);
-  // try {
-  //   const response = await Category.find().sort({ _id: -1 });
-  //   if (response) {
-  //     return res.status(200).json({
-  //       status: 'success',
-  //       count: response.length,
-  //       data: response,
-  //     });
-  //   }
-  // } catch (error) {
-  //   res.status(400);
-  //   throw new Error(error);
-  // }
 });
 //  Create new Category
 const newCategory = asyncHandler(async (req, res) => {

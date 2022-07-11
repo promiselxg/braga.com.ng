@@ -2,6 +2,9 @@ const express = require('express');
 const {
   createNewGallery,
   getAllGallery,
+  deletGallery,
+  updateGallery,
+  getSingleGallery,
 } = require('../controllers/galleryController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
@@ -20,4 +23,17 @@ router
     createNewGallery
   )
   .get(queryFilter(GalleryModel), getAllGallery);
+router
+  .route('/:id')
+  .get(verifyToken, verifyUserRoles(ROLES.admin), getSingleGallery);
+router
+  .route('/:id')
+  .delete(verifyToken, verifyUserRoles(ROLES.admin), deletGallery)
+  .put(
+    verifyToken,
+    verifyUserRoles(ROLES.admin),
+    uploadFile.array('files', 10),
+    updateGallery
+  );
+
 module.exports = router;

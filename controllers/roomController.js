@@ -1,5 +1,8 @@
 const asyncHandler = require('express-async-handler');
-const { cloudinary, removeUploadedImage } = require('../utils/cloudinary');
+const {
+  removeUploadedImage,
+  cloudinaryImageUploadMethod,
+} = require('../utils/cloudinary');
 const fs = require('fs');
 const Room = require('../models/roomModel');
 const Category = require('../models/categoryModel');
@@ -84,7 +87,7 @@ const createRoom = asyncHandler(async (req, res) => {
             $push: { rooms: room._id },
           });
           return res.status(201).json({
-            status: true,
+            status: 'success',
             message: 'New room successfully added to the inventory.',
           });
         } catch (error) {
@@ -210,7 +213,7 @@ const updateRoom = asyncHandler(async (req, res) => {
             $push: { rooms: response._id },
           });
           return res.status(200).json({
-            status: true,
+            status: 'success',
             message: 'Room Updated successfully.',
           });
         } catch (error) {
@@ -251,7 +254,7 @@ const deleteRoom = asyncHandler(async (req, res) => {
         $pull: { rooms: roomid },
       });
       return res.status(200).json({
-        response: true,
+        response: 'success',
         message: 'Room successfully deleted.',
       });
     } catch (error) {
@@ -271,7 +274,7 @@ const getSingleRoom = asyncHandler(async (req, res) => {
       path: 'category',
       select: 'id name type',
     });
-    const reviews = await Review.find({ room: roomid, status: true })
+    const reviews = await Review.find({ room: roomid, status: 'success' })
       .sort({ _id: -1 })
       .select('-updatedAt');
     if (!room) {
@@ -330,23 +333,6 @@ const getRoomsByCategory = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error(error);
   }
-});
-//  upload multiple image function
-const cloudinaryImageUploadMethod = asyncHandler(async (file, preset) => {
-  return new Promise((resolve) => {
-    cloudinary.uploader.upload(
-      file,
-      { upload_preset: `${preset}` },
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        }
-        resolve({
-          img: result,
-        });
-      }
-    );
-  });
 });
 
 module.exports = {
