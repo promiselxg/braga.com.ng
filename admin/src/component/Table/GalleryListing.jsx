@@ -1,15 +1,17 @@
-import { Dropdown, Menu, Skeleton, Space, Table } from 'antd';
+import { Dropdown, Menu, Skeleton, Space, Table, Image } from 'antd';
 import axios from 'axios';
-import { useState } from 'react';
-import { FiEdit, FiMoreHorizontal, FiSearch, FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiMoreHorizontal, FiTrash2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { TableHeader } from '../../GlobalStyle';
+import TextTruncate from 'react-text-truncate';
 import useFetch from '../../hooks/useFetch';
 const RoomListingWrapper = styled.div`
   border: 1px solid #deebfd;
   box-shadow: -8px 12px 18px 0 #dadee8;
+  p {
+    text-transform: capitalize !important;
+  }
   .action__btn {
     cursor: pointer;
     font-size: 1.4rem;
@@ -31,29 +33,25 @@ const config = {
 };
 const columns = [
   {
-    title: 'Room Title',
-    dataIndex: 'room__no',
+    title: 'Title',
+    dataIndex: 'title',
+    render: (record) => (
+      <TextTruncate line={2} element="p" truncateText="…" text={record} />
+    ),
   },
   {
-    title: 'Room Type',
-    dataIndex: 'room__type',
+    title: 'Description',
+    dataIndex: 'desc',
+    render: (record) => (
+      <TextTruncate line={1} element="p" truncateText="…" text={record} />
+    ),
   },
   {
-    title: 'Ac',
-    dataIndex: 'ac',
-  },
-  {
-    title: 'Bed Capacity',
-    dataIndex: 'bed__size',
-  },
-  {
-    title: 'Price',
-    dataIndex: 'rent',
-    render: (rent) => <b>&#8358;{rent}</b>,
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
+    title: 'Media',
+    dataIndex: 'media',
+    render: (record) => (
+      <Image src={record[0]} style={{ width: '100px', height: '50px' }} />
+    ),
   },
   {
     title: '',
@@ -66,7 +64,7 @@ const columns = [
             items={[
               {
                 label: (
-                  <Link to={`/rooms/${record.key}/edit`} className="menu">
+                  <Link to={`/gallery/${record.key}/edit`} className="menu">
                     <FiEdit />
                     Edit
                   </Link>
@@ -89,7 +87,7 @@ const columns = [
                         showLoaderOnConfirm: true,
                         preConfirm: async () => {
                           const response = await axios.delete(
-                            `api/v2/rooms/${record.key}`,
+                            `api/v2/gallery/${record.key}`,
                             config
                           );
                           return response;
@@ -101,7 +99,7 @@ const columns = [
                             icon: 'success',
                             text: `${result.value.data.message}`,
                           });
-                          return (window.location = '/rooms');
+                          return (window.location = '/gallery');
                         }
                       })
                     }
@@ -125,44 +123,24 @@ const columns = [
   },
 ];
 
-const RoomListing = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+const GalleryListing = () => {
   const { data, loading } = useFetch(
-    '/rooms?select=title,category,ac,price,bedSize'
+    '/gallery?select=title,description,image_url'
   );
-  const onSelectChange = (newSelectedRowKeys) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-    console.log(newSelectedRowKeys);
-  };
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const rooms = [];
+  const galleries = [];
 
-  data?.data?.map((room) =>
-    rooms.push({
-      key: room._id,
-      room__no: room.title,
-      room__type: room.category,
-      ac: room.ac ? 'AC' : 'NO AC',
-      bed__size: room.bedSize,
-      rent: `${room.price}`,
-      status: 'Booked',
+  data?.data?.map((gallery) =>
+    galleries.push({
+      key: gallery._id,
+      title: gallery.title,
+      desc: gallery.description,
+      media: gallery.image_url,
     })
   );
   return (
     <>
       <RoomListingWrapper>
-        <TableHeader>
-          <div className="header__search">
-            <div className="search__wrapper">
-              <FiSearch />
-              <input type="text" placeholder="Search" />
-            </div>
-          </div>
-        </TableHeader>
         {loading ? (
           <div style={{ padding: '20px' }}>
             <Skeleton active={loading} />
@@ -170,9 +148,8 @@ const RoomListing = () => {
         ) : (
           <>
             <Table
-              rowSelection={rowSelection}
               columns={columns}
-              dataSource={rooms}
+              dataSource={galleries}
               style={{
                 padding: 20,
               }}
@@ -184,4 +161,4 @@ const RoomListing = () => {
   );
 };
 
-export default RoomListing;
+export default GalleryListing;

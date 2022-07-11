@@ -24,16 +24,12 @@ const Bookings = () => {
     const fetchAllRooms = async () => {
       dispatch({ type: 'ROOM_INFO_START' });
       try {
-        const res = await axios.get(
-          'api/v2/reservation/booking?limit=100',
-          config
-        );
+        const res = await axios.get('/api/v2/reservation/booking', config);
         if (res.data.success) {
           dispatch({ type: 'ROOM_INFO_SUCCESS', payload: res.data });
         } else {
           dispatch({
             type: 'ROOM_INFO_FAILURE',
-            payload: { message: `${error.message}` },
           });
         }
       } catch (err) {
@@ -41,7 +37,7 @@ const Bookings = () => {
       }
     };
     fetchAllRooms();
-  }, [dispatch, error?.message]);
+  }, [dispatch]);
 
   return (
     <>

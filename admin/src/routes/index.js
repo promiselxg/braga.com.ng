@@ -1,9 +1,12 @@
 export { default as Dashboard } from './Dashboard/Dashboard';
 export { default as Rooms } from './Rooms';
+export { default as Gallery } from './Gallery';
 export { default as AddRooms } from './Rooms/Add';
 export { default as EditRoom } from './Rooms/Edit';
 export { default as AddBooking } from './Booking/Add';
+export { default as AddGallery } from './Gallery/Add';
 export { default as EditBooking } from './Booking/Edit';
+export { default as EditGallery } from './Gallery/Edit';
 export { default as Bookings } from './Booking';
 export { default as Customers } from './Customer';
 export { default as Login } from './Login';

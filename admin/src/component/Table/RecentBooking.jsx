@@ -1,33 +1,49 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { TableWrapper } from '../../routes/Dashboard/Dashboard.styled';
-import { Skeleton, Space, Table, Tag, Modal } from 'antd';
-import { FiEye, FiSearch, FiTrash2 } from 'react-icons/fi';
+import { Skeleton, Space, Table, Tag, Modal, Select } from 'antd';
+import DataTable from 'react-data-table-component';
+
+import {
+  FiEye,
+  FiSearch,
+  // FiMoreHorizontal,
+  // FiTrash2,
+  // FiEdit,
+} from 'react-icons/fi';
+// import { Link } from 'react-router-dom';
 import { RoomContext } from '../../context/RoomContext';
 import Image from '../Image';
 import axios from 'axios';
+import FilterComponent from '../FilterComponent';
+// import Swal from 'sweetalert2';
+const { Option } = Select;
 
 const RecentBooking = ({ title }) => {
-  const data = [];
+  let data = [];
+  const [filterText, setFilterText] = React.useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] =
+    React.useState(false);
   const [visible, setVisible] = useState(false);
   const [roomid, setRoomId] = useState('');
-  const [searchValue, setSearchValue] = useState('');
-  const { loading, roomInfo, room, isLoading, dispatch } =
-    useContext(RoomContext);
 
+  let { loading, roomInfo, room, isLoading, dispatch } =
+    useContext(RoomContext);
   roomInfo?.data?.map((booking) =>
     data.push({
-      key: booking?._id,
+      id: booking?._id,
       img: booking?.roomid?.imgThumbnail,
-      reservation_no: [booking?.reservationNumber],
-      room_name: booking?.roomid?.title,
+      reservation: [booking?.reservationNumber],
+      name: booking?.roomid?.title,
       check_in: booking?.checkIn,
       check_out: booking?.checkOut,
       total_days: booking?.totalDays,
       rid: booking?.reservationId,
-      tags: [booking?.status],
+      amount: booking?.amount,
+      status: [booking?.status],
     })
   );
-  const columns = [
+
+  const columnss = [
     {
       title: '',
       dataIndex: 'img',
@@ -123,13 +139,162 @@ const RecentBooking = ({ title }) => {
           >
             <FiEye />
           </span>
-          <span onClick={() => setVisible(true)} style={{ cursor: 'pointer' }}>
-            <FiTrash2 />
-          </span>
+          {/* <Dropdown
+            placement="bottom"
+            overlay={
+              <Menu
+                items={[
+                  {
+                    label: (
+                      <Link to={`/rooms/1/edit`} className="menu">
+                        <FiEdit />
+                        Edit
+                      </Link>
+                    ),
+                    key: 0,
+                  },
+                  // {
+                  //   label: (
+                  //     <span
+                  //       className="menu"
+                  //       onClick={() =>
+                  //         Swal.fire({
+                  //           title: 'Are you sure?',
+                  //           text: `You won't be able to revert this!`,
+                  //           icon: 'warning',
+                  //           showCancelButton: true,
+                  //           confirmButtonColor: '#3085d6',
+                  //           cancelButtonColor: '#d33',
+                  //           confirmButtonText: 'Yes, delete it!',
+                  //           showLoaderOnConfirm: true,
+                  //           preConfirm: async () => {
+                  //             const response = await axios.delete(
+                  //               `api/v2/rooms/`
+                  //             );
+                  //             return response;
+                  //           },
+                  //           allowOutsideClick: () => !Swal.isLoading(),
+                  //         }).then((result) => {
+                  //           if (result.isConfirmed) {
+                  //             Swal.fire({
+                  //               icon: 'success',
+                  //               text: `${result.value.data.message}`,
+                  //             });
+                  //             return (window.location = '/bookings');
+                  //           }
+                  //         })
+                  //       }
+                  //     >
+                  //       <FiTrash2 />
+                  //       Delete
+                  //     </span>
+                  //   ),
+                  //   key: 1,
+                  // },
+                ]}
+              />
+            }
+            trigger={['click']}
+          >
+            <Space size="middle" className="action__btn">
+              <FiMoreHorizontal />
+            </Space>
+          </Dropdown> */}
         </Space>
       ),
     },
   ];
+  const columns = [
+    {
+      name: 'Image',
+      selector: (row) => row.img,
+      cell: (row) => (
+        <>
+          <Space size="middle">
+            <Image
+              src={row.img}
+              alt={row.img}
+              style={{
+                width: '50px',
+                overflow: 'hidden',
+                height: '50px',
+                objectFit: 'cover',
+                borderRadius: '3px',
+              }}
+            />
+          </Space>
+        </>
+      ),
+    },
+    {
+      name: 'Amount',
+      selector: (row) => row.amount,
+      cell: (row) => (
+        <>
+          <b>{row.amount}</b>
+        </>
+      ),
+    },
+    {
+      name: 'Booking ID',
+      selector: (row) => row.reservation,
+      cell: (row) => (
+        <>
+          <b>{row.reservation}</b>
+        </>
+      ),
+    },
+    {
+      name: 'Check-in',
+      selector: (row) => row.check_in,
+    },
+    {
+      name: 'Check-out.',
+      selector: (row) => row.check_out,
+    },
+    {
+      name: 'Total Days',
+      selector: (row) => row.total_days,
+    },
+    {
+      name: 'Status',
+      selector: (row) => row.status,
+      cell: (row) => (
+        <>
+          {row.status.map((tag) => {
+            let color = '';
+            if (tag === 'pending') {
+              color = 'volcano';
+            } else {
+              color = 'green';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      name: 'Action.',
+      cell: (row) => (
+        <>
+          <Space size="middle">
+            <span
+              onClick={() => setVisible(true)}
+              style={{ cursor: 'pointer' }}
+              onMouseDown={() => setRoomId(row.rid[0])}
+            >
+              <FiEye />
+            </span>
+          </Space>
+        </>
+      ),
+    },
+  ];
+
   useEffect(() => {
     const config = {
       headers: {
@@ -160,9 +325,28 @@ const RecentBooking = ({ title }) => {
     }
   }, [visible, dispatch, roomid]);
 
-  console.log(room);
-  console.log(roomInfo);
-  console.log(roomid);
+  const filteredItems = data.filter(
+    (item) =>
+      JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !==
+      -1
+  );
+
+  const subHeaderComponentMemo = React.useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText('');
+      }
+    };
+
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterText}
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
   return (
     <>
       <TableWrapper>
@@ -170,22 +354,20 @@ const RecentBooking = ({ title }) => {
           <div className="left">
             <h1>{title}</h1>
           </div>
-          <div className="right">
-            <div className="search">
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value.toUpperCase())}
-              />
-              <FiSearch className="sort__icons" />
-            </div>
-          </div>
+          <div className="right"></div>
         </div>
         {loading ? (
           <Skeleton active={loading} />
         ) : (
           <>
-            <Table columns={columns} dataSource={data} />
+            <DataTable
+              columns={columns}
+              data={filteredItems}
+              pagination
+              paginationResetDefaultPage={!resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+              subHeader
+              subHeaderComponent={subHeaderComponentMemo}
+            />
           </>
         )}
       </TableWrapper>

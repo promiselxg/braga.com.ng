@@ -72,6 +72,12 @@ const GlobalStyle = createGlobalStyle`
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background-color: transparent !important;
 }
+.rdt_TableRow{
+  padding:10px 0 !important
+}
+/* .rdt_TableCell{
+  padding-left:0 !important
+} */
 body {
   
   font-family: 'Nunito', sans-serif;
@@ -82,6 +88,13 @@ body {
     font-size: 14px;
   /* transition: all 0.5s ease; */
 }
+.action__btn {
+    cursor: pointer;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
 a{
   text-decoration: none;
 }

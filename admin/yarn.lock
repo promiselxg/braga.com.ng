@@ -7324,7 +7324,7 @@ prompts@^2.0.1, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.5.7, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7781,6 +7781,13 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
+react-data-table-component@^7.5.2:
+  version "7.5.2"
+  resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-7.5.2.tgz#42d0af2a923e05887baadf8f4718bbb133c6db83"
+  integrity sha512-sOmeEEZiORJcnzf8fwcwA5+JbhIChjf+tQV/dLYvlhU8UT8rJZ33aBSOJNjNYq/5+t3lj/xCJXtSa2kgoZTDVQ==
+  dependencies:
+    deepmerge "^4.2.2"
+
 react-dev-utils@^12.0.1:
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-12.0.1.tgz#ba92edb4a1f379bd46ccd6bcd4e7bc398df33e73"
@@ -7925,6 +7932,13 @@ react-scripts@^5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-text-truncate@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/react-text-truncate/-/react-text-truncate-0.19.0.tgz#60bc5ecf29a03ebc256f31f90a2d8402176aac91"
+  integrity sha512-QxHpZABfGG0Z3WEYbRTZ+rXdZn50Zvp+sWZXgVAd7FCKAMzv/kcwctTpNmWgXDTpAoHhMjOVwmgRtX3x5yeF4w==
+  dependencies:
+    prop-types "^15.5.7"
 
 react-toastify@^9.0.1:
   version "9.0.5"

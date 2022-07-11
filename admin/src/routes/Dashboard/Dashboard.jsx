@@ -8,8 +8,40 @@ import {
 } from './Dashboard.styled';
 import RecentBooking from '../../component/Table/RecentBooking';
 import { FaBed, FaRegCalendarCheck } from 'react-icons/fa';
+import { useContext, useEffect } from 'react';
+import axios from 'axios';
+import { Skeleton } from 'antd';
+import { RoomContext } from '../../context/RoomContext';
 
 const Dashboard = () => {
+  const { loading, error, dispatch } = useContext(RoomContext);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+      },
+    };
+    const fetchAllRooms = async () => {
+      dispatch({ type: 'ROOM_INFO_START' });
+      try {
+        const res = await axios.get(
+          'api/v2/reservation/booking?limit=10&status=success',
+          config
+        );
+        if (res.data.success) {
+          dispatch({ type: 'ROOM_INFO_SUCCESS', payload: res.data });
+        } else {
+          dispatch({
+            type: 'ROOM_INFO_FAILURE',
+          });
+        }
+      } catch (err) {
+        dispatch({ type: 'ROOM_INFO_FAILURE', payload: err.response.data });
+      }
+    };
+    fetchAllRooms();
+  }, [dispatch]);
   return (
     <>
       <DashboardWrapper>
@@ -76,7 +108,13 @@ const Dashboard = () => {
           </DashboardStats>
           <DashboardTableStats>
             <div className="dashboard__tablestats__container">
-              <RecentBooking title="Recent Bookings" />
+              {loading ? (
+                <div style={{ padding: '30px' }}>
+                  <Skeleton active={loading} />
+                </div>
+              ) : (
+                <RecentBooking title="Recent Bookings" />
+              )}
             </div>
           </DashboardTableStats>
         </Content>

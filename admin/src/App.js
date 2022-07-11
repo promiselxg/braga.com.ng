@@ -4,12 +4,15 @@ import Layout from './component/Layout';
 import { AuthContext } from './context/AuthContext';
 import {
   AddBooking,
+  AddGallery,
   AddRooms,
   Bookings,
   Customers,
   Dashboard,
   EditBooking,
+  EditGallery,
   EditRoom,
+  Gallery,
   Login,
   Rooms,
 } from './routes';
@@ -43,6 +46,14 @@ function App() {
           }
         />
         <Route
+          path="/gallery"
+          element={
+            <ProtectedRoute>
+              <Gallery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/bookings"
           element={
             <ProtectedRoute>
@@ -67,6 +78,14 @@ function App() {
           }
         />
         <Route
+          path="/gallery/new"
+          element={
+            <ProtectedRoute>
+              <AddGallery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/bookings/new"
           element={
             <ProtectedRoute>
@@ -79,6 +98,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditRoom />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gallery/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditGallery />
             </ProtectedRoute>
           }
         />
