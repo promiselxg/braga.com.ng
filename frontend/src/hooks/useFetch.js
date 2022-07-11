@@ -10,7 +10,7 @@ const useFetch = (url) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`https://api.braga.com.ng/api/v2${url}`);
+        const res = await axios.get(`http://localhost:8080/api/v2${url}`);
         setData(res.data);
       } catch (err) {
         setError(err);

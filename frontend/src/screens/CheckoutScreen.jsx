@@ -45,12 +45,10 @@ const CheckoutScreen = () => {
     useSelector((state) => state.reservation);
   let search = JSON.parse(localStorage.getItem('search'));
 
-  const checkIn = search
-    ? search.checkIn
-    : new Date().toLocaleDateString().split('/').join('-');
+  const checkIn = search ? search.checkIn : moment().format('DD-MM-YYYY');
   const checkOut = search
     ? search.checkOut
-    : new Date().toLocaleDateString().split('/').join('-');
+    : moment().add(1, 'days').format('DD-MM-YYYY');
   const adult = search ? search.adult : 1;
   const kids = search ? search.kids : 0;
 
@@ -184,7 +182,11 @@ const CheckoutScreen = () => {
 
   useEffect(() => {
     dispatch(getSingleRoom(id));
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }, [dispatch, id]);
 
   const initializePayment = usePaystackPayment(config);

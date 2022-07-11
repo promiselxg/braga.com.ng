@@ -14,27 +14,48 @@ import { Links } from '../components/NavAnchor';
 import { Typography } from '../GlobalStyle';
 import { useEffect } from 'react';
 import { getRooms } from '../redux/room/roomSlice';
+import moment from 'moment';
+import { useState } from 'react';
 
 const RoomScreen = () => {
   const dispatch = useDispatch();
   const search = useLocation().search;
+  const [checkin, setCheckin] = useState(moment().format('DD-MM-YYYY'));
+  const [checkout, setCheckout] = useState(
+    moment().add(1, 'days').format('DD-MM-YYYY')
+  );
+  const [adults, setAdults] = useState(1);
+  const [kids, setKids] = useState(0);
   const { rooms } = useSelector((state) => state.listRooms);
-
+  const data = {
+    checkIn: checkin,
+    checkOut: checkout,
+    adult: adults,
+    kids: kids,
+  };
+  localStorage.setItem('search', JSON.stringify(data));
   useEffect(() => {
     if (search === '') {
       dispatch(getRooms('all'));
     } else {
       const query = new URLSearchParams(search);
       const data = {
-        checkIn: query.get('checkIn'),
-        checkOut: query.get('checkOut'),
-        adult: query.get('adult'),
-        kids: query.get('kids'),
+        checkIn: setCheckin(query.get('checkIn')),
+        checkOut: setCheckout(query.get('checkOut')),
+        adult: setAdults(query.get('adult')),
+        kids: setKids(query.get('kids')),
       };
       dispatch(getRooms(data));
     }
   }, [dispatch, search]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, []);
   return (
     <>
       <Section>

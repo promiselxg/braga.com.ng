@@ -1,8 +1,10 @@
-import { Image } from 'antd';
+import { Image, Skeleton } from 'antd';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-
 import { SliderWrapper } from './Slider.style';
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -24,41 +26,40 @@ const responsive = {
 };
 
 const Slider = () => {
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `http://localhost:8080/api/v2/gallery?select=image_url`
+        );
+        setGallery(data.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <SliderWrapper>
-        <Carousel responsive={responsive}>
-          <div>
-            <Image
-              src="https://www.ekohotels.com/assets/img/home-about.jpg"
-              alt="about us"
-            />
+        {loading ? (
+          <div style={{ padding: '0 20px' }}>
+            <Skeleton active={loading} />
           </div>
-          <div>
-            <Image
-              src="https://www.ekohotels.com/assets/img/home-about.jpg"
-              alt="about us"
-            />
-          </div>
-          <div>
-            <Image
-              src="https://www.ekohotels.com/assets/img/home-about.jpg"
-              alt="about us"
-            />
-          </div>
-          <div>
-            <Image
-              src="https://www.ekohotels.com/assets/img/home-about.jpg"
-              alt="about us"
-            />
-          </div>
-          <div>
-            <Image
-              src="https://www.ekohotels.com/assets/img/home-about.jpg"
-              alt="about us"
-            />
-          </div>
-        </Carousel>
+        ) : (
+          <Carousel responsive={responsive}>
+            {gallery.map((img) => (
+              <div key={img._id}>
+                <Image src={img.image_url[0]} alt="about us" />
+              </div>
+            ))}
+          </Carousel>
+        )}
       </SliderWrapper>
     </>
   );

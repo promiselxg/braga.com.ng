@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import {
@@ -12,6 +13,13 @@ import {
 import { Typography } from '../GlobalStyle';
 
 const HomeScreen = () => {
+  const data = {
+    checkIn: moment().format('DD-MM-YYYY'),
+    checkOut: moment().add(1, 'days').format('DD-MM-YYYY'),
+    adult: 1,
+    kids: 0,
+  };
+  localStorage.setItem('search', JSON.stringify(data));
   const location = useLocation();
   useEffect(() => {
     window.scrollTo({
@@ -20,6 +28,7 @@ const HomeScreen = () => {
       behavior: 'smooth',
     });
   }, [location.path]);
+
   return (
     <>
       <HeroSection />

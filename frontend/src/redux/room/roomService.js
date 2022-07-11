@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://api.braga.com.ng/api/v2/rooms';
 const config = {
-  'Content-Type': 'appilcation/json',
+  'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
 };
 //  Get all rooms
