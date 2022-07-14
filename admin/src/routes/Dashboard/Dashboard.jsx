@@ -14,7 +14,7 @@ import { Skeleton } from 'antd';
 import { RoomContext } from '../../context/RoomContext';
 
 const Dashboard = () => {
-  const { loading, error, dispatch } = useContext(RoomContext);
+  const { loading, dispatch } = useContext(RoomContext);
 
   useEffect(() => {
     const config = {

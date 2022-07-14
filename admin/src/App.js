@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './component/Layout';
 import { AuthContext } from './context/AuthContext';
 import {
-  AddBooking,
   AddGallery,
   AddRooms,
   Bookings,
@@ -14,6 +13,7 @@ import {
   EditRoom,
   Gallery,
   Login,
+  Reviews,
   Rooms,
 } from './routes';
 
@@ -42,6 +42,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Rooms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            <ProtectedRoute>
+              <Reviews />
             </ProtectedRoute>
           }
         />
@@ -85,14 +93,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/bookings/new"
-          element={
-            <ProtectedRoute>
-              <AddBooking />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/rooms/:id/edit"
           element={

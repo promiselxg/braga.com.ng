@@ -11,6 +11,7 @@ import {
   FiSettings,
   FiUser,
   FiImage,
+  FiStar,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -50,10 +51,11 @@ const items = [
   getItem(<Link to="/rooms">Rooms</Link>, 'sub3', <FiHome />, [
     getItem(<Link to="/rooms/new">New Room</Link>, '3', <FiPlus />),
     getItem(<Link to="/rooms">All Rooms</Link>, '4', <FiHome />),
+    getItem(<Link to="/reviews">Reviews</Link>, '40', <FiStar />),
   ]),
   getItem(<Link to="/gallery">Gallery</Link>, 'sub8', <FiImage />, [
     getItem(<Link to="/gallery/new">New Gallery</Link>, '02', <FiPlus />),
-    getItem(<Link to="/gallery">All Gallery</Link>, '03', <FiHome />),
+    getItem(<Link to="/gallery">All Gallery</Link>, '03', <FiPlus />),
   ]),
   getItem(<Link to="/customers">Customers</Link>, '6', <FiUser />),
   getItem(<Link to="/">Payment</Link>, 'sub5', <FaDollarSign />, [

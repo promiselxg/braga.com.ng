@@ -13,7 +13,7 @@ import {
 import { ContentWrapper } from './Booking.styled';
 
 const Bookings = () => {
-  const { loading, roomInfo, error, dispatch } = useContext(RoomContext);
+  const { loading, roomInfo, dispatch } = useContext(RoomContext);
 
   useEffect(() => {
     const config = {
