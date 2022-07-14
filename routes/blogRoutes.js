@@ -4,8 +4,8 @@ const {
   updateBlog,
   getAllBlogPost,
   getSingleBlogPost,
+  deletePost,
 } = require('../controllers/blogController');
-const { deleteCategory } = require('../controllers/categoryController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
 const { verifyUserRoles } = require('../middleware/roleMiddleware');
@@ -32,7 +32,7 @@ router
     uploadFile.array('files', 10),
     updateBlog
   )
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteCategory)
+  .delete(verifyToken, verifyUserRoles(ROLES.admin), deletePost)
   .get(getSingleBlogPost);
 
 module.exports = router;
