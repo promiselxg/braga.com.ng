@@ -30,7 +30,7 @@ const addReview = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-//  Add Review
+//  Delete Review
 const deleteReview = asyncHandler(async (req, res) => {
   const { id, roomid } = req.params;
   if (!id || !roomid) {
@@ -52,7 +52,7 @@ const deleteReview = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-//  Add Review
+//  Approve Review
 const approveReview = asyncHandler(async (req, res) => {
   const { id, roomid } = req.params;
   if (!id || !roomid) {
@@ -68,7 +68,9 @@ const approveReview = asyncHandler(async (req, res) => {
     const updateReviews = await Review.findByIdAndUpdate(
       id,
       {
-        $set: req.body,
+        $set: {
+          status: 'approved',
+        },
       },
       { new: true }
     );
@@ -81,16 +83,35 @@ const approveReview = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-//  Add Review
+//  Get All Reviews
 const getAllReviews = asyncHandler(async (req, res) => {
   try {
     const reviews = await Review.find().sort({ _id: -1 }).populate({
       path: 'room',
-      select: '_id title',
+      select: '_id title imgThumbnail roomNumbers',
     });
     return res.status(200).json({
       status: 'success',
       data: reviews,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+//  Get Single Review
+const getSingleReview = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const reviews = await Review.findById(id);
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        text: reviews.text,
+        status: reviews.status,
+        roomid: reviews.room,
+        id: reviews._id,
+      },
     });
   } catch (error) {
     res.status(400);
@@ -103,4 +124,5 @@ module.exports = {
   deleteReview,
   approveReview,
   getAllReviews,
+  getSingleReview,
 };

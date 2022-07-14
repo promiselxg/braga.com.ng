@@ -4,6 +4,7 @@ const {
   addReview,
   deleteReview,
   approveReview,
+  getSingleReview,
 } = require('../controllers/reviewsController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
@@ -13,7 +14,9 @@ const ROLES = require('../utils/roles');
 const router = express.Router();
 
 router.route('/').get(queryFilter(Reviews), getAllReviews);
-
+router
+  .route('/:id')
+  .get(verifyToken, verifyUserRoles(ROLES.admin), getSingleReview);
 router.route('/:roomid').post(verifyToken, addReview);
 router
   .route('/:roomid/:id')

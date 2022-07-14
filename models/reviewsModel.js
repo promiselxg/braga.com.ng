@@ -29,8 +29,8 @@ const reviewsSchema = mongoose.Schema(
       required: [true, 'Please add a rating between 1 to 5'],
     },
     status: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: 'pending',
     },
   },
   { timestamps: true }

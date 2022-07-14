@@ -27,6 +27,7 @@ app.use('/api/v2/reviews', ReviewsRoutes);
 app.use('/api/v2/reservation', ReservationRoutes);
 app.use('/api/v2/category', CategoryRoutes);
 app.use('/api/v2/gallery', require('./routes/galleryRoutes'));
+app.use('/api/v2/blog', require('./routes/blogRoutes'));
 app.use('/api/v2/auth', require('./routes/authRoutes'));
 // //  404 route
 app.use('*', (req, res) =>
