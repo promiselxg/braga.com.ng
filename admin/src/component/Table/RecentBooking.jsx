@@ -1,22 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { TableWrapper } from '../../routes/Dashboard/Dashboard.styled';
-import { Skeleton, Space, Table, Tag, Modal, Select } from 'antd';
+import { Skeleton, Space, Tag, Modal } from 'antd';
 import DataTable from 'react-data-table-component';
 
-import {
-  FiEye,
-  FiSearch,
-  // FiMoreHorizontal,
-  // FiTrash2,
-  // FiEdit,
-} from 'react-icons/fi';
+import { FiEye } from 'react-icons/fi';
 // import { Link } from 'react-router-dom';
 import { RoomContext } from '../../context/RoomContext';
 import Image from '../Image';
 import axios from 'axios';
 import FilterComponent from '../FilterComponent';
-// import Swal from 'sweetalert2';
-const { Option } = Select;
+import NumberFormat from 'react-number-format';
 
 const RecentBooking = ({ title }) => {
   let data = [];
@@ -42,168 +35,6 @@ const RecentBooking = ({ title }) => {
       status: [booking?.status],
     })
   );
-
-  const columnss = [
-    {
-      title: '',
-      dataIndex: 'img',
-      key: 'img',
-      render: (img) => (
-        <Space size="middle">
-          <Image
-            src={img}
-            alt={img}
-            style={{
-              width: '50px',
-              overflow: 'hidden',
-              height: '50px',
-              objectFit: 'cover',
-              borderRadius: '3px',
-            }}
-          />
-        </Space>
-      ),
-    },
-    {
-      title: 'Reservation No.',
-      dataIndex: 'reservation_no',
-      key: 'reservation_no',
-      render: (_, { reservation_no }) => (
-        <>
-          {reservation_no.map((tag) => {
-            return (
-              <Tag color="green" key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Room Name',
-      dataIndex: 'room_name',
-      key: 'room_name',
-      render: (text) => (
-        <span style={{ textTransform: 'capitalize', fontWeight: '600' }}>
-          {text}
-        </span>
-      ),
-    },
-    {
-      title: 'Check-in',
-      dataIndex: 'check_in',
-      key: 'check_in',
-    },
-    {
-      title: 'Check-out',
-      dataIndex: 'check_out',
-      key: 'check_out',
-    },
-    {
-      title: 'Total Days',
-      dataIndex: 'total_days',
-      key: 'total_days',
-    },
-    {
-      title: 'Status',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = '';
-            if (tag === 'pending') {
-              color = 'volcano';
-            } else {
-              color = 'green';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, render) => (
-        <Space size="middle">
-          <span
-            onClick={() => setVisible(true)}
-            style={{ cursor: 'pointer' }}
-            onMouseDown={() => setRoomId(render.rid[0])}
-          >
-            <FiEye />
-          </span>
-          {/* <Dropdown
-            placement="bottom"
-            overlay={
-              <Menu
-                items={[
-                  {
-                    label: (
-                      <Link to={`/rooms/1/edit`} className="menu">
-                        <FiEdit />
-                        Edit
-                      </Link>
-                    ),
-                    key: 0,
-                  },
-                  // {
-                  //   label: (
-                  //     <span
-                  //       className="menu"
-                  //       onClick={() =>
-                  //         Swal.fire({
-                  //           title: 'Are you sure?',
-                  //           text: `You won't be able to revert this!`,
-                  //           icon: 'warning',
-                  //           showCancelButton: true,
-                  //           confirmButtonColor: '#3085d6',
-                  //           cancelButtonColor: '#d33',
-                  //           confirmButtonText: 'Yes, delete it!',
-                  //           showLoaderOnConfirm: true,
-                  //           preConfirm: async () => {
-                  //             const response = await axios.delete(
-                  //               `api/v2/rooms/`
-                  //             );
-                  //             return response;
-                  //           },
-                  //           allowOutsideClick: () => !Swal.isLoading(),
-                  //         }).then((result) => {
-                  //           if (result.isConfirmed) {
-                  //             Swal.fire({
-                  //               icon: 'success',
-                  //               text: `${result.value.data.message}`,
-                  //             });
-                  //             return (window.location = '/bookings');
-                  //           }
-                  //         })
-                  //       }
-                  //     >
-                  //       <FiTrash2 />
-                  //       Delete
-                  //     </span>
-                  //   ),
-                  //   key: 1,
-                  // },
-                ]}
-              />
-            }
-            trigger={['click']}
-          >
-            <Space size="middle" className="action__btn">
-              <FiMoreHorizontal />
-            </Space>
-          </Dropdown> */}
-        </Space>
-      ),
-    },
-  ];
   const columns = [
     {
       name: 'Image',
@@ -231,7 +62,14 @@ const RecentBooking = ({ title }) => {
       selector: (row) => row.amount,
       cell: (row) => (
         <>
-          <b>{row.amount}</b>
+          <b>
+            <NumberFormat
+              value={row.amount}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix="&#8358;"
+            />
+          </b>
         </>
       ),
     },

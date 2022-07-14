@@ -7,6 +7,7 @@ export { default as AddGallery } from './Gallery/Add';
 export { default as EditBooking } from './Booking/Edit';
 export { default as EditGallery } from './Gallery/Edit';
 export { default as Bookings } from './Booking';
+export { default as BlogPost } from './Blog';
 export { default as Customers } from './Customer';
 export { default as Login } from './Login';
 export { default as Reviews } from './Rooms/Reviews';

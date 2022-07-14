@@ -5,6 +5,7 @@ import { AuthContext } from './context/AuthContext';
 import {
   AddGallery,
   AddRooms,
+  BlogPost,
   Bookings,
   Customers,
   Dashboard,
@@ -66,6 +67,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Bookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <ProtectedRoute>
+              <BlogPost />
             </ProtectedRoute>
           }
         />

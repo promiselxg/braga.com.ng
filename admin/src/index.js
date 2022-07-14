@@ -6,15 +6,18 @@ import GlobalStyle from './GlobalStyle';
 import 'antd/dist/antd.min.css';
 import { AuthContextProvider } from './context/AuthContext';
 import { RoomContextProvider } from './context/RoomContext';
+import { BlogContextProvider } from './context/BlogContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
     <RoomContextProvider>
-      <BrowserRouter>
-        <GlobalStyle />
-        <App />
-      </BrowserRouter>
+      <BlogContextProvider>
+        <BrowserRouter>
+          <GlobalStyle />
+          <App />
+        </BrowserRouter>
+      </BlogContextProvider>
     </RoomContextProvider>
   </AuthContextProvider>
 );

@@ -6,12 +6,12 @@ import {
   FiCalendar,
   FiHome,
   FiKey,
-  FiMail,
   FiPlus,
   FiSettings,
   FiUser,
   FiImage,
   FiStar,
+  FiBookOpen,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -57,14 +57,16 @@ const items = [
     getItem(<Link to="/gallery/new">New Gallery</Link>, '02', <FiPlus />),
     getItem(<Link to="/gallery">All Gallery</Link>, '03', <FiPlus />),
   ]),
-  getItem(<Link to="/customers">Customers</Link>, '6', <FiUser />),
+  getItem(<Link to="/blog">Blog Post</Link>, 'sub4', <FiBookOpen />, [
+    getItem(<Link to="/blog/new">New Blog Post</Link>, '002', <FiPlus />),
+    getItem(<Link to="/blog">All Blog Post</Link>, '003', <FiPlus />),
+  ]),
   getItem(<Link to="/">Payment</Link>, 'sub5', <FaDollarSign />, [
     getItem('Option 9', '11'),
     getItem('Option 10', '12'),
     getItem('Option 11', '13'),
     getItem('Option 12', '14'),
   ]),
-  getItem(<Link to="/">Support</Link>, 'sub6', <FiMail />),
   getItem(<Link to="/">Profile Management</Link>, 'sub7', <FiSettings />, [
     getItem('Change Username', '15', <FiUser />),
     getItem('Change Password', '16', <FiKey />),
