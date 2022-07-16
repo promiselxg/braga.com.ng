@@ -3,8 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './component/Layout';
 import { AuthContext } from './context/AuthContext';
 import {
+  AddBlogPost,
   AddGallery,
   AddRooms,
+  AllUsers,
   BlogPost,
   Bookings,
   Customers,
@@ -79,6 +81,14 @@ function App() {
           }
         />
         <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <AllUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/customers"
           element={
             <ProtectedRoute>
@@ -91,6 +101,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AddRooms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog/new"
+          element={
+            <ProtectedRoute>
+              <AddBlogPost />
             </ProtectedRoute>
           }
         />

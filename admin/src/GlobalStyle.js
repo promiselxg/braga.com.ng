@@ -19,7 +19,26 @@ const GlobalStyle = createGlobalStyle`
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+.form__control {
+    display: block;
+    width: 100%;
+    padding: 0.4375rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: #3c4d62;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dbdfea;
+    appearance: none;
+    border-radius: 4px;
 
+    :focus,
+    .focus-visible:focus:not(:focus-visible) {
+      outline: 0;
+      box-shadow: 0 0 0 0.4rem #fff, 0 0 0 0.35rem #069;
+    }
+  }
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.05);
@@ -108,6 +127,14 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 }
 p{
   color: #8094ae !important;
+}
+.ant-btn-default{
+  display:none!important;
+}
+.ql-editor{
+  height:300px !important;
+  white-space:normal !important ;
+  font-size:16px !important ;
 }
 `;
 
