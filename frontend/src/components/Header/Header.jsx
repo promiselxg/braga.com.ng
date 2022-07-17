@@ -1,13 +1,30 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, Button, SideBar } from '..';
+import { Image, Button } from '..';
 import { Logo } from '../../assets';
 import { Container } from '../../GlobalStyle';
 import { Links } from '../NavAnchor';
 import { HeaderContainer, HeaderWrapper, Nav, NavLogo } from './Header.style';
 import { Drawer } from 'antd';
 import { FiMenu } from 'react-icons/fi';
+import styled from 'styled-components';
+const DrawerWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 100px);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  a {
+    font-size: 2rem;
+    line-height: 4rem;
 
+    :hover {
+      text-decoration: underline;
+    }
+  }
+`;
 const Header = () => {
   const [visible, setVisible] = useState(false);
   const showDrawer = () => {
@@ -30,9 +47,9 @@ const Header = () => {
               </NavLogo>
               <Nav>
                 <Links url="/" label="Home" />
-                <Links url="/about" label="About Us" />
+                <Links url="/" label="About Us" />
                 <Links url="/rooms" label="Rooms" />
-                <Links url="/contact" label="Contact Us" />
+                <Links url="/" label="Contact Us" />
                 <Link to="/rooms">
                   <Button
                     label="Book a Room"
@@ -56,10 +73,13 @@ const Header = () => {
         </Container>
       </HeaderWrapper>
       <Drawer placement="right" onClose={onClose} visible={visible}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <SideBar />
+        <DrawerWrapper>
+          <Link to="/">Home</Link>
+          <Link to="/rooms">Rooms</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/services">Services</Link>
+          <Link to="/contact">Contact Us</Link>
+        </DrawerWrapper>
       </Drawer>
     </>
   );

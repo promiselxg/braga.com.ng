@@ -30,6 +30,14 @@ const StyledButton = styled.button`
     background: ${({ hoverBg }) => hoverBg || ''};
     color: ${({ hoverColor }) => hoverColor || ''};
   }
+  :disabled {
+    cursor: not-allowed;
+    background: #000;
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
 `;
 const Button = ({ icon, label, ...children }) => {
   return (

@@ -25,11 +25,11 @@ const Footer = () => {
                 </Typography>
               </FooterTitle>
               <FooterLinks>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
+                <Link to="/">Home</Link>
+                <Link to="/room">About Us</Link>
+                <Link to="/room">Privacy Policy</Link>
+                <Link to="/room">Lodging Rules</Link>
+                <Link to="/room">Refund Policy</Link>
               </FooterLinks>
             </FooterItem>
             <FooterItem>
@@ -39,11 +39,10 @@ const Footer = () => {
                 </Typography>
               </FooterTitle>
               <FooterLinks>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
-                <Link to="/room">Home</Link>
+                <Link to="/room">Room Service</Link>
+                <Link to="/room">Car Pickup</Link>
+                <Link to="/room">Outdoor Bar</Link>
+                <Link to="/room">Laundry</Link>
               </FooterLinks>
             </FooterItem>
             <FooterItem>

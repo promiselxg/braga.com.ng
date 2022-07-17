@@ -7,6 +7,8 @@ import { Container, Typography } from '../../GlobalStyle';
 import NumberFormat from 'react-number-format';
 import { Skeleton } from 'antd';
 import useFetch from '../../hooks/useFetch';
+import LazyLoad from 'react-lazyload';
+
 const Wrapper = styled.div`
   width: 100%;
   text-align: center;
@@ -121,103 +123,95 @@ const RoomsSection = () => {
         <Bg></Bg>
         <Container>
           <SectionContainer>
-            {loading ? (
-              <Skeleton active={loading} />
-            ) : (
-              <>
-                {data?.data?.map((room, i) => (
-                  <RoomCard key={i}>
-                    <Link to={`/room/${room._id}`}>
-                      <CardHeading bg={room.imgThumbnail}></CardHeading>
+            {data?.data?.map((room, i) => (
+              <RoomCard key={i}>
+                <Link to={`/room/${room._id}`}>
+                  <LazyLoad
+                    height={200}
+                    placeholder={
+                      <Skeleton
+                        active={loading}
+                        style={{ padding: '5px 10px' }}
+                      />
+                    }
+                  >
+                    <CardHeading bg={room.imgThumbnail}></CardHeading>
+                  </LazyLoad>
+                </Link>
+
+                <CardBody>
+                  <CardTitle>
+                    <Link to={`/room/${room?._id}`}>
+                      <Typography
+                        as="h2"
+                        fontSize="1rem"
+                        fontWeight="600"
+                        style={{ textTransform: 'capitalize' }}
+                      >
+                        {room.title}
+                      </Typography>
+                      <FiStar />
+                      <FiStar />
                     </Link>
+                  </CardTitle>
 
-                    <CardBody>
-                      <CardTitle>
-                        <Link to={`/room/${room?._id}`}>
-                          <Typography
-                            as="h2"
-                            fontSize="1rem"
-                            fontWeight="600"
-                            style={{ textTransform: 'capitalize' }}
-                          >
-                            {room.title}
+                  <CardInfo>
+                    {!room.discount ? (
+                      <>
+                        <div className="price">
+                          <Typography as="h2" fontSize="1rem" fontWeight="600">
+                            &#8358;
+                            <NumberFormat
+                              displayType={'text'}
+                              value={room.price}
+                              thousandSeparator={true}
+                            />
+                            /night
                           </Typography>
-                          <FiStar />
-                          <FiStar />
-                        </Link>
-                      </CardTitle>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="price">
+                          <Typography as="h2" fontSize="1rem" fontWeight="600">
+                            &#8358;
+                            <NumberFormat
+                              displayType={'text'}
+                              value={room.price}
+                              thousandSeparator={true}
+                            />
+                            /night
+                          </Typography>
+                        </div>
 
-                      <CardInfo>
-                        {!room.discount ? (
-                          <>
-                            <div className="price">
-                              <Typography
-                                as="h2"
-                                fontSize="1rem"
-                                fontWeight="600"
-                              >
-                                &#8358;
-                                <NumberFormat
-                                  displayType={'text'}
-                                  value={room.price}
-                                  thousandSeparator={true}
-                                />
-                                /night
-                              </Typography>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="price">
-                              <Typography
-                                as="h2"
-                                fontSize="1rem"
-                                fontWeight="600"
-                              >
-                                &#8358;
-                                <NumberFormat
-                                  displayType={'text'}
-                                  value={room.price}
-                                  thousandSeparator={true}
-                                />
-                                /night
-                              </Typography>
-                            </div>
+                        <div className="discount">
+                          <Typography as="h2" fontSize=".8rem" fontWeight="400">
+                            <s>
+                              &#8358;
+                              <NumberFormat
+                                displayType={'text'}
+                                value={room.discount}
+                                thousandSeparator={true}
+                              />
+                            </s>{' '}
+                            - {room.discount}% off
+                          </Typography>
+                        </div>
+                      </>
+                    )}
 
-                            <div className="discount">
-                              <Typography
-                                as="h2"
-                                fontSize=".8rem"
-                                fontWeight="400"
-                              >
-                                <s>
-                                  &#8358;
-                                  <NumberFormat
-                                    displayType={'text'}
-                                    value={room.discount}
-                                    thousandSeparator={true}
-                                  />
-                                </s>{' '}
-                                - {room.discount}% off
-                              </Typography>
-                            </div>
-                          </>
-                        )}
-
-                        <Link to={`/rooms/${room._id}/book`}>
-                          <Button
-                            label="Book Now"
-                            bg="var(--yellow)"
-                            hoverBg="#000"
-                            hoverColor="#fff"
-                          />
-                        </Link>
-                      </CardInfo>
-                    </CardBody>
-                  </RoomCard>
-                ))}
-              </>
-            )}
+                    <Link to={`/rooms/${room._id}/book`}>
+                      <Button
+                        label="Book Now"
+                        bg="var(--yellow)"
+                        hoverBg="#000"
+                        hoverColor="#fff"
+                      />
+                    </Link>
+                  </CardInfo>
+                </CardBody>
+              </RoomCard>
+            ))}
           </SectionContainer>
         </Container>
       </SectionWrapper>

@@ -9,6 +9,7 @@ import {
   Services,
   About,
   Slider,
+  Blog,
 } from '../components';
 import { Typography } from '../GlobalStyle';
 
@@ -41,6 +42,7 @@ const HomeScreen = () => {
         Our Gallery
       </Typography>
       <Slider />
+      <Blog />
     </>
   );
 };

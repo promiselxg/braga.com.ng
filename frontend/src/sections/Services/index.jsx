@@ -75,17 +75,17 @@ const Services = () => {
           </Typography>
         </div>
         <div className="container">
-          {Service.map((item, i) => (
+          {Service?.map((item, i) => (
             <ServicesCard key={i}>
               <CardTitle>
-                {item.icon && <Icon bg={item.bg}>{item.icon}</Icon>}
+                {item?.icon && <Icon bg={item?.bg}>{item?.icon}</Icon>}
                 <Typography as="h2" fontSize=".85rem" fontWeight="600">
-                  {item.title}
+                  {item?.title}
                 </Typography>
               </CardTitle>
               <CardInfo>
                 <Typography as="p" fontWeight="400" fontSize="0.8rem">
-                  {item.desc}
+                  {item?.desc}
                 </Typography>
               </CardInfo>
             </ServicesCard>

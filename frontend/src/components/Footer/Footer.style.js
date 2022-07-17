@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const FooterWrapper = styled.footer`
   background: #3c3c3c;
   padding: 80px 0;
-  margin-top: 50px;
   display: flex;
   width: 100%;
 

@@ -1,10 +1,11 @@
-import { Breadcrumb, Checkbox } from 'antd';
+import { Breadcrumb, Checkbox, Input, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Button, Notification, Section } from '../components';
 import { Links } from '../components/NavAnchor';
 import { RoomHeader } from '../components/Room/Room.style';
 import { Typography } from '../GlobalStyle';
-import { Input } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+
 import { v4 as uuidv4 } from 'uuid';
 import { usePaystackPayment } from 'react-paystack';
 import {
@@ -33,7 +34,14 @@ import {
 import { processPayment } from '../redux/room/roomPaymentSlice';
 
 const { TextArea } = Input;
-
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 44,
+    }}
+    spin
+  />
+);
 const CheckoutScreen = () => {
   const {
     success,
@@ -65,6 +73,9 @@ const CheckoutScreen = () => {
       id: uuidv4(),
     },
   ]);
+
+  console.log(isLoading);
+
   const location = useLocation();
   const id = location.pathname.split('/')[2];
   const checkin = moment(checkIn, 'DD-MM-YYYY');
@@ -140,7 +151,7 @@ const CheckoutScreen = () => {
         },
       };
       dispatch(makeReservation(userData));
-      dispatch(reset());
+      //dispatch(reset());
     }
   };
   //  Submit form
@@ -176,7 +187,7 @@ const CheckoutScreen = () => {
         },
       };
       dispatch(startPayment(userData));
-      dispatch(reset());
+      //dispatch(reset());
     }
   };
 
@@ -206,8 +217,8 @@ const CheckoutScreen = () => {
         },
         () => console.log('closed')
       );
+      dispatch(reset());
     }
-    dispatch(reset());
   }, [dispatch, isCompleted, initializePayment, id, record]);
 
   if (isSuccess || success) {
@@ -223,7 +234,7 @@ const CheckoutScreen = () => {
       {success && (
         <Notification message="Payment successfull." type="success" />
       )}
-      <Section>
+      <Section style={{ marginBottom: '20px' }}>
         <CheckOutWrapper>
           <RoomHeader>
             <Breadcrumb>
@@ -245,7 +256,7 @@ const CheckoutScreen = () => {
             </Breadcrumb>
           </RoomHeader>
           <CheckOutContainer>
-            <div className="notice">
+            {/* <div className="notice">
               Not ready to submit Your reservation?
               <Button
                 label="Save for later"
@@ -254,7 +265,7 @@ const CheckoutScreen = () => {
                 hoverBg="var(--yellow)"
                 hoverColor="#000"
               />
-            </div>
+            </div> */}
             <CheckoutUserInfo>
               <Left>
                 <form>
@@ -403,24 +414,6 @@ const CheckoutScreen = () => {
                             </Link>
                           </Checkbox>
                         </div>
-                        <div className="rules btn">
-                          <Button
-                            bg="var(--yellow)"
-                            label="Pay Online"
-                            hoverBg="var(--blue)"
-                            hoverColor="#fff"
-                            disabled={isLoading}
-                            onClick={HandlePayment}
-                          />
-                          <Button
-                            label="Pay at the hotel."
-                            bg="var(--blue)"
-                            hoverBg="var(--yellow)"
-                            hoverColor="#fff"
-                            disabled={isLoading}
-                            onClick={HandleSubmit}
-                          />
-                        </div>
                       </Typography>
                     </div>
                   </div>
@@ -509,21 +502,41 @@ const CheckoutScreen = () => {
                     </PriceInfo>
                   </RoomDetails>
                   <AccountSumary>
-                    <Button
-                      bg="var(--yellow)"
-                      label="Pay Online"
-                      hoverBg="var(--blue)"
-                      hoverColor="#fff"
-                      disabled={isLoading}
-                      onClick={HandlePayment}
-                    />
-                    <Button
-                      bg="var(--blue)"
-                      label="Pay at the Hotel"
-                      hoverBg="var(--yellow)"
-                      disabled={isLoading}
-                      onClick={HandleSubmit}
-                    />
+                    {isLoading ? (
+                      <Spin indicator={antIcon} />
+                    ) : (
+                      <>
+                        <Button
+                          bg="var(--yellow)"
+                          label="Pay Online"
+                          hoverBg="var(--blue)"
+                          hoverColor="#fff"
+                          disabled={
+                            isLoading ||
+                            !terms ||
+                            !guestMember[0].first_name ||
+                            !guestMember[0].last_name ||
+                            !guestMember[0].phone ||
+                            !guestMember[0].email
+                          }
+                          onClick={HandlePayment}
+                        />
+                        <Button
+                          bg="var(--blue)"
+                          label="Pay at the Hotel"
+                          hoverBg="var(--yellow)"
+                          disabled={
+                            isLoading ||
+                            !terms ||
+                            !guestMember[0].first_name ||
+                            !guestMember[0].last_name ||
+                            !guestMember[0].phone ||
+                            !guestMember[0].email
+                          }
+                          onClick={HandleSubmit}
+                        />
+                      </>
+                    )}
                   </AccountSumary>
                 </div>
               </Right>

@@ -1,5 +1,8 @@
-import { FiTrash2 } from 'react-icons/fi';
-export const Rooms = [
+import { FiArchive, FiTrash2 } from 'react-icons/fi';
+import { AiFillCar } from 'react-icons/ai';
+import { BiBeer } from 'react-icons/bi';
+import { Banner_1, Banner_2, Banner_3, Banner_4, Banner_5 } from '..';
+export const Roomsx = [
   {
     title: 'Presidential Villa',
     img: 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
@@ -38,21 +41,44 @@ export const Services = [
     desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
   },
   {
-    title: '24/7 Room service',
-    icon: <FiTrash2 />,
+    title: 'Car Pickup',
+    icon: <AiFillCar />,
     bg: '#2400FF',
     desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
   },
   {
-    title: '24/7 Room service',
-    icon: <FiTrash2 />,
+    title: 'Outdoor Bar',
+    icon: <BiBeer />,
     bg: '#F45800',
     desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
   },
   {
-    title: '24/7 Room service',
-    icon: <FiTrash2 />,
+    title: 'Laundry',
+    icon: <FiArchive />,
     bg: 'var(--yellow)',
     desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
+  },
+];
+
+export const slideBanner = [
+  {
+    img: Banner_1,
+    text: 'Find pleasure in our bar to stay calm.',
+  },
+  {
+    img: Banner_2,
+    text: 'Find pleasure in our bar to stay calm.',
+  },
+  {
+    img: Banner_3,
+    text: 'Find pleasure in our bar to stay calm.',
+  },
+  {
+    img: Banner_4,
+    text: 'Find pleasure in our bar to stay calm.',
+  },
+  {
+    img: Banner_5,
+    text: 'Find pleasure in our bar to stay calm.',
   },
 ];

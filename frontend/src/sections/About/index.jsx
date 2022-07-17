@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Image, Section } from '../../components';
 import { Typography } from '../../GlobalStyle';
-
+import { Banner_2 } from '../../assets';
 const AboutSectionWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 80px);
@@ -79,10 +79,7 @@ const AboutSection = () => {
           </Typography>
           <div className="container">
             <div className="image__wrapper">
-              <Image
-                src="https://www.ekohotels.com/assets/img/home-about.jpg"
-                alt="about us"
-              />
+              <Image src={Banner_2} alt="about us" />
             </div>
             <div className="about__wrapper">
               <Typography as="h4" fontSize="0.7rem" fontWeight="400">
@@ -92,18 +89,14 @@ const AboutSection = () => {
                 The Most Preferred Hotel in West Africa
               </Typography>
               <Typography as="p" fontSize="0.7rem">
-                Eko Hotels &amp; Suites is the most preferred hotel in West
-                Africa, and it is all about the right mix! Located in the heart
-                of Victoria Island, we offer our clients a perfect blend of
-                business &amp; leisure amenities with dining and recreational
-                options delicately infused in one amazing space. We crown all
-                these with services that meet the highest international
-                standards.
+                Braga Hotel is a modern, elegant and home of hospitality. it is
+                perfect for romantic get away, vacationand relaxation.
               </Typography>
               <Typography as="p" fontSize="0.7rem">
-                Overlooking the new Eko Atlantic City and Atlantic Ocean, it is
-                just a 10-minute drive to the City Centre and only 45minutes
-                away from the Airport.
+                The rooms are new,well-lit and inviting. While you enjoy a
+                cocktail by the swimming pool you will be stunned by the
+                breathtaking view of art designs and good music. Our Resturants
+                serves both local and international dishes.
               </Typography>
             </div>
           </div>

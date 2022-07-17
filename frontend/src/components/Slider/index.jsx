@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { SliderWrapper } from './Slider.style';
+import LazyLoad from 'react-lazyload';
 
 const responsive = {
   superLargeDesktop: {
@@ -47,11 +48,12 @@ const Slider = () => {
   return (
     <>
       <SliderWrapper>
-        {loading ? (
-          <div style={{ padding: '0 20px' }}>
-            <Skeleton active={loading} />
-          </div>
-        ) : (
+        <LazyLoad
+          height={250}
+          placeholder={
+            <Skeleton active={loading} style={{ padding: '0 20px' }} />
+          }
+        >
           <Carousel responsive={responsive}>
             {gallery.map((img) => (
               <div key={img._id}>
@@ -59,7 +61,7 @@ const Slider = () => {
               </div>
             ))}
           </Carousel>
-        )}
+        </LazyLoad>
       </SliderWrapper>
     </>
   );

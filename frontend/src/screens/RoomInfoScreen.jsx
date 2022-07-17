@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Breadcrumb, Image, Rate, Skeleton } from 'antd';
+import { Breadcrumb, Comment, Image, List, Rate, Skeleton } from 'antd';
 import { Button, Section, SideBar, Image as Img } from '../components';
 import { Links, LinkScroll } from '../components/NavAnchor';
 import { Typography } from '../GlobalStyle';
@@ -48,6 +48,15 @@ const RoomInfoScreen = () => {
       behavior: 'smooth',
     });
   }, [dispatch, id, pathname]);
+
+  var reviews = [];
+  room?.reviews?.forEach((review) => {
+    reviews.push({
+      author: review.user,
+      avatar: 'https://joeschmoe.io/api/v1/random',
+      content: <p>{review.text}</p>,
+    });
+  });
 
   return (
     <>
@@ -107,8 +116,10 @@ const RoomInfoScreen = () => {
                         duration={500}
                       />
                       <LinkScroll
-                        to="reiews"
-                        label="Guest reviews (50,000)"
+                        to="reviews"
+                        label={`Guest reviews (${
+                          isLoading ? 0 : room?.reviews?.length
+                        })`}
                         spy={true}
                         smooth={true}
                         offset={50}
@@ -126,12 +137,18 @@ const RoomInfoScreen = () => {
                     <div className="reserve">
                       {/* <FiHeart className="icon" /> */}
                       <Link to={`/rooms/${room?.data?._id}/book`}>
-                        <Button label="Reserve" bg="var(--blue)" />
+                        <Button
+                          label="Reserve"
+                          bg="var(--blue)"
+                          hoverBg="var(--yellow)"
+                          color="#fff"
+                          hoverColor="#000"
+                        />
                       </Link>
                     </div>
                   </RoomHeading>
                   {isLoading ? (
-                    <Skeleton />
+                    <Skeleton active={isLoading} />
                   ) : (
                     <>
                       <RoomImageWrapper>
@@ -252,14 +269,18 @@ const RoomInfoScreen = () => {
                       <Typography as="h2" fontSize="1rem" fontWeight="600">
                         Price
                       </Typography>
-                      <div className="room__feature">
-                        &#8358;
-                        <NumberFormat
-                          displayType={'text'}
-                          value={room?.data?.price}
-                          thousandSeparator={true}
-                        />
-                      </div>
+                      {isLoading ? (
+                        <Skeleton active={isLoading} />
+                      ) : (
+                        <div className="room__feature">
+                          &#8358;
+                          <NumberFormat
+                            displayType={'text'}
+                            value={room?.data?.price}
+                            thousandSeparator={true}
+                          />
+                        </div>
+                      )}
                     </div>
                   </RoomInfoBody>
                 </div>
@@ -316,6 +337,40 @@ const RoomInfoScreen = () => {
                             itaque doloribus repellat accusamus ipsam
                             repellendus atque obcaecati eius?
                           </span>
+                        </div>
+                      </div>
+                    </div>
+                  </RoomInfoBody>
+                </div>
+              </RoomInfo>
+              <RoomInfo id="reviews">
+                <div className="room__info__container">
+                  <RoomInfoHeader>
+                    <Typography as="h2" fontSize="1.5rem" fontWeight="600">
+                      Reviews
+                    </Typography>
+                  </RoomInfoHeader>
+                  <RoomInfoBody>
+                    <div className="card policy">
+                      <div className="room__feature">
+                        <div className="item policy__item">
+                          <List
+                            className="comment-list"
+                            header={`${reviews.length} reviews`}
+                            itemLayout="horizontal"
+                            dataSource={reviews}
+                            renderItem={(item) => (
+                              <li>
+                                <Comment
+                                  actions={item.actions}
+                                  author={item.author}
+                                  avatar={item.avatar}
+                                  content={item.content}
+                                  datetime={item.datetime}
+                                />
+                              </li>
+                            )}
+                          />
                         </div>
                       </div>
                     </div>

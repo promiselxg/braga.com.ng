@@ -12,7 +12,7 @@ const Room = () => {
   return (
     <>
       {isLoading ? (
-        <Skeleton />
+        <Skeleton active={isLoading} />
       ) : (
         rooms?.data?.map((room, i) => (
           <div className="room" key={i}>
