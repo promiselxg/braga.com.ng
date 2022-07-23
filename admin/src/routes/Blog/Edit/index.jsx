@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill'; // ES6
+import 'react-quill/dist/quill.snow.css'; // ES6
 import { useLocation } from 'react-router-dom';
 import {
   Content,
@@ -7,19 +9,23 @@ import {
 } from '../../Dashboard/Dashboard.styled';
 import { LoadingOutlined } from '@ant-design/icons';
 import { ContentWrapper, Form } from '../../Booking/Booking.styled';
-import { Col, Row, Image, message, Radio } from 'antd';
+import { Col, Row, Image, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Spinner } from '../../../component';
-import axios from 'axios';
 
-const EditGallery = () => {
+import axios from 'axios';
+import { useEffect } from 'react';
+
+const EditBlog = () => {
   const [selectedImages, setselectedImages] = useState([]);
   const [files, setFiles] = useState([]);
-  const [value, setValue] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [blogTitle, setBlogTitle] = useState('');
+  const [blogPost, setBlogPost] = useState('');
   let id = useLocation().pathname.split('/')[2];
+  const onChange = (content, delta, source, editor) => {
+    setBlogPost(editor.getText(content));
+  };
 
   const config = {
     headers: {
@@ -34,6 +40,7 @@ const EditGallery = () => {
       spin
     />
   );
+
   const imageHandleChange = (e) => {
     setselectedImages([]);
     if (e.target.files) {
@@ -62,7 +69,7 @@ const EditGallery = () => {
         Object.values(files).map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);
-          formData.append('upload_preset', 'braga_gallery');
+          formData.append('upload_preset', 'braga_blog');
           formData.append('timestamp', timestamp);
           formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
           const uploadRes = await axios.post(
@@ -75,44 +82,37 @@ const EditGallery = () => {
         })
       );
 
-      const newMedia = {
-        title,
-        description,
+      const newPost = {
+        blog_title: blogTitle,
+        blog_post: blogPost,
         photos: list,
       };
+
       try {
-        const response = await axios.put(
-          `/api/v2/gallery/${id}`,
-          newMedia,
-          config
-        );
+        const response = await axios.put(`/api/v2/blog/${id}`, newPost, config);
         window.scrollTo({
           top: 0,
           left: 0,
           behavior: 'smooth',
         });
-        message.success(response.data.message);
+        message.success(response?.data?.message);
       } catch (error) {
-        message.error(error.response.data.message);
+        message.error(error?.response?.data?.message);
       }
       setUploading(false);
     } catch (error) {
-      message.error(error.response.data.message);
+      message.error(error?.response?.data?.message);
     }
   };
+
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
-      },
-    };
-    const getGalleryInfo = async () => {
-      const { data } = await axios.get(`/api/v2/gallery/${id}`, config);
-      setTitle(data?.data?.title);
-      setDescription(data?.data?.description);
+    const getBlogPost = async () => {
+      const { data } = await axios.get(`/api/v2/blog/${id}`);
+      setBlogPost(data?.data?.blog_post);
+      setBlogTitle(data?.data?.blog_title);
       setselectedImages(data?.data?.image_url);
     };
-    getGalleryInfo();
+    getBlogPost();
   }, [id]);
   return (
     <>
@@ -122,7 +122,7 @@ const EditGallery = () => {
             <div className="dashboard__overview">
               <div className="dashboard__overview__info">
                 <div className="left">
-                  <h2>Update Media Content.</h2>
+                  <h2>Edit Blog Post</h2>
                 </div>
               </div>
             </div>
@@ -139,37 +139,18 @@ const EditGallery = () => {
                     className="form__row"
                   >
                     <Col className="form__group" span={24}>
-                      <div className="label">Title</div>
+                      <div className="label">Room Title</div>
                       <input
                         type="text"
-                        placeholder="Title"
+                        placeholder="Blog Title"
                         name="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={blogTitle}
+                        onChange={(e) => setBlogTitle(e.target.value)}
                         className="form__control"
                       />
                     </Col>
                   </Row>
-                  <Row
-                    gutter={{
-                      xs: 8,
-                      sm: 16,
-                      md: 24,
-                      lg: 32,
-                    }}
-                    className="form__row"
-                  >
-                    <Col className="form_group" span={4}>
-                      <div className="label">Banner</div>
-                      <Radio.Group
-                        onChange={(e) => setValue(e.target.value)}
-                        value={value}
-                      >
-                        <Radio value="true">Yes</Radio>
-                        <Radio value="false">No</Radio>
-                      </Radio.Group>
-                    </Col>
-                  </Row>
+
                   <Row
                     gutter={{
                       xs: 8,
@@ -180,16 +161,12 @@ const EditGallery = () => {
                     className="form__row"
                   >
                     <Col className="form__group" span={24}>
-                      <div className="label">Media Description.</div>
-                      <textarea
-                        type="text"
-                        rows={4}
-                        placeholder="Description"
-                        name="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="form__control"
-                      ></textarea>
+                      <div className="label">Blog Post</div>
+                      <ReactQuill
+                        theme="snow"
+                        value={blogPost}
+                        onChange={onChange}
+                      />
                     </Col>
                   </Row>
                   <Row
@@ -227,14 +204,14 @@ const EditGallery = () => {
                       <Spinner indicator={antIcon} />
                     ) : (
                       <Button
-                        label="Update"
+                        label="Add Blog Post"
                         bg="var(--blue)"
                         color="var(--white)"
                         hoverBg="var(--yellow)"
                         hoverColor="var(--black)"
                         onClick={submitForm}
                         disabled={
-                          uploading || !title || !description || !files[0]
+                          uploading || !blogTitle || !blogPost || !files[0]
                         }
                       />
                     )}
@@ -249,4 +226,4 @@ const EditGallery = () => {
   );
 };
 
-export default EditGallery;
+export default EditBlog;

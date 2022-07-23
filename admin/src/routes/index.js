@@ -3,6 +3,7 @@ export { default as Rooms } from './Rooms';
 export { default as Gallery } from './Gallery';
 export { default as AddRooms } from './Rooms/Add';
 export { default as AddBlogPost } from './Blog/Add';
+export { default as EditBlogPost } from './Blog/Edit';
 export { default as EditRoom } from './Rooms/Edit';
 export { default as AddGallery } from './Gallery/Add';
 export { default as EditBooking } from './Booking/Edit';

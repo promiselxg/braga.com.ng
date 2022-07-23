@@ -1,5 +1,6 @@
 import { Tooltip } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
 import { Button, RoomListing } from '../../component';
 import { ContentWrapper } from '../Booking/Booking.styled';
@@ -23,12 +24,14 @@ const Rooms = () => {
                 </div>
                 <div className="right">
                   <Tooltip title="Add New Room">
-                    <Button
-                      icon={<FiPlus />}
-                      bg="var(--blue)"
-                      color="#fff"
-                      border="1px solid transparent"
-                    />
+                    <Link to="/rooms/new">
+                      <Button
+                        icon={<FiPlus />}
+                        bg="var(--blue)"
+                        color="#fff"
+                        border="1px solid transparent"
+                      />
+                    </Link>
                   </Tooltip>
                 </div>
               </div>

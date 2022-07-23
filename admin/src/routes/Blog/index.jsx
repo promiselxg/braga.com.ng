@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { BlogPostListing, Button } from '../../component';
 import { BlogContext } from '../../context/BlogContext';
+import { Link } from 'react-router-dom';
 import {
   Content,
   DashboardTableStats,
@@ -45,13 +46,15 @@ const BlogPost = () => {
                   {!loading && <p>Total Blog Posts [{blog?.count}].</p>}
                 </div>
                 <div className="right">
-                  <Tooltip title="Add New Booking">
-                    <Button
-                      icon={<FiPlus />}
-                      bg="#fff"
-                      border="1px solid rgba(0,0,0,0.1)"
-                      boxShadow="5px 7px 26px -5px #cdd4e7"
-                    />
+                  <Tooltip title="Add New Blog Post">
+                    <Link to="/blog/new">
+                      <Button
+                        icon={<FiPlus />}
+                        bg="#fff"
+                        border="1px solid rgba(0,0,0,0.1)"
+                        boxShadow="5px 7px 26px -5px #cdd4e7"
+                      />
+                    </Link>
                   </Tooltip>
                 </div>
               </div>

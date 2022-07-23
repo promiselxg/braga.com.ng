@@ -11,6 +11,7 @@ import {
   Bookings,
   Customers,
   Dashboard,
+  EditBlogPost,
   EditBooking,
   EditGallery,
   EditRoom,
@@ -126,6 +127,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditRoom />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditBlogPost />
             </ProtectedRoute>
           }
         />

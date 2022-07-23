@@ -37,6 +37,7 @@ const StyledButton = styled.button`
   :disabled {
     cursor: not-allowed;
     background: var(--black1);
+    color: #fff;
     &:hover {
       color: #fff;
     }

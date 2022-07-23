@@ -10,6 +10,8 @@ import Image from '../Image';
 import axios from 'axios';
 import FilterComponent from '../FilterComponent';
 import NumberFormat from 'react-number-format';
+import Button from '../Button';
+import Swal from 'sweetalert2';
 
 const RecentBooking = ({ title }) => {
   let data = [];
@@ -95,7 +97,7 @@ const RecentBooking = ({ title }) => {
       selector: (row) => row.total_days,
     },
     {
-      name: 'Status',
+      name: 'Payment Status',
       selector: (row) => row.status,
       cell: (row) => (
         <>
@@ -133,6 +135,12 @@ const RecentBooking = ({ title }) => {
     },
   ];
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+    },
+  };
+
   useEffect(() => {
     const config = {
       headers: {
@@ -145,7 +153,7 @@ const RecentBooking = ({ title }) => {
         dispatch({ type: 'SINGLE_ROOM_INFO_START' });
         try {
           const response = await axios.get(
-            `api/v2/reservation/${roomid}`,
+            `/api/v2/reservation/${roomid}`,
             config
           );
           dispatch({
@@ -248,6 +256,46 @@ const RecentBooking = ({ title }) => {
 
             <h3>Special Request</h3>
             <p>{room?.response?.special_request}</p>
+            {room?.status !== 'success' && (
+              <Space>
+                <Button
+                  label="Update Payment Status"
+                  bg="var(--blue)"
+                  hoverColor="#fff"
+                  hoverBg="var(--yellow)"
+                  onClick={() =>
+                    Swal.fire({
+                      title: 'Update Status',
+                      text: `You are about to update this reservation payment status.`,
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, update it!',
+                      showLoaderOnConfirm: true,
+                      backdrop: true,
+                      preConfirm: async () => {
+                        const response = await axios.put(
+                          `/api/v2/reservation/${room?.response?.reservationid}`,
+                          '',
+                          config
+                        );
+                        return response;
+                      },
+                      allowOutsideClick: () => !Swal.isLoading(),
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        Swal.fire({
+                          icon: 'success',
+                          text: `${result.value.data.message}`,
+                        });
+                        return (window.location = '/bookings');
+                      }
+                    })
+                  }
+                />
+              </Space>
+            )}
           </>
         )}
       </Modal>

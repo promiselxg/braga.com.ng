@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { TableWrapper } from '../../routes/Dashboard/Dashboard.styled';
-import { Skeleton, Space } from 'antd';
+import { Skeleton, Space, Tooltip } from 'antd';
 import DataTable from 'react-data-table-component';
 import TextTruncate from 'react-text-truncate';
-import { FiTrash2 } from 'react-icons/fi';
-// import { Link } from 'react-router-dom';
+import { FiTrash2, FiEdit } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import { BlogContext } from '../../context/BlogContext';
 import Image from '../Image';
 import FilterComponent from '../FilterComponent';
@@ -85,37 +85,47 @@ const RecentBooking = ({ title }) => {
         <>
           <Space size="middle">
             <span style={{ cursor: 'pointer' }}>
-              <FiTrash2
-                onClick={() =>
-                  Swal.fire({
-                    title: 'Are you sure?',
-                    text: `You won't be able to revert this!`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    showLoaderOnConfirm: true,
-                    backdrop: true,
-                    preConfirm: async () => {
-                      const response = await axios.delete(
-                        `/api/v2/blog/${row.id}`,
-                        config
-                      );
-                      return response;
-                    },
-                    allowOutsideClick: () => !Swal.isLoading(),
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      Swal.fire({
-                        icon: 'success',
-                        text: `${result.value.data.message}`,
-                      });
-                      return (window.location = '/blog');
-                    }
-                  })
-                }
-              />
+              <Tooltip title="Delete Blog Post">
+                <FiTrash2
+                  onClick={() =>
+                    Swal.fire({
+                      title: 'Are you sure?',
+                      text: `You won't be able to revert this!`,
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it!',
+                      showLoaderOnConfirm: true,
+                      backdrop: true,
+                      preConfirm: async () => {
+                        const response = await axios.delete(
+                          `/api/v2/blog/${row.id}`,
+                          config
+                        );
+                        return response;
+                      },
+                      allowOutsideClick: () => !Swal.isLoading(),
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        Swal.fire({
+                          icon: 'success',
+                          text: `${result.value.data.message}`,
+                        });
+                        return (window.location = '/blog');
+                      }
+                    })
+                  }
+                />
+              </Tooltip>
+              <Tooltip title="Edit Blog Post">
+                <Link
+                  to={`/blog/${row.id}/edit`}
+                  style={{ marginLeft: '10px' }}
+                >
+                  <FiEdit />
+                </Link>
+              </Tooltip>
             </span>
           </Space>
         </>

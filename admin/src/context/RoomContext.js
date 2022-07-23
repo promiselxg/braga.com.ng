@@ -14,18 +14,21 @@ const RoomReducer = (state, action) => {
   switch (action.type) {
     case 'ROOM_INFO_START':
       return {
+        ...state,
         roomInfo: null,
         loading: true,
         error: null,
       };
     case 'ROOM_INFO_SUCCESS':
       return {
+        ...state,
         roomInfo: action.payload,
         loading: false,
         error: null,
       };
     case 'ROOM_INFO_FAILURE':
       return {
+        ...state,
         roomInfo: null,
         loading: false,
         error: action.payload,

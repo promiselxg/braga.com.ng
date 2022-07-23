@@ -12,6 +12,7 @@ import { Button, Spinner } from '../../../component';
 import useFetch from '../../../hooks/useFetch';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const EditRoom = () => {
   let location = useLocation();
@@ -23,28 +24,23 @@ const EditRoom = () => {
     },
   };
 
-  const { loading: isLoading, data: EditResponse } = useFetch(
-    `/rooms/${url}`,
-    config
-  );
-
+  const { loading, data: response } = useFetch('/category?select=type');
   const [selectedImages, setselectedImages] = useState([]);
+  const [roomloading, setRoomloading] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
-  const [inputForm, setInputForm] = useState({
-    title: '',
-    price: '',
-    roomNumbers: '',
-    category: '',
-    bed_size: '',
-    ac: '',
-    adults: '',
-    kids: '',
-    cancellation: '',
-    children: '',
-    room_features: '',
-    description: '',
-  });
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [roomNumbers, setRoomNumbers] = useState('');
+  const [category, setCategory] = useState('');
+  const [bed_size, setBedSize] = useState('');
+  const [ac, setAc] = useState('');
+  const [adults, setAdults] = useState('');
+  const [kids, setKids] = useState('');
+  const [cancellation, setCancellation] = useState('');
+  const [children, setChildren] = useState('');
+  const [room_features, setRoomFeatures] = useState('');
+  const [description, setDescription] = useState('');
 
   const antIcon = (
     <LoadingOutlined
@@ -54,12 +50,7 @@ const EditRoom = () => {
       spin
     />
   );
-  const handleChange = (e) => {
-    setInputForm((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+
   const imageHandleChange = (e) => {
     setselectedImages([]);
     if (e.target.files) {
@@ -78,8 +69,7 @@ const EditRoom = () => {
       </div>
     ));
   };
-
-  const {
+  const inputForm = {
     title,
     price,
     roomNumbers,
@@ -90,9 +80,11 @@ const EditRoom = () => {
     kids,
     cancellation,
     children,
+    room_features,
     description,
-  } = inputForm;
+  };
 
+  //console.log(room);
   const submitForm = async (e) => {
     e.preventDefault();
     const timestamp = Math.round(new Date().getTime() / 1000);
@@ -114,14 +106,16 @@ const EditRoom = () => {
           return data;
         })
       );
-
       const newRoom = {
-        ...inputForm,
+        inputForm,
         photos: list,
       };
-
       try {
-        const response = await axios.post('/api/v2/rooms/new', newRoom, config);
+        const response = await axios.put(
+          `/api/v2/rooms/${url}`,
+          newRoom,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,
@@ -137,7 +131,32 @@ const EditRoom = () => {
       message.error(error.response.data.message);
     }
   };
-  const { loading, data: response } = useFetch('/category?select=type');
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+      },
+    };
+    const fetSinglRoom = async () => {
+      setRoomloading(true);
+      const { data } = await axios.get(`/api/v2/rooms/${url}`, config);
+      setTitle(data?.data?.title);
+      setPrice(data?.data?.price);
+      setRoomNumbers(`${data?.data?.roomNumbers[0]?.number}`);
+      setCategory(data?.data?.category?._id);
+      setBedSize(data?.data?.bedSize);
+      setAc(data?.data?.ac);
+      setAdults(data?.data?.noAdults);
+      setKids(data?.data?.noKids);
+      setCancellation(data?.data?.cancellation);
+      setRoomFeatures(data?.data?.room_features);
+      setDescription(data?.data?.description);
+      setselectedImages(data?.data?.otherImg);
+      setRoomloading(false);
+    };
+    fetSinglRoom();
+  }, [url]);
 
   return (
     <>
@@ -152,8 +171,8 @@ const EditRoom = () => {
               </div>
             </div>
             <DashboardTableStats>
-              {isLoading ? (
-                <Skeleton active={isLoading} />
+              {roomloading ? (
+                <Skeleton active={roomloading} />
               ) : (
                 <>
                   <div className="dashboard__tablestats__container">
@@ -174,7 +193,7 @@ const EditRoom = () => {
                             placeholder="Room Title"
                             name="title"
                             value={title}
-                            onChange={handleChange}
+                            onChange={(e) => setTitle(e.target.value)}
                             className="form__control"
                           />
                         </Col>
@@ -184,8 +203,8 @@ const EditRoom = () => {
                             type="text"
                             placeholder="Price per Night."
                             name="price"
-                            value={EditResponse?.data?.price}
-                            onChange={handleChange}
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
                             className="form__control"
                           />
                         </Col>
@@ -205,9 +224,9 @@ const EditRoom = () => {
                             type="number"
                             placeholder="Room No."
                             name="roomNumbers"
-                            value={EditResponse?.data?.roomNumbers[0]?.number}
+                            value={roomNumbers}
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setRoomNumbers(e.target.value)}
                           />
                         </Col>
                         <Col className="form__group" span={6}>
@@ -216,7 +235,7 @@ const EditRoom = () => {
                             name="category"
                             value={category}
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setCategory(e.target.value)}
                           >
                             <option></option>
                             {!loading &&
@@ -237,7 +256,7 @@ const EditRoom = () => {
                             name="bed_size"
                             value={bed_size}
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setBedSize(e.target.value)}
                           >
                             <option></option>
                             <option value="king_size">King Size</option>
@@ -251,7 +270,7 @@ const EditRoom = () => {
                             name="ac"
                             value={ac}
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setAc(e.target.value)}
                           >
                             <option></option>
                             <option value="true">YES</option>
@@ -273,7 +292,7 @@ const EditRoom = () => {
                           <select
                             className="form__control"
                             value={adults}
-                            onChange={handleChange}
+                            onChange={(e) => setAdults(e.target.value)}
                             name="adults"
                           >
                             <option></option>
@@ -286,7 +305,7 @@ const EditRoom = () => {
                           <div className="label">Kids.</div>
                           <select
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setKids(e.target.value)}
                             value={kids}
                             name="kids"
                           >
@@ -302,7 +321,7 @@ const EditRoom = () => {
                           <select
                             name="cancellation"
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setCancellation(e.target.value)}
                             value={cancellation}
                           >
                             <option></option>
@@ -315,7 +334,7 @@ const EditRoom = () => {
                           <select
                             name="children"
                             className="form__control"
-                            onChange={handleChange}
+                            onChange={(e) => setChildren(e.target.value)}
                             value={children}
                           >
                             <option></option>
@@ -343,8 +362,8 @@ const EditRoom = () => {
                             rows={2}
                             placeholder="Ventilation,packing space, etc"
                             name="room_features"
-                            value={EditResponse?.data?.roomFeatures}
-                            onChange={handleChange}
+                            value={room_features}
+                            onChange={(e) => setRoomFeatures(e.target.value)}
                             className="form__control"
                           ></textarea>
                         </Col>
@@ -365,8 +384,8 @@ const EditRoom = () => {
                             rows={4}
                             placeholder="Room Description"
                             name="description"
-                            value={EditResponse?.data?.description}
-                            onChange={handleChange}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             className="form__control"
                           ></textarea>
                         </Col>
