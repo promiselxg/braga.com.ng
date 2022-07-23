@@ -8,6 +8,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  post: null,
   message: '',
 };
 
@@ -23,6 +24,23 @@ export const getBlogPosts = createAsyncThunk('blog/all', async (thunkAPI) => {
     return thunkAPI.rejectWithValue(message);
   }
 });
+// get all rooms
+export const getSingleBlogPost = createAsyncThunk(
+  'blog/post',
+  async (id, thunkAPI) => {
+    try {
+      return await blogService.getSingleBlogPost(id);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const blogPostSlice = createSlice({
   name: 'blog',
@@ -33,6 +51,7 @@ export const blogPostSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.posts = [];
+      state.post = [];
       state.message = '';
     },
     refresh: (state) => {
@@ -53,6 +72,20 @@ export const blogPostSlice = createSlice({
       state.isError = true;
       state.message = action.payload;
       state.posts = null;
+    },
+    [getSingleBlogPost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getSingleBlogPost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.post = action.payload;
+    },
+    [getSingleBlogPost.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action.payload;
+      state.post = null;
     },
   },
 });

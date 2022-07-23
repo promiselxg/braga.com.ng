@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Image, Section } from '../../components';
 import { Typography } from '../../GlobalStyle';
 import { Banner_2 } from '../../assets';
+import LazyLoad from 'react-lazyload';
 const AboutSectionWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 80px);
@@ -79,7 +80,9 @@ const AboutSection = () => {
           </Typography>
           <div className="container">
             <div className="image__wrapper">
-              <Image src={Banner_2} alt="about us" />
+              <LazyLoad height={400} once>
+                <Image src={Banner_2} alt="about us" />
+              </LazyLoad>
             </div>
             <div className="about__wrapper">
               <Typography as="h4" fontSize="0.7rem" fontWeight="400">

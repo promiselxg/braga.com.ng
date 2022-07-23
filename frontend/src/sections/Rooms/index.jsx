@@ -8,6 +8,7 @@ import NumberFormat from 'react-number-format';
 import { Skeleton } from 'antd';
 import useFetch from '../../hooks/useFetch';
 import LazyLoad from 'react-lazyload';
+import TextTruncate from 'react-text-truncate';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -150,8 +151,13 @@ const RoomsSection = () => {
                       >
                         {room.title}
                       </Typography>
-                      <FiStar />
-                      <FiStar />
+                      <TextTruncate
+                        line={2}
+                        element="p"
+                        truncateText="…"
+                        text={`${room?.description}`}
+                        style={{ fontSize: '12px' }}
+                      />
                     </Link>
                   </CardTitle>
 

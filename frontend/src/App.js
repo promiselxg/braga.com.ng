@@ -10,6 +10,9 @@ import {
   PageNotFound,
   RoomCategoryScreen,
   CheckOutScreen,
+  BlogScreen,
+  SingleBlogScreen,
+  Terms,
 } from './screens';
 
 function App() {
@@ -22,6 +25,9 @@ function App() {
           <Route path="/room/:id" element={<RoomInfoScreen />} />
           <Route path="/rooms/:category" element={<RoomCategoryScreen />} />
           <Route path="/rooms/:roomid/book" element={<CheckOutScreen />} />
+          <Route path="/blogs" element={<BlogScreen />} />
+          <Route path="/blogs/:id" element={<SingleBlogScreen />} />
+          <Route path="/terms" element={<Terms />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

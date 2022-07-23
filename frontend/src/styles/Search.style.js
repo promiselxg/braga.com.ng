@@ -18,17 +18,17 @@ export const SelectBox = styled.div`
   flex: ${(props) => (props.flex ? props.flex : '')};
   .dateWrapper {
     width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
-
   .span {
     display: flex;
     justify-content: space-between;
-    margin-left: 10px;
-    margin-right: 10px;
+    font-size: 0.8rem;
     color: #ccc;
   }
   span {
     color: #ccc;
+    font-size: 0.8rem;
   }
   .ant-picker {
     width: 100%;

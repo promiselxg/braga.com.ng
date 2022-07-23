@@ -74,7 +74,7 @@ const CheckoutScreen = () => {
     },
   ]);
 
-  console.log(isLoading);
+  console.log(isLoading, message);
 
   const location = useLocation();
   const id = location.pathname.split('/')[2];

@@ -26,10 +26,10 @@ const Footer = () => {
               </FooterTitle>
               <FooterLinks>
                 <Link to="/">Home</Link>
-                <Link to="/room">About Us</Link>
-                <Link to="/room">Privacy Policy</Link>
-                <Link to="/room">Lodging Rules</Link>
-                <Link to="/room">Refund Policy</Link>
+                <Link to="/">About Us</Link>
+                <Link to="/terms#intro">Privacy Policy</Link>
+                <Link to="/terms#rules">Lodging Rules</Link>
+                <Link to="/terms#cancel">Refund Policy</Link>
               </FooterLinks>
             </FooterItem>
             <FooterItem>
@@ -76,7 +76,7 @@ const Footer = () => {
           </div>
         </Container>
       </FooterWrapper>
-      <InnerFooter>
+      {/* <InnerFooter>
         <Container maxWidth="800px">
           <div className="footer">
             <Typography as="p" fontSize="0.8rem" fontWeight="600">
@@ -84,7 +84,7 @@ const Footer = () => {
             </Typography>
           </div>
         </Container>
-      </InnerFooter>
+      </InnerFooter> */}
     </>
   );
 };

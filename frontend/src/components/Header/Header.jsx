@@ -47,9 +47,9 @@ const Header = () => {
               </NavLogo>
               <Nav>
                 <Links url="/" label="Home" />
-                <Links url="/" label="About Us" />
+                <Links url="/about" label="About Us" />
                 <Links url="/rooms" label="Rooms" />
-                <Links url="/" label="Contact Us" />
+                <Links url="/blogs" label="Blog" />
                 <Link to="/rooms">
                   <Button
                     label="Book a Room"
@@ -77,8 +77,7 @@ const Header = () => {
           <Link to="/">Home</Link>
           <Link to="/rooms">Rooms</Link>
           <Link to="/about">About Us</Link>
-          <Link to="/services">Services</Link>
-          <Link to="/contact">Contact Us</Link>
+          <Link to="/">Services</Link>
         </DrawerWrapper>
       </Drawer>
     </>

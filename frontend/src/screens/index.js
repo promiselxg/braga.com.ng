@@ -5,3 +5,6 @@ export { default as RoomInfoScreen } from './RoomInfoScreen';
 export { default as RoomCategoryScreen } from './CategoryScreen';
 export { default as CheckOutScreen } from './CheckoutScreen';
 export { default as PageNotFound } from './404';
+export { default as BlogScreen } from './BlogScreen';
+export { default as SingleBlogScreen } from './SingleBlogScreen';
+export { default as Terms } from './Terms';

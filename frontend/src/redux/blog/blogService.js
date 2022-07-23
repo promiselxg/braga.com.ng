@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/v2/blog';
+const API_URL = 'https://api.braga.com.ng/api/v2/blog';
 
 //  Get single room details
 const getAllBlogPost = async () => {
@@ -10,9 +10,15 @@ const getAllBlogPost = async () => {
   }
   return response.data;
 };
+//  Get single room details
+const getSingleBlogPost = async (id) => {
+  const response = await axios.get(`${API_URL}/${id}`);
+  return response.data;
+};
 
 const blogService = {
   getAllBlogPost,
+  getSingleBlogPost,
 };
 
 export default blogService;

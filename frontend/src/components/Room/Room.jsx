@@ -6,9 +6,48 @@ import { Links } from '../NavAnchor';
 import { RoomWrapper } from './Room.style';
 import { Link } from 'react-router-dom';
 import { Skeleton } from 'antd';
+import { useContext, useState } from 'react';
+import { SearchContext } from '../../context/SearchContext';
 
 const Room = () => {
   const { rooms, isLoading } = useSelector((state) => state.listRooms);
+  const { dates } = useContext(SearchContext);
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  const getDatesInRange = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const date = new Date(start.getTime());
+
+    const dates = [];
+
+    while (date <= end) {
+      dates.push(new Date(date).getTime());
+      date.setDate(date.getDate() + 1);
+    }
+
+    return dates;
+  };
+
+  const isAvailable = (roomNumber) => {
+    console.log(roomNumber);
+    const isFound = roomNumber.unavailableDates.some((date) =>
+      alldates.includes(new Date(date).getTime())
+    );
+
+    return !isFound;
+  };
+  const handleSelect = (e) => {
+    const checked = e.target.checked;
+    const value = e.target.value;
+    setSelectedRooms(
+      checked
+        ? [...selectedRooms, value]
+        : selectedRooms.filter((item) => item !== value)
+    );
+  };
+  console.log(dates);
+  const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
   return (
     <>
       {isLoading ? (
@@ -63,6 +102,17 @@ const Room = () => {
                     </div>
                     <div className="rating__count">6.5</div>
                   </div>
+                  {room.roomNumbers.map((roomNumber, i) => (
+                    <div className="room" key={i}>
+                      <label>{roomNumber.number}</label>
+                      <input
+                        type="checkbox"
+                        value={roomNumber._id}
+                        onChange={handleSelect}
+                        disabled={!isAvailable(roomNumber)}
+                      />
+                    </div>
+                  ))}
                   <Link to={`/rooms/${room?._id}/book`}>
                     <Button
                       bg="var(--blue)"

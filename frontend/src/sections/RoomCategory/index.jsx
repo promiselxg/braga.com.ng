@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import { Skeleton } from 'antd';
 import truncate from 'truncate';
+import LazyLoad from 'react-lazyload';
 const CategoryWrapper = styled.div`
   height: 100%;
   padding: 80px 0;
@@ -116,12 +117,14 @@ const Category = () => {
                 {data?.data?.map((cat, i) => (
                   <Link to={`/rooms/${cat._id}`} key={i}>
                     <Card>
-                      <div className="card__img">
-                        <Image
-                          img="https://images.unsplash.com/photo-1650173419393-a3d85d494399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-                          alt="image"
-                        />
-                      </div>
+                      <LazyLoad>
+                        <div className="card__img">
+                          <Image
+                            img="https://images.unsplash.com/photo-1650173419393-a3d85d494399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                            alt="image"
+                          />
+                        </div>
+                      </LazyLoad>
                       <div className="card__name">
                         <h2>{truncate(`${cat?.name}`, 20)}</h2>
                         <p>Type: {cat.type}</p>

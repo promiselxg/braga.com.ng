@@ -18,7 +18,7 @@ import {
   SinglRoomWrapper,
 } from '../styles/SingleRoomScreen.style';
 import { FiCheck, FiCheckCircle, FiCheckSquare } from 'react-icons/fi';
-import { getSingleRoom } from '../redux/room/singleRoomSlice';
+import { getSingleRoom, reset } from '../redux/room/singleRoomSlice';
 import { RoomHeader } from '../components/Room/Room.style';
 import PageNotFound from './404';
 import NumberFormat from 'react-number-format';
@@ -42,6 +42,7 @@ const RoomInfoScreen = () => {
 
   useEffect(() => {
     dispatch(getSingleRoom(id));
+    dispatch(reset());
     window.scrollTo({
       top: 0,
       left: 0,

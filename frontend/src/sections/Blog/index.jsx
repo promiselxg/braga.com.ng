@@ -9,7 +9,7 @@ import { Skeleton } from 'antd';
 import TextTruncate from 'react-text-truncate';
 import LazyLoad from 'react-lazyload';
 import { Link } from 'react-router-dom';
-const BlogWrapper = styled.section`
+export const BlogWrapper = styled.section`
   padding: 80px 0;
   width: 100%;
   /* overflow: hidden; */
@@ -81,14 +81,6 @@ const BlogSection = () => {
     <>
       <Section maxWidth="100%">
         <BlogWrapper>
-          <Typography
-            as="h2"
-            fontSize="2rem"
-            fontWeight="800"
-            className="title_"
-          >
-            Blog Posts
-          </Typography>
           <div className="container">
             <>
               {posts?.data?.map((post) => (
@@ -98,6 +90,7 @@ const BlogSection = () => {
                       <LazyLoad
                         height={200}
                         offset={100}
+                        once={true}
                         placeholder={
                           <Skeleton
                             active={isLoading}
@@ -108,16 +101,18 @@ const BlogSection = () => {
                         <img src={post.image_url[0]} alt={post.blog_title} />
                       </LazyLoad>
                     </div>
-                    <div className="title">
-                      <Typography
-                        as="h1"
-                        fontSize="1rem"
-                        fontWeight="800"
-                        className="title_"
-                      >
-                        {post.blog_title}
-                      </Typography>
-                    </div>
+                    <Link to={`/blogs/${post._id}`}>
+                      <div className="title">
+                        <Typography
+                          as="h1"
+                          fontSize="1rem"
+                          fontWeight="800"
+                          className="title_"
+                        >
+                          {post.blog_title}
+                        </Typography>
+                      </div>
+                    </Link>
                     <div className="blog_content">
                       <TextTruncate
                         line={2}
@@ -125,7 +120,7 @@ const BlogSection = () => {
                         truncateText="…"
                         text={`${post.blog_post}`}
                         textTruncateChild={
-                          <Link to={`/blog/${post._id}`}>Read more</Link>
+                          <Link to={`/blogs/${post._id}`}>Read more</Link>
                         }
                       />
                     </div>

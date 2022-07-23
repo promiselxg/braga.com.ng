@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Container } from '../../GlobalStyle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -12,42 +12,49 @@ import { DatePicker, Select } from 'antd';
 import Button from '../Button';
 import moment from 'moment';
 import { getRooms } from '../../redux/room/roomSlice';
+import { SearchContext } from '../../context/SearchContext';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-const dateFormat = 'DD-MM-YYYY';
+const dateFormat = 'YYYY-MM-DD';
 
 const Search = () => {
   const { isLoading, isSuccess } = useSelector((state) => state.listRooms);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const { dispatch } = useContext(SearchContext);
   const [adult, setAdult] = useState(1);
   const [kid, setKid] = useState(0);
   const [checkin, setCheckIn] = useState();
   const [checkout, setCheckOut] = useState();
+  const navigate = useNavigate();
 
   const selectDate = (date) => {
-    setCheckIn(moment(date[0]).format('DD-MM-YYYY'));
-    setCheckOut(moment(date[1]).format('DD-MM-YYYY'));
+    setCheckIn(moment(date[0]).format('YYYY-MM-DD'));
+    setCheckOut(moment(date[1]).format('YYYY-MM-DD'));
   };
 
+  const dates = [
+    {
+      startDate: checkin,
+      endDate: checkout,
+    },
+  ];
+
+  const options = {
+    adult: adult,
+    children: kid,
+  };
   const checkRoomAvailability = () => {
     if (!checkin || !checkout || !adult) {
       console.log('error');
     } else {
-      const data = {
-        checkIn: checkin,
-        checkOut: checkout,
-        adult,
-        kids: kid,
-      };
-      dispatch(getRooms(data));
-      if (isSuccess) {
-        navigate(
-          `/rooms?checkIn=${checkin}&checkOut=${checkout}&adult=${adult}&kids=${kid}`
-        );
-      }
+      dispatch({ type: 'NEW_SEARCH', payload: { dates, options } });
+      navigate('/rooms', { state: { dates, options } });
+      // dispatch(getRooms(data));
+      // if (isSuccess) {
+      //   navigate(
+      //     `/rooms?checkIn=${checkin}&checkOut=${checkout}&adult=${adult}&kids=${kid}`
+      //   );
+      // }
     }
   };
 
@@ -76,8 +83,8 @@ const Search = () => {
                 />
               </div>
             </SelectBox>
-            <div className="selectBox">
-              <SelectBox flex="0.1">
+            <div className="selectBox" style={{ width: '100%' }}>
+              <SelectBox style={{ width: '100%' }}>
                 <span>Adult</span>
                 <div className="dateWrapper">
                   <Select
@@ -95,7 +102,7 @@ const Search = () => {
                   </Select>
                 </div>
               </SelectBox>
-              <SelectBox flex="0.1">
+              <SelectBox style={{ width: '100%' }}>
                 <span>Children</span>
                 <div className="dateWrapper">
                   <Select
