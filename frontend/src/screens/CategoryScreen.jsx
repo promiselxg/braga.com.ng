@@ -1,8 +1,9 @@
 import { Breadcrumb, Rate, Skeleton } from 'antd';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Filter, Image, Section, SideBar } from '../components';
 import { Links } from '../components/NavAnchor';
 import {
@@ -14,8 +15,7 @@ import {
 } from '../components/Room/Room.style';
 import { Typography } from '../GlobalStyle';
 import useFetch from '../hooks/useFetch';
-// import { getRoomByCategory } from '../redux/room/roomCategorySlice';
-// import { setSuccess } from '../redux/room/roomSlice';
+
 import {
   RoomCard,
   RoomCardBody,
@@ -23,9 +23,22 @@ import {
   RoomCardWrapper,
 } from '../styles/CategoryScreen.style';
 import { FilterBox } from '../styles/Filter.style';
+import getDatesInRange from '../utils/getDatesInRange';
 
 const CategoryScreen = () => {
   const params = useParams();
+  const checkin = moment().format('YYYY-MM-DD');
+  const checkout = moment().add(1, 'days').format('YYYY-MM-DD');
+  const navigate = useNavigate();
+  const isAvailable = (roomNumber) => {
+    const isFound = roomNumber?.unavailableDates?.some((date) =>
+      alldates.includes(new Date(date).getTime())
+    );
+    return !isFound;
+  };
+
+  const alldates = getDatesInRange(checkin, checkout);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -86,80 +99,79 @@ const CategoryScreen = () => {
                   <>
                     <RoomCardWrapper>
                       {data?.rooms?.map((room) => (
-                        <Link to={`/rooms/${room._id}/book`} key={room._id}>
-                          <RoomCard>
-                            <div className="container">
-                              <RoomCardImg>
-                                <Image
-                                  img={room.imgThumbnail}
-                                  alt={room.title}
-                                />
-                              </RoomCardImg>
-                              <RoomCardBody>
-                                <div className="room__name">
-                                  <Typography
-                                    as="h2"
-                                    fontSize="0.75rem"
-                                    lineHeight="0.9rem"
-                                    color="rgba(0,0,0,0.7)"
-                                    style={{ textTransform: 'capitalize' }}
-                                  >
-                                    {room.title}
-                                  </Typography>
-                                  <div className="rating">
-                                    <Rate defaultValue={4.5} disabled />
-                                  </div>
+                        <RoomCard key={room._id}>
+                          <div className="container">
+                            <RoomCardImg>
+                              <Image img={room.imgThumbnail} alt={room.title} />
+                            </RoomCardImg>
+                            <RoomCardBody>
+                              <div className="room__name">
+                                <Typography
+                                  as="h2"
+                                  fontSize="0.75rem"
+                                  lineHeight="0.9rem"
+                                  color="rgba(0,0,0,0.7)"
+                                  style={{ textTransform: 'capitalize' }}
+                                >
+                                  {room.title}
+                                </Typography>
+                                <div className="rating">
+                                  <Rate defaultValue={4.5} disabled />
                                 </div>
-                                <div className="room__price">
-                                  {!room.discount ? (
-                                    <>
-                                      <div className="price">
+                              </div>
+                              <div className="room__price">
+                                {!room.discount ? (
+                                  <>
+                                    <div className="price">
+                                      &#8358;
+                                      <NumberFormat
+                                        displayType={'text'}
+                                        value={room.price}
+                                        thousandSeparator={true}
+                                      />
+                                      /night
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="price">
+                                      &#8358;
+                                      <NumberFormat
+                                        displayType={'text'}
+                                        value={room?.discountPrice || 10000}
+                                        thousandSeparator={true}
+                                      />
+                                      /night
+                                    </div>
+                                    <div className="discount">
+                                      <s>
                                         &#8358;
                                         <NumberFormat
                                           displayType={'text'}
                                           value={room.price}
                                           thousandSeparator={true}
                                         />
-                                        /night
-                                      </div>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <div className="price">
-                                        &#8358;
-                                        <NumberFormat
-                                          displayType={'text'}
-                                          value={room?.discountPrice || 10000}
-                                          thousandSeparator={true}
-                                        />
-                                        /night
-                                      </div>
-                                      <div className="discount">
-                                        <s>
-                                          &#8358;
-                                          <NumberFormat
-                                            displayType={'text'}
-                                            value={room.price}
-                                            thousandSeparator={true}
-                                          />
-                                        </s>
-                                      </div>
-                                    </>
-                                  )}
-                                </div>
-                                <div className="room__btn">
-                                  <Button
-                                    bg="#000"
-                                    color="#fff"
-                                    label="Book now"
-                                    hoverBg="var(--yellow)"
-                                    hoverColor="#000"
-                                  />
-                                </div>
-                              </RoomCardBody>
-                            </div>
-                          </RoomCard>
-                        </Link>
+                                      </s>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                              <div className="room__btn">
+                                <Button
+                                  bg="#000"
+                                  color="#fff"
+                                  label="Book now"
+                                  hoverBg="var(--yellow)"
+                                  hoverColor="#000"
+                                  disabled={!isAvailable(room)}
+                                  onClick={() =>
+                                    navigate(`/rooms/${room._id}/book`)
+                                  }
+                                />
+                              </div>
+                            </RoomCardBody>
+                          </div>
+                        </RoomCard>
                       ))}
                     </RoomCardWrapper>
                   </>

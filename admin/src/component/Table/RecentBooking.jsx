@@ -244,8 +244,7 @@ const RecentBooking = ({ title }) => {
             </p>
             <h3>Room Details</h3>
             <p>
-              Room Number :{' '}
-              <b>{room?.response?.roomid.roomNumbers[0].number}</b>
+              Room Number : <b>{room?.response?.roomid.roomNumber}</b>
             </p>
             <p>
               Adults : <b>{room?.response?.roomid?.noAdults}</b>

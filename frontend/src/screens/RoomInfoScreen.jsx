@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb, Comment, Image, List, Rate, Skeleton } from 'antd';
@@ -17,11 +17,13 @@ import {
   RoomProperties,
   SinglRoomWrapper,
 } from '../styles/SingleRoomScreen.style';
-import { FiCheck, FiCheckCircle, FiCheckSquare } from 'react-icons/fi';
+import { FiCheck, FiCheckCircle, FiWifi } from 'react-icons/fi';
 import { getSingleRoom, reset } from '../redux/room/singleRoomSlice';
 import { RoomHeader } from '../components/Room/Room.style';
 import PageNotFound from './404';
 import NumberFormat from 'react-number-format';
+import getDatesInRange from '../utils/getDatesInRange';
+import moment from 'moment';
 
 const RoomInfoScreen = () => {
   const dispatch = useDispatch();
@@ -58,6 +60,22 @@ const RoomInfoScreen = () => {
       content: <p>{review.text}</p>,
     });
   });
+
+  let search = JSON.parse(localStorage.getItem('search'));
+
+  const checkIn = search ? search.checkIn : moment().format('YYYY-MM-DD');
+  const checkOut = search
+    ? search.checkOut
+    : moment().add(1, 'days').format('YYYY-MM-DD');
+  const navigate = useNavigate();
+  const isAvailable = (roomNumber) => {
+    const isFound = roomNumber?.unavailableDates?.some((date) =>
+      alldates.includes(new Date(date).getTime())
+    );
+    return !isFound;
+  };
+
+  const alldates = getDatesInRange(checkIn, checkOut);
 
   return (
     <>
@@ -137,15 +155,18 @@ const RoomInfoScreen = () => {
                     </div>
                     <div className="reserve">
                       {/* <FiHeart className="icon" /> */}
-                      <Link to={`/rooms/${room?.data?._id}/book`}>
-                        <Button
-                          label="Reserve"
-                          bg="var(--blue)"
-                          hoverBg="var(--yellow)"
-                          color="#fff"
-                          hoverColor="#000"
-                        />
-                      </Link>
+
+                      <Button
+                        label="Reserve"
+                        bg="var(--blue)"
+                        hoverBg="var(--yellow)"
+                        color="#fff"
+                        disabled={!isAvailable(room?.data)}
+                        hoverColor="#000"
+                        onClick={() =>
+                          navigate(`/rooms/${room?.data?._id}/book`)
+                        }
+                      />
                     </div>
                   </RoomHeading>
                   {isLoading ? (
@@ -219,14 +240,6 @@ const RoomInfoScreen = () => {
                       >
                         {room?.data?.category?.name} room
                       </Typography>
-                      <div className="room__feature">
-                        <div className="item">
-                          <span className="name">
-                            <FiCheckCircle />
-                            {room?.data?.bedSize} sized bed
-                          </span>
-                        </div>
-                      </div>
                     </div>
                     <div className="card">
                       <Typography as="h2" fontSize="1rem" fontWeight="600">
@@ -237,14 +250,10 @@ const RoomInfoScreen = () => {
                         <div className="item">
                           {room?.data?.cancellation && (
                             <span className="name">
-                              <FiCheckSquare />
+                              <FiCheckCircle />
                               Free Cancellation
                             </span>
                           )}
-                          <span className="name">
-                            <FiCheckCircle />
-                            Book now, pay later.
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -256,24 +265,33 @@ const RoomInfoScreen = () => {
                       <div className="room__feature">
                         <div className="item">
                           <span className="name">
-                            <FiCheckCircle />
-                            Bathroom
-                          </span>
-                          <span className="name">
-                            <FiCheckCircle />
-                            Air conditioning
+                            <FiWifi />
+                            Free Wifi
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="card">
                       <Typography as="h2" fontSize="1rem" fontWeight="600">
-                        Price
+                        Price per night
                       </Typography>
-                      {isLoading ? (
-                        <Skeleton active={isLoading} />
+                      {room?.data?.slashPrice ? (
+                        <div
+                          className="room__feature"
+                          style={{ fontSize: '1.4rem', fontWeight: '600' }}
+                        >
+                          &#8358;
+                          <NumberFormat
+                            displayType={'text'}
+                            value={room?.data?.slashPrice}
+                            thousandSeparator={true}
+                          />
+                        </div>
                       ) : (
-                        <div className="room__feature">
+                        <div
+                          className="room__feature"
+                          style={{ fontSize: '1.4rem', fontWeight: '600' }}
+                        >
                           &#8358;
                           <NumberFormat
                             displayType={'text'}

@@ -15,8 +15,8 @@ import { Typography } from '../GlobalStyle';
 
 const HomeScreen = () => {
   const data = {
-    checkIn: moment().format('DD-MM-YYYY'),
-    checkOut: moment().add(1, 'days').format('DD-MM-YYYY'),
+    checkIn: moment().format('YYYY-MM-DD'),
+    checkOut: moment().add(1, 'days').format('YYYY-MM-DD'),
     adult: 1,
     kids: 0,
   };

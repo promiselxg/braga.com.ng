@@ -37,7 +37,7 @@ const RoomListing = ({ title }) => {
   const [filterText, setFilterText] = useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
   const { data, loading } = useFetch(
-    '/rooms?select=title,category,price,imgThumbnail,roomNumbers'
+    '/rooms?select=title,category,price,imgThumbnail,roomNumber'
   );
   const rooms = [];
   data?.data?.map((room) =>
@@ -45,12 +45,12 @@ const RoomListing = ({ title }) => {
       key: room._id,
       title: room.title,
       category: room.category,
-      roomNumber: room?.roomNumbers[0]?.number,
+      roomNumber: room?.roomNumber,
       price: room.price,
       img: room.imgThumbnail,
     })
   );
-
+  console.log(data);
   const columns = [
     {
       name: 'Image',

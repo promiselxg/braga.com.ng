@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../components';
-import { FiStar } from 'react-icons/fi';
 import { Container, Typography } from '../../GlobalStyle';
 import NumberFormat from 'react-number-format';
 import { Skeleton } from 'antd';
 import useFetch from '../../hooks/useFetch';
 import LazyLoad from 'react-lazyload';
 import TextTruncate from 'react-text-truncate';
+import moment from 'moment';
+import getDatesInRange from '../../utils/getDatesInRange';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -107,6 +108,16 @@ const CardInfo = styled.div`
 `;
 const RoomsSection = () => {
   const { data, loading } = useFetch(`/rooms?limit=4`);
+  const checkin = moment().format('YYYY-MM-DD');
+  const checkout = moment().add(1, 'days').format('YYYY-MM-DD');
+  const navigate = useNavigate();
+  const isAvailable = (roomNumber) => {
+    const isFound = roomNumber.unavailableDates.some((date) =>
+      alldates.includes(new Date(date).getTime())
+    );
+    return !isFound;
+  };
+  const alldates = getDatesInRange(checkin, checkout);
   return (
     <>
       <Container maxWidth="1000px">
@@ -206,14 +217,14 @@ const RoomsSection = () => {
                       </>
                     )}
 
-                    <Link to={`/rooms/${room._id}/book`}>
-                      <Button
-                        label="Book Now"
-                        bg="var(--yellow)"
-                        hoverBg="#000"
-                        hoverColor="#fff"
-                      />
-                    </Link>
+                    <Button
+                      label="Book Now"
+                      bg="var(--yellow)"
+                      hoverBg="#000"
+                      hoverColor="#fff"
+                      disabled={!isAvailable(room)}
+                      onClick={() => navigate(`/rooms/${room._id}/book`)}
+                    />
                   </CardInfo>
                 </CardBody>
               </RoomCard>

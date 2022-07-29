@@ -32,6 +32,8 @@ import {
   startPayment,
 } from '../redux/room/roomReservationSlice';
 import { processPayment } from '../redux/room/roomPaymentSlice';
+import getDatesInRange from '../utils/getDatesInRange';
+import TextTruncate from 'react-text-truncate';
 
 const { TextArea } = Input;
 const antIcon = (
@@ -53,10 +55,10 @@ const CheckoutScreen = () => {
     useSelector((state) => state.reservation);
   let search = JSON.parse(localStorage.getItem('search'));
 
-  const checkIn = search ? search.checkIn : moment().format('DD-MM-YYYY');
+  const checkIn = search ? search.checkIn : moment().format('YYYY-MM-DD');
   const checkOut = search
     ? search.checkOut
-    : moment().add(1, 'days').format('DD-MM-YYYY');
+    : moment().add(1, 'days').format('YYYY-MM-DD');
   const adult = search ? search.adult : 1;
   const kids = search ? search.kids : 0;
 
@@ -73,18 +75,20 @@ const CheckoutScreen = () => {
       id: uuidv4(),
     },
   ]);
-
-  console.log(isLoading, message);
-
   const location = useLocation();
+  const selectedDays = location?.state?.alldates;
   const id = location.pathname.split('/')[2];
-  const checkin = moment(checkIn, 'DD-MM-YYYY');
-  const checkout = moment(checkOut, 'DD-MM-YYYY');
+  const checkin = moment(checkIn, 'YYYY-MM-DD');
+  const checkout = moment(checkOut, 'YYYY-MM-DD');
+
   const duration = search
     ? moment.duration(checkout.diff(checkin)).asDays() + 1
     : 1;
-  const totalPrice = duration * room?.data?.price;
 
+  let unitPrice = room?.data?.slashPrice
+    ? room?.data?.slashPrice
+    : room?.data?.price;
+  const totalPrice = duration * unitPrice;
   const config = {
     reference: new Date().getTime().toString(),
     email: `${guestMember[0].email}`,
@@ -148,6 +152,7 @@ const CheckoutScreen = () => {
           special_request: specialRequest,
           adults: adult,
           kids: kids,
+          selectedDays,
         },
       };
       dispatch(makeReservation(userData));
@@ -224,6 +229,14 @@ const CheckoutScreen = () => {
   if (isSuccess || success) {
     navigate(`/room/${id}`);
   }
+  const isAvailable = (roomNumber) => {
+    const isFound = roomNumber?.unavailableDates?.some((date) =>
+      alldates.includes(new Date(date).getTime())
+    );
+    return !isFound;
+  };
+
+  const alldates = getDatesInRange(checkIn, checkOut);
   return (
     <>
       {isError && <Notification message={message} type="error" />}
@@ -246,7 +259,7 @@ const CheckoutScreen = () => {
               </Breadcrumb.Item>
               <Breadcrumb.Item className="seperator">
                 <Links
-                  to={`/rooms/${room?.data?.category?.name}`}
+                  to={`/rooms/${room?.data?.category?._id}`}
                   label={room?.data?.category?.name}
                 />
               </Breadcrumb.Item>
@@ -271,14 +284,14 @@ const CheckoutScreen = () => {
                 <form>
                   <div className="container">
                     <div className="top">
-                      Guest Information <b>OR</b>
+                      {/* Guest Information <b>OR</b>
                       <Button
                         label="Sign in to Book faster"
                         bg="var(--yellow)"
                         color="#000"
                         hoverBg="var(--blue)"
                         hoverColor="#fff"
-                      />
+                      /> */}
                     </div>
                     <div className="formFields">
                       <div className="form">
@@ -432,7 +445,12 @@ const CheckoutScreen = () => {
                       {room?.data?.title}
                     </Typography>
                     <Typography as="p" fontSize="0.75rem">
-                      {room?.data?.description}
+                      <TextTruncate
+                        line={1}
+                        element="span"
+                        truncateText="…"
+                        text={`${room?.data?.description}`}
+                      />
                     </Typography>
                     <div className="checkinDetails">
                       <div className="checkin">
@@ -459,9 +477,7 @@ const CheckoutScreen = () => {
                         : `1 Night Stay`}
                     </Typography>
                   </CheckoutDetails>
-                  <div className="heading">
-                    Rooms &amp; Rate&nbsp;(price for 1 night)
-                  </div>
+                  <div className="heading">Rooms &amp; Rate</div>
                   <RoomDetails>
                     <p>
                       Room Details: {adult} adults, {kids} child
@@ -475,7 +491,7 @@ const CheckoutScreen = () => {
                               &#8358;
                               <NumberFormat
                                 displayType={'text'}
-                                value={room?.data?.price}
+                                value={unitPrice}
                                 thousandSeparator={true}
                               />
                             </td>
@@ -517,7 +533,8 @@ const CheckoutScreen = () => {
                             !guestMember[0].first_name ||
                             !guestMember[0].last_name ||
                             !guestMember[0].phone ||
-                            !guestMember[0].email
+                            !guestMember[0].email ||
+                            !isAvailable(room.data)
                           }
                           onClick={HandlePayment}
                         />
@@ -531,7 +548,8 @@ const CheckoutScreen = () => {
                             !guestMember[0].first_name ||
                             !guestMember[0].last_name ||
                             !guestMember[0].phone ||
-                            !guestMember[0].email
+                            !guestMember[0].email ||
+                            !isAvailable(room.data)
                           }
                           onClick={HandleSubmit}
                         />

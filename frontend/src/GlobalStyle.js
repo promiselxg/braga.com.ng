@@ -25,6 +25,9 @@ body {
   transition: all 0.5s ease;
   
 }
+.hide{
+  display:none
+}
 .title_{
   text-align:center;
   align-items:center ;

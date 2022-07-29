@@ -143,7 +143,7 @@ const EditRoom = () => {
       const { data } = await axios.get(`/api/v2/rooms/${url}`, config);
       setTitle(data?.data?.title);
       setPrice(data?.data?.price);
-      setRoomNumbers(`${data?.data?.roomNumbers[0]?.number}`);
+      setRoomNumbers(`${data?.data?.roomNumber}`);
       setCategory(data?.data?.category?._id);
       setBedSize(data?.data?.bedSize);
       setAc(data?.data?.ac);

@@ -7,21 +7,13 @@ const config = {
 };
 //  Get all rooms
 const getAllRooms = async (data) => {
-  if (data === 'all') {
-    const response = await axios.get(API_URL);
-    if (response.data) {
-      localStorage.setItem('rooms', JSON.stringify(response.data));
-    }
-    return response.data;
-  } else {
-    const { adult, kids } = data;
-    const response = await axios.get(`${API_URL}/?adult=${adult}&kids=${kids}`);
-    if (response.data) {
-      localStorage.setItem('rooms', JSON.stringify(response.data));
-      localStorage.setItem('search', JSON.stringify(data));
-    }
-    return response.data;
+  const { adult, kids } = data;
+  const response = await axios.get(`${API_URL}/?adult=${adult}&kids=${kids}`);
+  if (response.data) {
+    localStorage.setItem('rooms', JSON.stringify(response.data));
+    localStorage.setItem('search', JSON.stringify(data));
   }
+  return response.data;
 };
 
 //  Get single room details
@@ -56,7 +48,7 @@ const roomReservation = async (data) => {
 const payment = async (data) => {
   const { roomid } = data;
   const response = await axios.put(
-    `https://api.braga.com.ng/api/v2/reservation/${roomid}/payment`,
+    `https://localhost:8080/api/v2/reservation/${roomid}/payment`,
     data,
     config
   );

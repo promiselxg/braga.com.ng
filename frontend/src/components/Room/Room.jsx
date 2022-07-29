@@ -1,60 +1,84 @@
-import { useSelector } from 'react-redux';
-import { FiCheckCircle } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import { FiUmbrella, FiWifi } from 'react-icons/fi';
 import { Typography } from '../../GlobalStyle';
 import { Button, Image } from '../index';
 import { Links } from '../NavAnchor';
 import { RoomWrapper } from './Room.style';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Skeleton } from 'antd';
-import { useContext, useState } from 'react';
-import { SearchContext } from '../../context/SearchContext';
+import { useEffect } from 'react';
+import { getRooms } from '../../redux/room/roomSlice';
+import { useMemo } from 'react';
+import moment from 'moment';
+import getDatesInRange from '../../utils/getDatesInRange';
+import TextTruncate from 'react-text-truncate'; // recommend
+import { CgCheckO } from 'react-icons/cg';
+import NumberFormat from 'react-number-format';
 
 const Room = () => {
   const { rooms, isLoading } = useSelector((state) => state.listRooms);
-  const { dates } = useContext(SearchContext);
-  const [selectedRooms, setSelectedRooms] = useState([]);
-  const getDatesInRange = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+  //const [selectedRooms, setSelectedRooms] = useState([]);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  let checkin = searchParams.get('checkin') ? searchParams.get('checkin') : '';
+  let checkout = searchParams.get('checkout')
+    ? searchParams.get('checkout')
+    : '';
+  const adults = searchParams.get('adult');
+  const kids = searchParams.get('children');
+  const dispatch = useDispatch();
 
-    const date = new Date(start.getTime());
+  if (checkin === '' || checkout === '') {
+    checkin = moment().format('YYYY-MM-DD');
+    checkout = moment().add(1, 'days').format('YYYY-MM-DD');
+    // checkout = new Date();
+  }
+  // var GivenDate = new Date(checkin);
+  var GivenDate = useMemo(() => new Date(checkin), [checkin]);
+  var checkoutDate = useMemo(() => new Date(checkout), [checkout]);
 
-    const dates = [];
-
-    while (date <= end) {
-      dates.push(new Date(date).getTime());
-      date.setDate(date.getDate() + 1);
-    }
-
-    return dates;
-  };
+  GivenDate = new Date(GivenDate);
 
   const isAvailable = (roomNumber) => {
-    console.log(roomNumber);
-    const isFound = roomNumber.unavailableDates.some((date) =>
+    const isFound = roomNumber?.unavailableDates?.some((date) =>
       alldates.includes(new Date(date).getTime())
     );
-
     return !isFound;
   };
-  const handleSelect = (e) => {
-    const checked = e.target.checked;
-    const value = e.target.value;
-    setSelectedRooms(
-      checked
-        ? [...selectedRooms, value]
-        : selectedRooms.filter((item) => item !== value)
-    );
-  };
-  console.log(dates);
-  const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
+
+  const alldates = getDatesInRange(checkin, checkout);
+
+  useEffect(() => {
+    const data = {
+      adults,
+      kids,
+      checkIn: checkin,
+      checkOut: checkout,
+    };
+    dispatch(getRooms(data));
+  }, [dispatch, checkin, adults, kids, checkout]);
+
+  useEffect(() => {
+    if (checkoutDate < GivenDate) {
+      navigate('/');
+    }
+  }, [GivenDate, checkoutDate, navigate]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }, []);
+
+  console.log(rooms);
   return (
     <>
       {isLoading ? (
         <Skeleton active={isLoading} />
       ) : (
         rooms?.data?.map((room, i) => (
-          <div className="room" key={i}>
+          <div className={`room ${!isAvailable(room) ? 'hidex' : ''}`} key={i}>
             <RoomWrapper>
               <div className="container">
                 <div className="room__left">
@@ -74,54 +98,131 @@ const Room = () => {
                   </div>
                   <div className="room__details">
                     <Typography as="p" fontSize="0.8rem">
-                      {room.description}
+                      <TextTruncate
+                        line={2}
+                        element="span"
+                        truncateText="…"
+                        text={`${room.description}`}
+                      />
                     </Typography>
                     <div className="room__features">
-                      {room.roomFeatures.split(',').map((item, i) => (
-                        <div className="feature" key={i}>
-                          <span className="icon">
-                            <FiCheckCircle />
+                      <div className="feature">
+                        <span className="icon">
+                          <CgCheckO />
+                        </span>
+                        <span
+                          className="name"
+                          style={{ textTransform: 'capitalize' }}
+                        >
+                          CCTV Survelliance
+                        </span>
+                      </div>
+                      <div className="feature">
+                        <span className="icon">
+                          <FiWifi />
+                        </span>
+                        <span
+                          className="name"
+                          style={{ textTransform: 'capitalize' }}
+                        >
+                          Free WiFi
+                        </span>
+                      </div>
+                      <div className="feature">
+                        <span className="icon">
+                          <FiUmbrella />
+                        </span>
+                        <span
+                          className="name"
+                          style={{ textTransform: 'capitalize' }}
+                        >
+                          Bar
+                        </span>
+                      </div>
+                    </div>
+                    <div className="room__price">
+                      {room?.slashPrice ? (
+                        <div className="slashedPrice">
+                          <span className="price">
+                            &#8358;
+                            <NumberFormat
+                              value={room?.slashPrice}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                            />
+                            <span
+                              className="night"
+                              style={{ fontSize: '0.6rem' }}
+                            >
+                              /per night
+                            </span>
                           </span>
-                          <span
-                            className="name"
-                            style={{ textTransform: 'capitalize' }}
-                          >
-                            {item}
+                          <span className="price slashPrice">
+                            &#8358;
+                            <NumberFormat
+                              value={room?.price}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                            />
                           </span>
                         </div>
-                      ))}
+                      ) : (
+                        <span className="price">
+                          &#8358;
+                          <NumberFormat
+                            value={room?.price}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                          />
+                          <span
+                            className="night"
+                            style={{ fontSize: '0.6rem' }}
+                          >
+                            /per night
+                          </span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="room__right">
-                  <div className="room__right__container">
+                  {/* <div className="room__right__container">
                     <div className="rating">
                       <Typography as="p" fontSize="0.7rem">
                         500 reviews
                       </Typography>
                     </div>
                     <div className="rating__count">6.5</div>
-                  </div>
-                  {room.roomNumbers.map((roomNumber, i) => (
-                    <div className="room" key={i}>
-                      <label>{roomNumber.number}</label>
-                      <input
-                        type="checkbox"
-                        value={roomNumber._id}
-                        onChange={handleSelect}
-                        disabled={!isAvailable(roomNumber)}
-                      />
-                    </div>
-                  ))}
-                  <Link to={`/rooms/${room?._id}/book`}>
+                  </div> */}
+
+                  <div className="right">
+                    <Button
+                      bg="transparent"
+                      border="1px solid var(--blue)"
+                      color="var(--yellow)"
+                      label="View Details"
+                      hoverBg="var(--yellow)"
+                      onClick={() =>
+                        navigate(`/room/${room?._id}`, {
+                          state: { alldates },
+                        })
+                      }
+                      hoverColor="#000"
+                    />
                     <Button
                       bg="var(--blue)"
                       color="#fff"
                       label="Book Room"
                       hoverBg="var(--yellow)"
+                      disabled={!isAvailable(room)}
+                      onClick={() =>
+                        navigate(`/rooms/${room?._id}/book`, {
+                          state: { alldates },
+                        })
+                      }
                       hoverColor="#000"
                     />
-                  </Link>
+                  </div>
                 </div>
               </div>
             </RoomWrapper>

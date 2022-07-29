@@ -2,7 +2,7 @@ import styled from 'styled-components';
 const StyledButton = styled.button`
   background: ${(props) => (props.bg ? props.bg : '#000')};
   color: ${(props) => (props.color ? props.color : '#000')};
-  border: none;
+  border: ${(props) => (props.border ? props.border : 'none')};
   padding: ${(props) => (props.padding ? props.padding : '10px 20px;')};
   border-radius: ${(props) =>
     props.borderRadius ? props.borderRadius : '5px'};

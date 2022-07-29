@@ -187,7 +187,16 @@ export const RightWrapper = styled.div`
 
 export const RoomWrapper = styled.div`
   width: 100%;
+  .slashedPrice {
+    display: flex;
 
+    .slashPrice {
+      text-decoration: line-through;
+      margin-left: 10px;
+      color: rgba(0, 0, 0, 0.7) !important;
+      font-size: 0.7rem !important;
+    }
+  }
   .container {
     display: flex;
     width: 100%;
@@ -210,9 +219,26 @@ export const RoomWrapper = styled.div`
     .room__center {
       flex: 0.6;
       margin: 10px 20px;
+      position: relative;
       .room__title {
         a {
           margin-left: -8px;
+        }
+      }
+      .room__price {
+        position: absolute;
+        bottom: 0;
+      }
+      .price {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--blue);
+        display: flex;
+        align-items: center;
+
+        .night {
+          margin-left: 2px;
+          color: rgba(0, 0, 0, 0.7);
         }
       }
       @media screen and (max-width: 760px) {
@@ -226,10 +252,13 @@ export const RoomWrapper = styled.div`
         width: 100%;
         .feature {
           align-items: center;
-          color: var(--blue);
-          font-size: 12px;
+          color: var('#000');
+          font-size: 14px;
           display: flex;
-          margin: 2px 5px;
+          margin: 10px 15px;
+          &:nth-child(1) {
+            margin-left: 0px;
+          }
           .icon {
             display: flex;
             margin-right: 8px;
@@ -238,8 +267,20 @@ export const RoomWrapper = styled.div`
       }
     }
     .room__right {
-      flex: 0.15;
-
+      flex: 0.32;
+      width: 100%;
+      position: relative;
+      .right {
+        display: flex;
+        gap: 4px;
+        position: absolute;
+        bottom: 0;
+      }
+      /* button {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 10px;
+      } */
       .room__right__container {
         display: flex;
         align-items: center;

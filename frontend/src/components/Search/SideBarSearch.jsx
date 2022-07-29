@@ -4,44 +4,52 @@ import { Button } from '../index';
 import { Typography } from '../../GlobalStyle';
 import { SearchBox } from '../Room/Room.style';
 import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { getRooms } from '../../redux/room/roomSlice';
 const { Option } = Select;
 const SideBarSearch = () => {
-  const { isLoading, isSuccess } = useSelector((state) => state.listRooms);
-  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.listRooms);
+
   const [adult, setAdult] = useState(1);
   const [error, setError] = useState(false);
   const [kid, setKid] = useState(0);
-  const [checkin, setCheckIn] = useState('');
-  const [checkout, setCheckOut] = useState('');
+  const [checkin, setCheckIn] = useState();
+  const [checkout, setCheckOut] = useState();
   const navigate = useNavigate();
 
   const checkInDate = (date) => {
-    setCheckIn(moment(date).format('DD-MM-YYYY'));
+    setCheckIn(moment(date).format('YYYY-MM-DD'));
   };
   const checkOutDate = (date) => {
-    setCheckOut(moment(date).format('DD-MM-YYYY'));
+    setCheckOut(moment(date).format('YYYY-MM-DD'));
   };
 
   const refresh = () => {
     setError(false);
   };
+
+  const dates = [
+    {
+      startDate: checkin,
+      endDate: checkout,
+    },
+  ];
+
+  const options = {
+    adult: adult,
+    children: kid,
+  };
+
   const handleSearch = () => {
     if (checkout < checkin) {
       setError(true);
     } else {
-      const data = {
-        checkIn: checkin,
-        checkOut: checkout,
-        adult,
-        kids: kid,
-      };
-      dispatch(getRooms(data));
-      if (isSuccess) {
+      if (!checkin || !checkout || !adult) {
+        console.log('error');
+      } else {
         navigate(
-          `/rooms?checkIn=${checkin}&checkOut=${checkout}&adult=${adult}&kids=${kid}`
+          `/rooms?checkin=${dates[0].startDate}&checkout=${dates[0].endDate}&adult=${options.adult}&children=${options.children}`,
+          { state: { dates, options } }
         );
       }
     }

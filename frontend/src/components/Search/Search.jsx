@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Container } from '../../GlobalStyle';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import {
   SearchContainer,
@@ -11,16 +11,12 @@ import { DatePicker, Select } from 'antd';
 
 import Button from '../Button';
 import moment from 'moment';
-import { getRooms } from '../../redux/room/roomSlice';
-import { SearchContext } from '../../context/SearchContext';
-
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
 
 const Search = () => {
-  const { isLoading, isSuccess } = useSelector((state) => state.listRooms);
-  const { dispatch } = useContext(SearchContext);
+  const { isLoading } = useSelector((state) => state.listRooms);
   const [adult, setAdult] = useState(1);
   const [kid, setKid] = useState(0);
   const [checkin, setCheckIn] = useState();
@@ -47,14 +43,10 @@ const Search = () => {
     if (!checkin || !checkout || !adult) {
       console.log('error');
     } else {
-      dispatch({ type: 'NEW_SEARCH', payload: { dates, options } });
-      navigate('/rooms', { state: { dates, options } });
-      // dispatch(getRooms(data));
-      // if (isSuccess) {
-      //   navigate(
-      //     `/rooms?checkIn=${checkin}&checkOut=${checkout}&adult=${adult}&kids=${kid}`
-      //   );
-      // }
+      navigate(
+        `/rooms?checkin=${dates[0].startDate}&checkout=${dates[0].endDate}&adult=${options.adult}&children=${options.children}`,
+        { state: { dates, options } }
+      );
     }
   };
 

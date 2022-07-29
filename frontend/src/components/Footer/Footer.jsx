@@ -9,7 +9,6 @@ import {
   FooterWrapper,
   FooterTitle,
   FooterLinks,
-  InnerFooter,
 } from './Footer.style';
 
 const Footer = () => {
