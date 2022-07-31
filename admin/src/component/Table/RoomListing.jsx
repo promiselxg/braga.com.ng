@@ -50,7 +50,6 @@ const RoomListing = ({ title }) => {
       img: room.imgThumbnail,
     })
   );
-  console.log(data);
   const columns = [
     {
       name: 'Image',

@@ -8,3 +8,5 @@ export { default as Users } from './Table/UserListing';
 export { default as GalleryListing } from './Table/GalleryListing';
 export { default as Spinner } from './Spiner';
 export { default as CustomersListing } from './Table/CustomersListing';
+export { default as CategoryListing } from './Table/CategoryListing';
+export { default as Chart } from './Chart/Chart';

@@ -1,5 +1,5 @@
-import { AppstoreOutlined, UserOutlined } from '@ant-design/icons';
-import { Menu, Modal, Input } from 'antd';
+import { AppstoreOutlined, UserOutlined,UploadOutlined } from '@ant-design/icons';
+import { Menu, Modal, Input, Col, Row, Image, message } from 'antd';
 import React, { useState, useContext } from 'react';
 import {
   FiCalendar,
@@ -12,6 +12,7 @@ import {
   FiStar,
   FiBookOpen,
   FiMail,
+  FiAlignCenter,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -19,23 +20,33 @@ import Button from '../../Button';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { AuthContext } from '../../../context/AuthContext';
+import { DashboardTableStats } from '../../../routes/Dashboard/Dashboard.styled';
 
 const App = () => {
   const [openKeys, setOpenKeys] = useState(['sub1']);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [categoryModal, setCategoryModal] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [newUserVisible, setnewUserVisible] = useState(false);
   const [currentUsername, setCurrentUsername] = useState();
   const [newUsername, setNewUsername] = useState();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [passwordField, setPasswordField] = useState({
     current_password: '',
     new_password: '',
     confirm_password: '',
   });
+  const [files, setFiles] = useState([]);
+  const [selectedImages, setselectedImages] = useState([]);
   const [newUserField, setnewUserField] = useState({
     username: '',
     email: '',
+  });
+  const [categoryInput, setCategoryInput] = useState({
+    name: '',
+    type: '',
+    cheapestPrice: '',
   });
   const [roles, setRoles] = useState([]);
   const { user } = useContext(AuthContext);
@@ -78,13 +89,22 @@ const App = () => {
         ),
       ]
     ),
+
     getItem(
       <a href="/" onClick={(e) => e.preventDefault()}>
-        Rooms
+        Rooms &amp; Categories
       </a>,
       'sub3',
       <FiHome />,
       [
+        getItem(
+          <a href="/" onMouseDown={() => setCategoryModal(!categoryModal)}>
+            New Category
+          </a>,
+          '11',
+          <FiAlignCenter />
+        ),
+        getItem(<Link to="/categories">All Categories</Link>, '12', <FiPlus />),
         getItem(<Link to="/rooms/new">New Room</Link>, '3', <FiPlus />),
         getItem(<Link to="/rooms">All Rooms</Link>, '4', <FiHome />),
         getItem(<Link to="/reviews">Reviews</Link>, '40', <FiStar />),
@@ -112,12 +132,7 @@ const App = () => {
         getItem(<Link to="/blog">All Blog Post</Link>, '003', <FiPlus />),
       ]
     ),
-    // getItem(<Link to="/">Payment</Link>, 'sub5', <FaDollarSign />, [
-    //   getItem('Option 9', '11'),
-    //   getItem('Option 10', '12'),
-    //   getItem('Option 11', '13'),
-    //   getItem('Option 12', '14'),
-    // ]),
+
     getItem(
       <a href="/" onClick={(e) => e.preventDefault()}>
         Profile Management
@@ -173,6 +188,12 @@ const App = () => {
   };
   const handleChange = (e) => {
     setPasswordField((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const handleCategoryChange = (e) => {
+    setCategoryInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -254,6 +275,70 @@ const App = () => {
       Swal.fire('Error occured', error?.response?.data?.message, 'error');
     }
   };
+  const imageHandleChange = (e) => {
+    setselectedImages([]);
+    if (e.target.files) {
+      setFiles(e.target.files);
+      const fileArray = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setselectedImages((prevImages) => prevImages.concat(fileArray));
+      Array.from(e.target.files).map((file) => URL.revokeObjectURL(file));
+    }
+  };
+  const renderImages = (source) => {
+    return source.map((image, i) => (
+      <div className="image__box" key={i}>
+        <Image src={image} alt={`images ${i}`} />
+      </div>
+    ));
+  };
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    try {
+      setUploading(true);
+      const list = await Promise.all(
+        Object.values(files).map(async (file) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'braga_category');
+          formData.append('timestamp', timestamp);
+          formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+          const uploadRes = await axios.post(
+            `https://api.cloudinary.com/v1_1/promiselxg/image/upload`,
+            formData
+          );
+
+          const { data } = uploadRes;
+          return data;
+        })
+      );
+
+      const newRoom = {
+        ...categoryInput,
+        photos: list,
+      };
+
+      try {
+        const response = await axios.post('/api/v2/category', newRoom, config);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+        message.success(response.data.message);
+        setselectedImages([]);
+      } catch (error) {
+        message.error(error.response.data.message);
+      }
+      setUploading(false);
+    } catch (error) {
+      message.error(error.response.data.message);
+    }
+  };
+
   return (
     <>
       <Menu
@@ -396,6 +481,100 @@ const App = () => {
           onClick={handleNewUser}
           disabled={!newUserField.username || loading}
         />
+      </Modal>
+      <Modal
+        title="New Category"
+        visible={categoryModal}
+        onOk={() => setCategoryModal(!categoryModal)}
+      >
+        <DashboardTableStats style={{ margin: '0', padding: '0' }}>
+          <div
+            className="dashboard__tablestats__container"
+            style={{ border: 'none' }}
+          >
+            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+              <Col className="gutter-row" span={24}>
+                <div className="label">Category Name</div>
+                <Input
+                  placeholder="Category Name"
+                  value={categoryInput.name}
+                  name="name"
+                  onChange={handleCategoryChange}
+                />
+              </Col>
+            </Row>
+            <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+              <Col className="gutter-row" span={12}>
+                <div className="label">Type</div>
+                <select
+                  name="type"
+                  className="form__control"
+                  onChange={handleCategoryChange}
+                >
+                  <option value="horney">Horney Room</option>
+                  <option value="standard">Standard Room</option>
+                  <option value="executive studio 1">Executive Studio 1</option>
+                  <option value="executive studio 2">Executive Studio 2</option>
+                  <option value="royal">Royal Room</option>
+                  <option value="deluxe">Deluxe Room</option>
+                </select>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <div className="label">Price</div>
+                <Input
+                  placeholder="Price"
+                  value={categoryInput.cheapestPrice}
+                  name="cheapestPrice"
+                  onChange={handleCategoryChange}
+                />
+              </Col>
+            </Row>
+            <Row
+              gutter={{
+                xs: 8,
+                sm: 16,
+                md: 24,
+                lg: 32,
+              }}
+              className="form__row"
+            >
+              <Col span={24} className="form__group upload__group">
+                <div className="image__preview">
+                  {renderImages(selectedImages)}
+                </div>
+
+                <div className="label-holder">
+                  <input
+                    type="file"
+                    name="files"
+                    id="files"
+                    className="file"
+                    accept="image/*"
+                    onChange={imageHandleChange}
+                  />
+                  <label htmlFor="files" className="upload">
+                    <UploadOutlined />
+                  </label>
+                </div>
+              </Col>
+            </Row>
+            <br />
+            <Button
+              label="Add New Category"
+              bg="var(--blue)"
+              color="#fff"
+              hoverBg="var(--yellow)"
+              hoverColor="#000"
+              onClick={submitForm}
+              disabled={
+                !categoryInput.cheapestPrice ||
+                !categoryInput.name ||
+                uploading ||
+                !categoryInput.type
+              }
+            />
+          </div>
+        </DashboardTableStats>
       </Modal>
     </>
   );

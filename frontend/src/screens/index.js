@@ -8,3 +8,4 @@ export { default as PageNotFound } from './404';
 export { default as BlogScreen } from './BlogScreen';
 export { default as SingleBlogScreen } from './SingleBlogScreen';
 export { default as Terms } from './Terms';
+export { default as Privacy } from './Privacy';

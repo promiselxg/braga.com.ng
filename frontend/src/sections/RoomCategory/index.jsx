@@ -120,8 +120,12 @@ const Category = () => {
                       <LazyLoad>
                         <div className="card__img">
                           <Image
-                            img="https://images.unsplash.com/photo-1650173419393-a3d85d494399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-                            alt="image"
+                            img={`${
+                              cat?.image_url
+                                ? cat?.image_url
+                                : 'https://images.unsplash.com/photo-1650173419393-a3d85d494399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
+                            }`}
+                            alt={`${cat?.name}`}
                           />
                         </div>
                       </LazyLoad>

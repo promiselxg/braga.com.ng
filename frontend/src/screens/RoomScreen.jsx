@@ -1,4 +1,4 @@
-import { Room, Section, SideBar, Filter } from '../components';
+import { Room, Section, SideBar } from '../components';
 import { Breadcrumb } from 'antd';
 import {
   LeftWrapper,
@@ -36,9 +36,6 @@ const RoomScreen = () => {
               <LeftWrapper>
                 <FilterBox className="filterBox">
                   <SideBar />
-                </FilterBox>
-                <FilterBox>
-                  <Filter />
                 </FilterBox>
               </LeftWrapper>
               <RightWrapper>

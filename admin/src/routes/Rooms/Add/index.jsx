@@ -4,10 +4,9 @@ import {
   DashboardTableStats,
   DashboardWrapper,
 } from '../../Dashboard/Dashboard.styled';
-import { LoadingOutlined } from '@ant-design/icons';
 import { ContentWrapper, Form } from '../../Booking/Booking.styled';
 import { Col, Row, Image, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Spinner } from '../../../component';
 import useFetch from '../../../hooks/useFetch';
 import axios from 'axios';
@@ -197,7 +196,7 @@ const AddRoom = () => {
                       />
                     </Col>
                     <Col className="form__group" span={6}>
-                      <div className="label">Room Type</div>
+                      <div className="label">Category</div>
                       <select
                         name="category"
                         value={category}

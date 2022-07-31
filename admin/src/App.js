@@ -9,6 +9,7 @@ import {
   AllUsers,
   BlogPost,
   Bookings,
+  Category,
   Customers,
   Dashboard,
   EditBlogPost,
@@ -94,6 +95,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Customers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <Category />
             </ProtectedRoute>
           }
         />

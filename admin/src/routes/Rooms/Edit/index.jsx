@@ -230,7 +230,7 @@ const EditRoom = () => {
                           />
                         </Col>
                         <Col className="form__group" span={6}>
-                          <div className="label">Room Type</div>
+                          <div className="label">Category</div>
                           <select
                             name="category"
                             value={category}

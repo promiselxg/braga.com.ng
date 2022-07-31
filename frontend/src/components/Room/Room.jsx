@@ -71,7 +71,6 @@ const Room = () => {
     });
   }, []);
 
-  console.log(rooms);
   return (
     <>
       {isLoading ? (

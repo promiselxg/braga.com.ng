@@ -138,6 +138,7 @@ export const RightWrapper = styled.div`
     padding: 10px;
     border-radius: 5px;
     height: 250px;
+
     margin: 16px 0;
     box-shadow: 0 1px 5px rgba(0 0 0 / 15%);
     background: #fff;
@@ -147,7 +148,8 @@ export const RightWrapper = styled.div`
       cursor: pointer;
     }
     @media screen and (max-width: 760px) {
-      height: max-content;
+      height: 500px;
+      position: relative;
     }
   }
   .heading {
@@ -203,6 +205,7 @@ export const RoomWrapper = styled.div`
     .room__left {
       width: 100%;
       height: 220px;
+
       flex: 0.25;
       border-radius: 5px;
       overflow: hidden;
@@ -228,6 +231,11 @@ export const RoomWrapper = styled.div`
       .room__price {
         position: absolute;
         bottom: 0;
+
+        @media screen and (max-width: 760px) {
+          position: relative;
+          top: 10px;
+        }
       }
       .price {
         font-size: 1.5rem;
@@ -252,7 +260,7 @@ export const RoomWrapper = styled.div`
         width: 100%;
         .feature {
           align-items: center;
-          color: var('#000');
+          color: '#000';
           font-size: 14px;
           display: flex;
           margin: 10px 15px;
@@ -305,9 +313,9 @@ export const RoomWrapper = styled.div`
       }
       @media screen and (max-width: 760px) {
         flex: 1;
-
-        margin: 10px 0;
-
+        position: absolute;
+        bottom: 15px;
+        display: none;
         button {
           width: 100%;
         }

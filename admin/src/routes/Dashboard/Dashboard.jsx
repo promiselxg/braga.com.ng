@@ -1,4 +1,4 @@
-import { FiBook, FiDollarSign } from 'react-icons/fi';
+import { FiBook } from 'react-icons/fi';
 import {
   Content,
   DashboardCards,
@@ -6,16 +6,28 @@ import {
   DashboardTableStats,
   DashboardWrapper,
 } from './Dashboard.styled';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 import RecentBooking from '../../component/Table/RecentBooking';
 import { FaBed, FaRegCalendarCheck } from 'react-icons/fa';
 import { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { Skeleton } from 'antd';
 import { RoomContext } from '../../context/RoomContext';
+import useFetch from '../../hooks/useFetch';
+import NumberFormat from 'react-number-format';
+import { Chart } from '../../component';
 
 const Dashboard = () => {
   const { loading, dispatch } = useContext(RoomContext);
-
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 24,
+      }}
+      spin
+    />
+  );
   useEffect(() => {
     const config = {
       headers: {
@@ -42,6 +54,15 @@ const Dashboard = () => {
     };
     fetchAllRooms();
   }, [dispatch]);
+
+  const { data: totalBooking, loading: totalBookingLoading } =
+    useFetch(`/stats/booking`);
+  const { data: totalRooms, loading: totalRoomsLoading } =
+    useFetch(`/stats/rooms`);
+  const { data: pendingBooking, loading: pendingBookingLoading } = useFetch(
+    `/stats/booking?query=pending`
+  );
+  const { data: total, loading: totalLoading } = useFetch(`/stats/total`);
   return (
     <>
       <DashboardWrapper>
@@ -68,7 +89,13 @@ const Dashboard = () => {
                 </div>
                 <div className="card__info">
                   <span>Total Booking</span>
-                  <span>5,074</span>
+                  <span>
+                    {totalBookingLoading ? (
+                      <Spin indicator={antIcon} />
+                    ) : (
+                      totalBooking?.data
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="cards">
@@ -76,8 +103,14 @@ const Dashboard = () => {
                   <FaBed className="card__icons" />
                 </div>
                 <div className="card__info">
-                  <span>Reservations</span>
-                  <span>574</span>
+                  <span>Rooms</span>
+                  <span>
+                    {totalRoomsLoading ? (
+                      <Spin indicator={antIcon} />
+                    ) : (
+                      totalRooms?.data
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="cards">
@@ -85,25 +118,46 @@ const Dashboard = () => {
                   <FaRegCalendarCheck className="card__icons" />
                 </div>
                 <div className="card__info">
-                  <span>Check-in</span>
-                  <span>702</span>
+                  <span>Pending</span>
+                  <span>
+                    {pendingBookingLoading ? (
+                      <Spin indicator={antIcon} />
+                    ) : (
+                      pendingBooking?.data
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="cards">
                 <div className="card__icon bg-cyan">
-                  <FiDollarSign className="card__icons" />
+                  <i className="card__icons">&#8358;</i>
                 </div>
                 <div className="card__info">
                   <span>Total Revenue</span>
-                  <span>$22,567</span>
+                  <span>
+                    {totalLoading ? (
+                      <Spin indicator={antIcon} />
+                    ) : (
+                      <>
+                        &#8358;
+                        <NumberFormat
+                          value={total?.data}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                        />
+                      </>
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
           </DashboardCards>
           <DashboardStats>
             <div className="dashboard__stats__container">
-              <div className="left"></div>
-              <div className="right"></div>
+              <div className="left">
+                <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+              </div>
+              {/* <div className="right"></div> */}
             </div>
           </DashboardStats>
           <DashboardTableStats>

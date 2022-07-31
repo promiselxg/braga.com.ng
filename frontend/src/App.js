@@ -13,6 +13,7 @@ import {
   BlogScreen,
   SingleBlogScreen,
   Terms,
+  Privacy,
 } from './screens';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/blogs" element={<BlogScreen />} />
           <Route path="/blogs/:id" element={<SingleBlogScreen />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

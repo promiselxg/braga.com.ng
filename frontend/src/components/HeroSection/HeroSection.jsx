@@ -15,7 +15,7 @@ const HeroSection = () => {
               <Carousel
                 additionalTransfrom={0}
                 arrows
-                autoPlaySpeed={10000}
+                autoPlaySpeed={5000}
                 centerMode={false}
                 className=""
                 containerClass=""

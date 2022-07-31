@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Image, Button } from '..';
 import { Logo } from '../../assets';
 import { Container } from '../../GlobalStyle';
-import { Links } from '../NavAnchor';
 import { HeaderContainer, HeaderWrapper, Nav, NavLogo } from './Header.style';
 import { Drawer } from 'antd';
 import { FiMenu } from 'react-icons/fi';
@@ -46,10 +45,6 @@ const Header = () => {
                 </Link>
               </NavLogo>
               <Nav>
-                <Links url="/" label="Home" />
-                <Links url="/about" label="About Us" />
-                <Links url="/rooms" label="Rooms" />
-                <Links url="/blogs" label="Blog" />
                 <Link to="/rooms">
                   <Button
                     label="Book a Room"
@@ -77,7 +72,6 @@ const Header = () => {
           <Link to="/">Home</Link>
           <Link to="/rooms">Rooms</Link>
           <Link to="/about">About Us</Link>
-          <Link to="/">Services</Link>
         </DrawerWrapper>
       </Drawer>
     </>

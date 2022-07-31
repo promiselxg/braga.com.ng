@@ -26,7 +26,7 @@ const Footer = () => {
               <FooterLinks>
                 <Link to="/">Home</Link>
                 <Link to="/">About Us</Link>
-                <Link to="/terms#intro">Privacy Policy</Link>
+                <Link to="/privacy">Privacy Policy</Link>
                 <Link to="/terms#rules">Lodging Rules</Link>
                 <Link to="/terms#cancel">Refund Policy</Link>
               </FooterLinks>

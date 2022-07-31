@@ -14,3 +14,4 @@ export { default as Customers } from './Customer';
 export { default as Login } from './Login';
 export { default as Reviews } from './Rooms/Reviews';
 export { default as AllUsers } from './User';
+export { default as Category } from './Category';

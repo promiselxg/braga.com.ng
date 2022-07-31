@@ -105,16 +105,17 @@ export const DashboardStats = styled.div`
     display: flex;
     width: 100%;
     gap: 10px;
-    min-height: 300px;
+    min-height: 200px;
     padding: 0 2rem;
 
     .left {
-      flex: 0.7;
-      background: green;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.8);
     }
     .right {
       flex: 0.3;
       background: purple;
+      height: 250px;
     }
   }
 `;

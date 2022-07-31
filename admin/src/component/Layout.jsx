@@ -1,6 +1,6 @@
 import { Avatar } from 'antd';
 import React from 'react';
-import { FiMenu, FiSearch, FiUser } from 'react-icons/fi';
+import { FiMenu, FiUser } from 'react-icons/fi';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { Sidebar } from './index';
@@ -112,9 +112,6 @@ const Layout = () => {
               </div>
 
               <div className="topbar__rightnav">
-                <div className="topbar__rightnav__item">
-                  <FiSearch className="menu__icon" />
-                </div>
                 <div className="topbar__rightnav__item">
                   <Avatar icon={<FiUser />} className="menu__icon" />
                 </div>

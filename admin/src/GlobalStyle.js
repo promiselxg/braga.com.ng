@@ -14,10 +14,18 @@ const GlobalStyle = createGlobalStyle`
   width: 5px;
   height: 5px;
 }
-
+#search{
+  width:100% !important
+}
+.sc-efBctP{
+  display:none !important
+}
 /* Track */
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+.gutter-row{
+  margin:10px 0 ;
 }
 .form__control {
     display: block;
@@ -72,6 +80,9 @@ const GlobalStyle = createGlobalStyle`
   width:100% !important;
   color: #ccc;
   background:transparent !important;
+}
+.ant-modal-close-x{
+  display:none ;
 }
 .ant-menu-submenu{
   margin:10px 0
