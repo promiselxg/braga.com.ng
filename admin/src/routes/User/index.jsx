@@ -15,7 +15,7 @@ import { useState } from 'react';
 const AllUsers = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const API_URL = 'https://api.braga.com.ng';
   useEffect(() => {
     const config = {
       headers: {
@@ -25,7 +25,7 @@ const AllUsers = () => {
 
     const fetchUsers = async () => {
       setLoading(true);
-      const { data } = await axios.get(`/api/v2/auth/users`, config);
+      const { data } = await axios.get(`${API_URL}/api/v2/auth/users`, config);
       setLoading(false);
       setData(data);
     };

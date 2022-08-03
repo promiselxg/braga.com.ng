@@ -42,6 +42,15 @@ const HomeScreen = () => {
         Our Gallery
       </Typography>
       <Slider />
+      <Typography
+        as="h2"
+        fontSize="2rem"
+        fontWeight="800"
+        className="title_"
+        margin="20px 0px 0px 0px"
+      >
+        Braga News update
+      </Typography>
       <Blog />
     </>
   );

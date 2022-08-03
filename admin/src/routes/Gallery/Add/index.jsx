@@ -18,6 +18,7 @@ const AddGallery = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
+  const API_URL = 'https://api.braga.com.ng';
 
   const config = {
     headers: {
@@ -79,7 +80,11 @@ const AddGallery = () => {
         photos: list,
       };
       try {
-        const response = await axios.post('/api/v2/gallery', newMedia, config);
+        const response = await axios.post(
+          `${API_URL}/api/v2/gallery`,
+          newMedia,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,

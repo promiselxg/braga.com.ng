@@ -20,6 +20,7 @@ const ReviewsListing = ({ title, data, loading }) => {
   const [approving, setIsApproving] = useState(false);
   const [reviewid, setReviewId] = useState('');
   const [reviewInfo, setReviewInfo] = useState('');
+  const API_URL = 'https://api.braga.com.ng';
 
   data?.data?.map((review) =>
     reviews.push({
@@ -146,7 +147,7 @@ const ReviewsListing = ({ title, data, loading }) => {
         setIsLoading(true);
         try {
           const { data } = await axios.get(
-            `api/v2/reviews/${reviewid}`,
+            `${API_URL}/api/v2/reviews/${reviewid}`,
             config
           );
           setReviewInfo(data);
@@ -192,7 +193,7 @@ const ReviewsListing = ({ title, data, loading }) => {
     console.log(conf);
     setIsApproving(true);
     try {
-      await axios.put(`api/v2/reviews/${roomid}/${id}`, '', conf);
+      await axios.put(`${API_URL}/api/v2/reviews/${roomid}/${id}`, '', conf);
       Swal.fire('Approved Successfull', 'Approved successfully', 'success');
       setVisible(false);
     } catch (error) {

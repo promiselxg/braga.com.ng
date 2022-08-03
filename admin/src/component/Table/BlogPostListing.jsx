@@ -18,6 +18,8 @@ const RecentBooking = ({ title }) => {
     React.useState(false);
 
   let { loading, blog } = useContext(BlogContext);
+  const API_URL = 'https://api.braga.com.ng';
+
   blog?.data?.map((post) =>
     data.push({
       id: post?._id,
@@ -100,7 +102,7 @@ const RecentBooking = ({ title }) => {
                       backdrop: true,
                       preConfirm: async () => {
                         const response = await axios.delete(
-                          `/api/v2/blog/${row.id}`,
+                          `${API_URL}/api/v2/blog/${row.id}`,
                           config
                         );
                         return response;

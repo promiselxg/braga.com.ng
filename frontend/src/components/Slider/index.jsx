@@ -34,7 +34,7 @@ const Slider = () => {
       try {
         setLoading(true);
         const { data } = await axios.get(
-          `http://localhost:8080/api/v2/gallery?select=image_url`
+          `https://api.braga.com.ng/api/v2/gallery?select=image_url`
         );
         setGallery(data.data);
         setLoading(false);

@@ -173,17 +173,31 @@ const RoomsSection = () => {
                   </CardTitle>
 
                   <CardInfo>
-                    {!room.discount ? (
+                    {room?.slashPrice ? (
                       <>
                         <div className="price">
                           <Typography as="h2" fontSize="1rem" fontWeight="600">
                             &#8358;
                             <NumberFormat
                               displayType={'text'}
-                              value={room.price}
+                              value={room.slashPrice}
                               thousandSeparator={true}
                             />
                             /night
+                          </Typography>
+                        </div>
+
+                        <div className="discount">
+                          <Typography as="h2" fontSize=".8rem" fontWeight="400">
+                            <s>
+                              &#8358;
+                              <NumberFormat
+                                displayType={'text'}
+                                value={room.price}
+                                thousandSeparator={true}
+                              />
+                              /night
+                            </s>{' '}
                           </Typography>
                         </div>
                       </>
@@ -198,20 +212,6 @@ const RoomsSection = () => {
                               thousandSeparator={true}
                             />
                             /night
-                          </Typography>
-                        </div>
-
-                        <div className="discount">
-                          <Typography as="h2" fontSize=".8rem" fontWeight="400">
-                            <s>
-                              &#8358;
-                              <NumberFormat
-                                displayType={'text'}
-                                value={room.discount}
-                                thousandSeparator={true}
-                              />
-                            </s>{' '}
-                            - {room.discount}% off
                           </Typography>
                         </div>
                       </>

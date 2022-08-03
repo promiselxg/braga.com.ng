@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 import './login.css';
 
 const Login = () => {
+  const API_URL = 'https://api.braga.com.ng';
   const [credentials, setCredentials] = useState({
     Username: undefined,
     password: undefined,
@@ -23,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     dispatch({ type: 'LOGIN_START' });
     try {
-      const res = await axios.post('/api/v2/auth/login', credentials);
+      const res = await axios.post(`${API_URL}/api/v2/auth/login`, credentials);
       if (res.data.success) {
         dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.token });
         navigate('/');

@@ -12,6 +12,7 @@ const Users = ({ title, data, loading }) => {
   const [filterText, setFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
+  const API_URL = 'https://api.braga.com.ng';
 
   data?.users?.map((user) =>
     users.push({
@@ -91,7 +92,7 @@ const Users = ({ title, data, loading }) => {
                   backdrop: true,
                   preConfirm: async () => {
                     const response = await axios.delete(
-                      `/api/v2/auth/profile/${row.id}`,
+                      `${API_URL}/api/v2/auth/profile/${row.id}`,
                       config
                     );
                     return response;

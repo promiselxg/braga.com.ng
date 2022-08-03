@@ -14,6 +14,7 @@ import { ContentWrapper } from './Booking.styled';
 
 const Bookings = () => {
   const { loading, roomInfo, dispatch } = useContext(RoomContext);
+  const API_URL = 'https://api.braga.com.ng';
 
   useEffect(() => {
     const config = {
@@ -24,7 +25,10 @@ const Bookings = () => {
     const fetchAllRooms = async () => {
       dispatch({ type: 'ROOM_INFO_START' });
       try {
-        const res = await axios.get('/api/v2/reservation/booking', config);
+        const res = await axios.get(
+          `${API_URL}/api/v2/reservation/booking`,
+          config
+        );
         if (res.data.success) {
           dispatch({ type: 'ROOM_INFO_SUCCESS', payload: res.data });
         } else {

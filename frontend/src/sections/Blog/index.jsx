@@ -10,7 +10,7 @@ import TextTruncate from 'react-text-truncate';
 import LazyLoad from 'react-lazyload';
 import { Link } from 'react-router-dom';
 export const BlogWrapper = styled.section`
-  padding: 80px 0;
+  padding: 0px 0px 80px 0px;
   width: 100%;
   /* overflow: hidden; */
   .container {

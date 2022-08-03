@@ -12,6 +12,7 @@ import useFetch from '../../../hooks/useFetch';
 import axios from 'axios';
 
 const AddRoom = () => {
+  const API_URL = 'https://api.braga.com.ng';
   const [selectedImages, setselectedImages] = useState([]);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -25,7 +26,6 @@ const AddRoom = () => {
     adults: '',
     kids: '',
     cancellation: '',
-    children: '',
     room_features: '',
     description: '',
   });
@@ -77,7 +77,6 @@ const AddRoom = () => {
     adults,
     kids,
     cancellation,
-    children,
     room_features,
     description,
   } = inputForm;
@@ -110,7 +109,11 @@ const AddRoom = () => {
       };
 
       try {
-        const response = await axios.post('/api/v2/rooms/new', newRoom, config);
+        const response = await axios.post(
+          `${API_URL}/api/v2/rooms/new`,
+          newRoom,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,
@@ -293,19 +296,6 @@ const AddRoom = () => {
                         <option></option>
                         <option value="true">Free Cancellation</option>
                         <option value="false">10% Charge</option>
-                      </select>
-                    </Col>
-                    <Col className="form__group" span={6}>
-                      <div className="label">Allow Children</div>
-                      <select
-                        name="children"
-                        className="form__control"
-                        onChange={handleChange}
-                        value={children}
-                      >
-                        <option></option>
-                        <option value="true">YES</option>
-                        <option value="false">NO</option>
                       </select>
                     </Col>
                   </Row>

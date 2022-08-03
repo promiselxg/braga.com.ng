@@ -1,4 +1,8 @@
-import { AppstoreOutlined, UserOutlined,UploadOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  UserOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { Menu, Modal, Input, Col, Row, Image, message } from 'antd';
 import React, { useState, useContext } from 'react';
 import {
@@ -23,6 +27,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import { DashboardTableStats } from '../../../routes/Dashboard/Dashboard.styled';
 
 const App = () => {
+  const API_URL = 'https://api.braga.com.ng';
   const [openKeys, setOpenKeys] = useState(['sub1']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [categoryModal, setCategoryModal] = useState(false);
@@ -213,7 +218,7 @@ const App = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `/api/v2/auth/profile/${jwt_decode(user).id}?type=username`,
+        `${API_URL}/api/v2/auth/profile/${jwt_decode(user).id}?type=username`,
         data,
         config
       );
@@ -236,7 +241,7 @@ const App = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `/api/v2/auth/profile/${jwt_decode(user).id}?type=password`,
+        `${API_URL}/api/v2/auth/profile/${jwt_decode(user).id}?type=password`,
         data,
         config
       );
@@ -266,7 +271,11 @@ const App = () => {
     };
     try {
       setLoading(true);
-      const response = await axios.post('/api/v2/auth/register', data, config);
+      const response = await axios.post(
+        `${API_URL}/api/v2/auth/register`,
+        data,
+        config
+      );
       Swal.fire('Successfull', response?.data?.message, 'success');
       setnewUserVisible(false);
       setLoading(false);
@@ -322,7 +331,11 @@ const App = () => {
       };
 
       try {
-        const response = await axios.post('/api/v2/category', newRoom, config);
+        const response = await axios.post(
+          `${API_URL}/api/v2/category`,
+          newRoom,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,

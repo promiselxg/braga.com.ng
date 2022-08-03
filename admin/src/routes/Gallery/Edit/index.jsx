@@ -20,6 +20,7 @@ const EditGallery = () => {
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
   let id = useLocation().pathname.split('/')[2];
+  const API_URL = 'https://api.braga.com.ng';
 
   const config = {
     headers: {
@@ -82,7 +83,7 @@ const EditGallery = () => {
       };
       try {
         const response = await axios.put(
-          `/api/v2/gallery/${id}`,
+          `${API_URL}/api/v2/gallery/${id}`,
           newMedia,
           config
         );
@@ -107,7 +108,10 @@ const EditGallery = () => {
       },
     };
     const getGalleryInfo = async () => {
-      const { data } = await axios.get(`/api/v2/gallery/${id}`, config);
+      const { data } = await axios.get(
+        `${API_URL}/api/v2/gallery/${id}`,
+        config
+      );
       setTitle(data?.data?.title);
       setDescription(data?.data?.description);
       setselectedImages(data?.data?.image_url);

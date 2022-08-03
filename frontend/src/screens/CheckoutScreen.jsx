@@ -82,7 +82,7 @@ const CheckoutScreen = () => {
   const checkout = moment(checkOut, 'YYYY-MM-DD');
 
   const duration = search
-    ? moment.duration(checkout.diff(checkin)).asDays() + 1
+    ? moment.duration(checkout.diff(checkin)).asDays()
     : 1;
 
   let unitPrice = room?.data?.slashPrice
@@ -237,6 +237,7 @@ const CheckoutScreen = () => {
   };
 
   const alldates = getDatesInRange(checkIn, checkOut);
+
   return (
     <>
       {isError && <Notification message={message} type="error" />}

@@ -41,7 +41,7 @@ const EditRoom = () => {
   const [children, setChildren] = useState('');
   const [room_features, setRoomFeatures] = useState('');
   const [description, setDescription] = useState('');
-
+  const API_URL = 'https://api.braga.com.ng';
   const antIcon = (
     <LoadingOutlined
       style={{
@@ -112,7 +112,7 @@ const EditRoom = () => {
       };
       try {
         const response = await axios.put(
-          `/api/v2/rooms/${url}`,
+          `${API_URL}/api/v2/rooms/${url}`,
           newRoom,
           config
         );

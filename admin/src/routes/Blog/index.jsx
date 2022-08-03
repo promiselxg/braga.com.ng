@@ -14,12 +14,13 @@ import { ContentWrapper } from '../Booking/Booking.styled';
 
 const BlogPost = () => {
   const { loading, blog, dispatch } = useContext(BlogContext);
+  const API_URL = 'https://api.braga.com.ng';
 
   useEffect(() => {
     const fetchAllPost = async () => {
       dispatch({ type: 'BLOG_START' });
       try {
-        const res = await axios.get('/api/v2/blog');
+        const res = await axios.get(`${API_URL}/api/v2/blog`);
         if (res.data.success) {
           dispatch({ type: 'BLOG_SUCCESS', payload: res.data });
         } else {

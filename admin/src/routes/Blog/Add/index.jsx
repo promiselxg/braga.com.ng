@@ -21,6 +21,7 @@ const AddBlog = () => {
   const [uploading, setUploading] = useState(false);
   const [blogTitle, setBlogTitle] = useState('');
   const [blogPost, setBlogPost] = useState('');
+  const API_URL = 'https://api.braga.com.ng';
 
   const onChange = (content, delta, source, editor) => {
     setBlogPost(editor.getText(content));
@@ -88,7 +89,11 @@ const AddBlog = () => {
       };
 
       try {
-        const response = await axios.post('/api/v2/blog', newPost, config);
+        const response = await axios.post(
+          `${API_URL}/api/v2/blog`,
+          newPost,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,

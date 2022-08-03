@@ -20,6 +20,7 @@ const RecentBooking = ({ title }) => {
     React.useState(false);
   const [visible, setVisible] = useState(false);
   const [roomid, setRoomId] = useState('');
+  const API_URL = 'https://api.braga.com.ng';
 
   let { loading, roomInfo, room, isLoading, dispatch } =
     useContext(RoomContext);
@@ -153,7 +154,7 @@ const RecentBooking = ({ title }) => {
         dispatch({ type: 'SINGLE_ROOM_INFO_START' });
         try {
           const response = await axios.get(
-            `/api/v2/reservation/${roomid}`,
+            `${API_URL}/api/v2/reservation/${roomid}`,
             config
           );
           dispatch({
@@ -244,7 +245,7 @@ const RecentBooking = ({ title }) => {
             </p>
             <h3>Room Details</h3>
             <p>
-              Room Number : <b>{room?.response?.roomid.roomNumber}</b>
+              Room Number : <b>{room?.response?.roomid?.roomNumber}</b>
             </p>
             <p>
               Adults : <b>{room?.response?.roomid?.noAdults}</b>
@@ -275,7 +276,7 @@ const RecentBooking = ({ title }) => {
                       backdrop: true,
                       preConfirm: async () => {
                         const response = await axios.put(
-                          `/api/v2/reservation/${room?.response?.reservationid}`,
+                          `${API_URL}/api/v2/reservation/${room?.response?.reservationid}`,
                           '',
                           config
                         );

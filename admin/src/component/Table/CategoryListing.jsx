@@ -60,6 +60,7 @@ const CategoryListing = () => {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [price, setPrice] = useState('');
+  const API_URL = 'https://api.braga.com.ng';
 
   const categories = [];
   const imageHandleChange = (e) => {
@@ -111,7 +112,7 @@ const CategoryListing = () => {
 
       try {
         const response = await axios.put(
-          `/api/v2/category/${catId}`,
+          `${API_URL}/api/v2/category/${catId}`,
           newRoom,
           config
         );
@@ -200,7 +201,7 @@ const CategoryListing = () => {
                           showLoaderOnConfirm: true,
                           preConfirm: async () => {
                             const response = await axios.delete(
-                              `api/v2/category/${record.key}`,
+                              `${API_URL}/api/v2/category/${record.key}`,
                               config
                             );
                             return response;
@@ -246,7 +247,10 @@ const CategoryListing = () => {
       if (editCategoryModal === true) {
         setIsLoading(true);
         try {
-          const { data } = await axios.get(`/api/v2/category/${catId}`, config);
+          const { data } = await axios.get(
+            `${API_URL}/api/v2/category/${catId}`,
+            config
+          );
           setName(data?.data?.name);
           setType(data?.data?.type);
           setPrice(data?.data?.cheapestPrice);
@@ -313,6 +317,7 @@ const CategoryListing = () => {
                       value={type}
                       onChange={(e) => setType(e.target.value)}
                     >
+                      <option value="">select category type</option>
                       <option value="horney">Horney Room</option>
                       <option value="standard">Standard Room</option>
                       <option value="executive studio 1">

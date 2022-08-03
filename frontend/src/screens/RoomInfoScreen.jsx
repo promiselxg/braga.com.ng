@@ -76,7 +76,6 @@ const RoomInfoScreen = () => {
   };
 
   const alldates = getDatesInRange(checkIn, checkOut);
-
   return (
     <>
       <Section>

@@ -20,6 +20,8 @@ import { Chart } from '../../component';
 
 const Dashboard = () => {
   const { loading, dispatch } = useContext(RoomContext);
+  const API_URL = 'https://api.braga.com.ng';
+
   const antIcon = (
     <LoadingOutlined
       style={{
@@ -38,7 +40,7 @@ const Dashboard = () => {
       dispatch({ type: 'ROOM_INFO_START' });
       try {
         const res = await axios.get(
-          'api/v2/reservation/booking?limit=10&status=success',
+          `${API_URL}/api/v2/reservation/booking?limit=10&status=success`,
           config
         );
         if (res.data.success) {

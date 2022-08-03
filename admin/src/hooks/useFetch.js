@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const useFetch = (url) => {
-  const API_URL = '/api/v2';
+  const API_URL = 'https://www.api.braga.com.ng/api/v2';
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

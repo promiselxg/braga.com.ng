@@ -26,6 +26,7 @@ const EditBlog = () => {
   const onChange = (content, delta, source, editor) => {
     setBlogPost(editor.getText(content));
   };
+  const API_URL = 'https://api.braga.com.ng';
 
   const config = {
     headers: {
@@ -89,7 +90,11 @@ const EditBlog = () => {
       };
 
       try {
-        const response = await axios.put(`/api/v2/blog/${id}`, newPost, config);
+        const response = await axios.put(
+          `${API_URL}/api/v2/blog/${id}`,
+          newPost,
+          config
+        );
         window.scrollTo({
           top: 0,
           left: 0,
@@ -107,7 +112,7 @@ const EditBlog = () => {
 
   useEffect(() => {
     const getBlogPost = async () => {
-      const { data } = await axios.get(`/api/v2/blog/${id}`);
+      const { data } = await axios.get(`${API_URL}/api/v2/blog/${id}`);
       setBlogPost(data?.data?.blog_post);
       setBlogTitle(data?.data?.blog_title);
       setselectedImages(data?.data?.image_url);
