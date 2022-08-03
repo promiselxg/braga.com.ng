@@ -6,14 +6,22 @@ const sgMail = require('@sendgrid/mail');
 //const moment = require('moment');
 const { sendEmail } = require('../utils/sendgrid');
 const Room = require('../models/roomModel');
-
 //   Make reservation
 const roomReservation = asyncHandler(async (req, res) => {
   let rids = [];
+  let r_id;
   const { guestMember, roomInfo, type } = req.body;
   const { roomid: id } = req.params;
-  const { roomid, checkin, checkout, totalDays, totalAmount, adults, kids } =
-    roomInfo;
+  const {
+    roomid,
+    checkin,
+    checkout,
+    totalDays,
+    totalAmount,
+    adults,
+    kids,
+    selectedDays,
+  } = roomInfo;
 
   // Send Confirmation Email to user
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -67,10 +75,10 @@ const roomReservation = asyncHandler(async (req, res) => {
           },
           function (error, doc) {
             rids.push(doc._id);
+            r_id = doc._id;
           }
         )
       );
-
       try {
         const reserve = await ReservationInfo.create({
           roomid: roomInfo.roomid,
@@ -80,7 +88,6 @@ const roomReservation = asyncHandler(async (req, res) => {
           checkOut: roomInfo.checkout,
           reservationNumber: reservation_id,
         });
-
         if (reserve) {
           if (type === 'reserve') {
             sendEmail({
@@ -106,25 +113,27 @@ const roomReservation = asyncHandler(async (req, res) => {
             });
           }
           //  update reservationsInfo to include reservation IDs
-          try {
-            await ReservationInfo.findByIdAndUpdate(
-              reserve._id,
-              {
-                $set: {
-                  reservationId: rids,
-                },
-              },
-              { new: true }
-            );
-            return res.status(200).json({
-              status: 'success',
-              message: 'Room reservation successfull.',
-              reservationId: reserve._id,
-            });
-          } catch (error) {
-            res.status(400);
-            throw new Error(error);
-          }
+
+          await ReservationInfo.findByIdAndUpdate(reserve._id, {
+            $set: {
+              reservationId: rids,
+            },
+          });
+          await Room.findByIdAndUpdate(roomid, {
+            $push: {
+              unavailableDates: selectedDays,
+            },
+          });
+          await Reservation.findByIdAndUpdate(r_id, {
+            $set: {
+              reservationid: reserve._id,
+            },
+          });
+          return res.status(201).json({
+            status: 'success',
+            message: 'Room reservation successfull.',
+            reservationId: rids,
+          });
         }
       } catch (error) {
         res.status(400);
@@ -150,6 +159,11 @@ const completePayment = asyncHandler(async (req, res) => {
       throw new Error('Invalid request ID.');
     }
     const { status, referenceNo, transactionId } = req.body;
+    await Room.findByIdAndUpdate(roomid, {
+      $push: {
+        unavailableDates: selectedDays,
+      },
+    });
     //  update reservation
     const update = await ReservationInfo.findByIdAndUpdate(
       roomid,
@@ -183,11 +197,58 @@ const getAllBookings = asyncHandler(async (req, res) => {
 //  Get reserved room info.
 const getReservedRoomInfo = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
-  const response = await Reservation.findById(roomid).populate('roomid');
+  const response = await Reservation.findById(roomid).populate(
+    'roomid',
+    'noAdults noKids roomNumbers'
+  );
+  const { status } = await ReservationInfo.findById(response.reservationid);
   res.status(200).json({
-    status: 'success',
+    status,
     response,
   });
+});
+//  Update Room Availability
+const updateRoomAvailability = asyncHandler(async (req, res) => {
+  try {
+    await Room.updateOne(
+      { 'roomNumbers._id': req.params.id },
+      {
+        $push: {
+          'roomNumbers.$.unavailableDates': req.body.dates,
+        },
+      }
+    );
+    res.status(200).json('Room status has been updated.');
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+//  Update Reservation Payment Status
+const updateReservationPayment = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (await ReservationInfo.findById(id)) {
+      const response = await ReservationInfo.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            status: 'succcess',
+          },
+        },
+        { new: true }
+      );
+      const { email } = await Reservation.findById(response.reservationId);
+      // send mail
+      return res.status(200).json({
+        status: 'success',
+        message: 'Reservation payemtent confirmed.',
+      });
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
 });
 module.exports = {
   roomReservation,
@@ -195,4 +256,6 @@ module.exports = {
   getAllReservations,
   getAllBookings,
   getReservedRoomInfo,
+  updateRoomAvailability,
+  updateReservationPayment,
 };

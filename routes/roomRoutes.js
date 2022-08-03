@@ -6,6 +6,7 @@ const {
   deleteRoom,
   getSingleRoom,
   getRoomsByCategory,
+  updateRoomPrice,
 } = require('../controllers/roomController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { verifyUserRoles } = require('../middleware/roleMiddleware');
@@ -24,6 +25,9 @@ router
     uploadFile.array('files', 10),
     createRoom
   );
+router
+  .route('/:id')
+  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateRoomPrice);
 router
   .route('/:roomid')
   .put(

@@ -7,8 +7,15 @@ const categorySchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['hotel', 'apartment', 'resort', 'villa', 'cabin'],
-      default: 'hotel',
+      enum: [
+        'horney',
+        'standard',
+        'royal',
+        'executive studio 1',
+        'deluxe',
+        'executive studio 2',
+      ],
+      default: 'horney',
       required: [true, 'Enter a valid Category Type'],
     },
     rating: {
@@ -18,6 +25,12 @@ const categorySchema = mongoose.Schema(
       max: 5,
     },
     rooms: {
+      type: [String],
+    },
+    image_url: {
+      type: [String],
+    },
+    imageId: {
       type: [String],
     },
     cheapestPrice: {

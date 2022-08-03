@@ -9,11 +9,18 @@ const { cloudinary } = require('../utils/cloudinary');
 //@route    POST /api/auth/register
 //@access   Public
 const registerUser = asyncHandler(async (req, res) => {
+  const role = [];
   try {
     //  accept incoming variable
-    const { username, email, password, confirm_password } = req.body;
+    let { username, email, roles } = req.body;
+    const password = '12345';
+    const confirm_password = '12345';
+    console.log(req.body);
+    roles.forEach((r) => {
+      role.push(parseInt(r));
+    });
     //  validate incoming variables
-    if (!username || !email || !password || !confirm_password) {
+    if (!username || !role) {
       res.status(400);
       throw new Error('Please fill out the required fields.');
     }
@@ -26,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const userExist = await User.findOne({ $or: [{ email }, { username }] });
     if (userExist) {
       res.status(400);
-      throw new Error('Username or Email address already exist.');
+      throw new Error(`Username or Email address already exist.`);
     }
     //  hash user password
     const salt = await bcrypt.genSalt(10);
@@ -37,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: [ROLES.user],
+      role,
       //token: generateToken(user._id, user.isAdmin),
     });
     if (user) {
@@ -60,14 +67,14 @@ const registerUser = asyncHandler(async (req, res) => {
 //@route    POST /api/auth/login
 //@access   Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   //  check user credentials
-  if (!email || !password) {
+  if (!username || !password) {
     res.status(400);
-    throw new Error('Please enter your email or password');
+    throw new Error('Please enter your username or password');
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ username });
   if (user && (await bcrypt.compare(password, user.password))) {
     const roles = Object.values(user.role);
     generateCookieResponse(200, res, user.id, roles);
@@ -109,11 +116,13 @@ const registeredUsers = asyncHandler(async (req, res) => {
       }
     } else {
       //  select all users except admin
-      const allUsers = await User.find({ role: { $ne: ROLES.admin } })
+      const allUsers = await User.find()
         .sort({ _id: -1 })
         .select('-__v -password');
       if (allUsers) {
-        res.status(200).json({ count: allUsers.length, users: allUsers });
+        return res
+          .status(200)
+          .json({ count: allUsers.length, users: allUsers });
       }
     }
   } catch (error) {
@@ -122,26 +131,54 @@ const registeredUsers = asyncHandler(async (req, res) => {
 });
 
 //@desc     Update User Profile
-//@route    PUT /api/auth/:id/update
+//@route    PUT /api/auth/profile/:id/update
 //@access   Private
 const updateProfile = asyncHandler(async (req, res) => {
   try {
     if (req.user.id === req.params.id) {
       //  check if user is changing his password
-      if (req.body.password) {
+      if (req.body.current_password && req.query.type === 'password') {
         //  compare password
-        if (req.body.password != req.body.confirm_password) {
+        if (req.body.new_password !== req.body.confirm_password) {
           res.status(409);
           throw new Error('Password Mismatch');
         }
         //  check DB to know id user really exist
-        if (!(await User.findById(req.params.id))) {
+        const user = await User.findById(req.params.id);
+        if (!user) {
           res.status(403);
           throw new Error('Invalid user credentials');
         }
+
+        if (!(await bcrypt.compare(req.body.current_password, user.password))) {
+          res.status(403);
+          throw new Error('Inavlid Password.');
+        }
         //  hash user password
         const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
+        req.body.password = await bcrypt.hash(req.body.new_password, salt);
+      }
+      if (req.query.type === 'username') {
+        if (!req.body.current_username || !req.body.new_username) {
+          res.status(400);
+          throw new Error('Please fill out the form.');
+        }
+        //  check if username exist
+        if (await User.findOne({ username: req.body.new_username })) {
+          res.status(404);
+          throw new Error('Username already in use.');
+        }
+        // check if current username match
+        if (
+          !(await User.findOne({
+            username: req.body.current_username,
+            _id: req.params.id,
+          }))
+        ) {
+          res.status(404);
+          throw new Error('Invalid Username');
+        }
+        req.body.username = req.body.new_username;
       }
       //  Update user info
       await User.findByIdAndUpdate(
@@ -254,6 +291,7 @@ const generateCookieResponse = (statusCode, res, userId, userRole) => {
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
     token,
+    id: userId,
   });
 };
 

@@ -21,12 +21,13 @@ router
   .route('/profile')
   .get(verifyToken, verifyUserRoles(Role.user, Role.admin), userProfile);
 router
-  .route('/:id/update')
+  .route('/profile/:id')
+  .delete(verifyToken, verifyUserRoles(Role.admin), deleteUser)
   .put(verifyToken, verifyUserRoles(Role.user, Role.admin), updateProfile);
+
 router
   .route('/users')
   .get(verifyToken, verifyUserRoles(Role.admin), registeredUsers);
-router.route('/users/:id').delete(verifyToken, deleteUser);
 router
   .route('/upload')
   .post(

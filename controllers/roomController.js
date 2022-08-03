@@ -26,10 +26,10 @@ const createRoom = asyncHandler(async (req, res) => {
         roomNumbers,
       } = req.body;
 
-      const roomNumber = roomNumbers
-        .replace(/(\s*,?\s*)*$/, '')
-        .split(',')
-        .map((room) => ({ number: room }));
+      // const roomNumber = roomNumbers
+      //   .replace(/(\s*,?\s*)*$/, '')
+      //   .split(',')
+      //   .map((room) => ({ number: room }));
 
       //    check if required fields are empty
       if (!title || !description || !category || !price || !bed_size) {
@@ -56,11 +56,19 @@ const createRoom = asyncHandler(async (req, res) => {
           },
         ],
       });
-
+      const roomNumberExist = await Room.findOne({
+        $and: [{ roomNumber: roomNumbers }],
+      });
       if (roomExist) {
         res.status(400);
         throw new Error(
           `Room ${title} already exist in the selected category.`
+        );
+      }
+      if (roomNumberExist) {
+        res.status(400);
+        throw new Error(
+          `Room Number ${roomNumberExist} already exist in the selected category.`
         );
       }
       //create new Room
@@ -78,7 +86,7 @@ const createRoom = asyncHandler(async (req, res) => {
         noAdults: adults ? adults : 1,
         noKids: kids ? kids : 0,
         cancellation,
-        roomNumbers: roomNumber,
+        roomNumber: roomNumbers,
       });
 
       if (room) {
@@ -133,14 +141,14 @@ const updateRoom = asyncHandler(async (req, res) => {
         kids,
         cancellation,
         roomNumbers,
-      } = req.body;
+      } = req.body.inputForm;
 
-      const roomNumber = roomNumbers
-        .replace(/(\s*,?\s*)*$/, '')
-        .split(',')
-        .map((room) => ({ number: room }));
-
+      // const roomNumber = roomNumbers
+      //   .replace(/(\s*,?\s*)*$/, '')
+      //   .split(',')
+      //   .map((room) => ({ number: room }));
       //    check if required fields are empty
+
       if (
         !title ||
         !description ||
@@ -157,7 +165,6 @@ const updateRoom = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Category ID does not exist.');
       }
-
       //  remove image from cloudinary.
       if (roomExist.imageId) {
         removeUploadedImage(roomExist.imageId, 'rooms');
@@ -198,7 +205,7 @@ const updateRoom = asyncHandler(async (req, res) => {
             noAdults: adults ? adults : 1,
             noKids: kids ? kids : 0,
             cancellation,
-            roomNumbers: roomNumber,
+            roomNumber: roomNumbers,
           },
         },
         { new: true }
@@ -291,6 +298,31 @@ const getSingleRoom = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+//  Update Single Room Price
+const updateRoomPrice = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body.slashPrice);
+  try {
+    if (!(await Room.findById(id))) {
+      return res.status(404).json({
+        status: false,
+        message: 'Room does not exist.',
+      });
+    }
+    await Room.findByIdAndUpdate(id, {
+      $set: {
+        slashPrice: req.body.slashPrice,
+      },
+    });
+    return res.status(200).json({
+      status: true,
+      message: 'Price updated successfully.',
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
 //  Get all Rooms
 const getAllRooms = asyncHandler(async (req, res) => {
   res.status(200).json(res.queryResults);
@@ -341,6 +373,7 @@ module.exports = {
   updateRoom,
   deleteRoom,
   getSingleRoom,
+  updateRoomPrice,
   getRoomsByCategory,
   cloudinaryImageUploadMethod,
 };

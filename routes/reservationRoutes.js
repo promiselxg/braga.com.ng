@@ -5,6 +5,7 @@ const {
   getAllReservations,
   getReservedRoomInfo,
   getAllBookings,
+  updateReservationPayment,
 } = require('../controllers/reservationController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
@@ -30,6 +31,9 @@ router
     queryFilter(ReservationInfoModel, 'roomid'),
     getAllBookings
   );
+router
+  .route('/:id')
+  .put(verifyToken, verifyUserRoles(ROLES.admin), updateReservationPayment);
 router
   .route('/:roomid')
   .post(roomReservation)

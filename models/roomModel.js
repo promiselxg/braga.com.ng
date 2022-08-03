@@ -43,6 +43,9 @@ const RoomSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    slashPrice: {
+      type: Number,
+    },
     imgThumbnail: {
       type: String,
       required: true,
@@ -54,7 +57,12 @@ const RoomSchema = new mongoose.Schema(
     otherImg: {
       type: [String],
     },
-    roomNumbers: [{ number: Number, unavailableDates: { type: [Date] } }],
+    roomNumber: {
+      type: Number,
+      required: true,
+    },
+    unavailableDates: { type: [Date] },
+    //roomNumbers: [{ number: Number, unavailableDates: { type: [Date] } }],
   },
   { timestamps: true }
 );

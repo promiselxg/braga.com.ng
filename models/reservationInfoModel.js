@@ -28,7 +28,7 @@ const reservationInfoSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['succcess', 'pending', 'failed'],
+      enum: ['success', 'pending', 'failed'],
       default: 'pending',
       required: true,
     },

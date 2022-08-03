@@ -1,12 +1,15 @@
 const asyncHandler = require('express-async-handler');
 const Category = require('../models/categoryModel');
 const Room = require('../models/roomModel');
+const { removeUploadedImage } = require('../utils/cloudinary');
 //  get All Category
 const getAllCategory = asyncHandler(async (req, res) => {
   res.status(200).json(res.queryResults);
 });
 //  Create new Category
 const newCategory = asyncHandler(async (req, res) => {
+  const photos = req.body.photos;
+  const photoId = photos.map((url) => url.public_id.split('/')[1]);
   const { name, type, cheapestPrice } = req.body;
   if (!name || !type || !cheapestPrice) {
     res.status(403);
@@ -16,11 +19,18 @@ const newCategory = asyncHandler(async (req, res) => {
     //    check if category exist
     const nameExist = await Category.findOne({ type: type });
     if (nameExist) {
+      removeUploadedImage(photoId, 'category');
       res.status(400);
       throw new Error('Category already exist.');
     }
     //    save to db
-    const response = await Category.create({ name, type, cheapestPrice });
+    const response = await Category.create({
+      name,
+      type,
+      cheapestPrice,
+      image_url: photos.map((url) => url.secure_url),
+      imageId: photos.map((url) => url.public_id.split('/')[1]),
+    });
     if (response) {
       return res.status(200).json({
         status: 'success',
@@ -29,6 +39,7 @@ const newCategory = asyncHandler(async (req, res) => {
       });
     }
   } catch (error) {
+    removeUploadedImage(photoId, 'category');
     res.status(400);
     throw new Error(error);
   }
@@ -36,6 +47,8 @@ const newCategory = asyncHandler(async (req, res) => {
 //  Update Category
 const updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const photos = req.body.photos;
+  const photoId = photos.map((url) => url.public_id.split('/')[1]);
   if (!id) {
     res.status(400);
     throw new Error('Invalid request.');
@@ -44,13 +57,20 @@ const updateCategory = asyncHandler(async (req, res) => {
     //    check if Id exits
     const category = await Category.findById(id);
     if (!category) {
+      removeUploadedImage(photoId, 'category');
       res.status(404);
       throw new Error('This ID does not exist.');
     }
     await Category.findByIdAndUpdate(
       id,
       {
-        $set: req.body,
+        $set: {
+          name: req.body.name,
+          type: req.body.type,
+          cheapestPrice: req.body.cheapestPrice,
+          image_url: photos.map((url) => url.secure_url),
+          imageId: photos.map((url) => url.public_id.split('/')[1]),
+        },
       },
       { new: true }
     );
@@ -106,7 +126,9 @@ const singleCategory = asyncHandler(async (req, res) => {
     const response = await Category.findOne({ _id: id });
     const rooms = await Promise.all(
       response.rooms.map((room) => {
-        return Room.findById(room).select('_id imgThumbnail price title');
+        return Room.findById(room).select(
+          '_id imgThumbnail price title unavailableDates'
+        );
       })
     );
     return res.status(200).json({
