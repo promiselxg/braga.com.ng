@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { Button, Filter, Image, Section, SideBar } from '../components';
+import { Button, Image, Section, SideBar } from '../components';
 import { Links } from '../components/NavAnchor';
 import {
   LeftWrapper,
@@ -76,9 +76,6 @@ const CategoryScreen = () => {
               <LeftWrapper>
                 <FilterBox className="filterBox">
                   <SideBar />
-                </FilterBox>
-                <FilterBox>
-                  <Filter />
                 </FilterBox>
               </LeftWrapper>
               <RightWrapper>

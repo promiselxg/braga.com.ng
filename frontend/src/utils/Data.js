@@ -1,15 +1,15 @@
 const HotelRules = [
   {
-    rule: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores nihil alias facilis veritatis,dolorem numquam saepe nesciunt. Inventore ex nisi numquam, voluptate tenetur corrupti, possimus quod veniam, quos sint necessitatibus.',
+    rule: 'Do not use the guest rooms for purposes other than intended without authorization.',
   },
   {
-    rule: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores nihil alias facilis veritatis,dolorem numquam saepe nesciunt. Inventore ex nisi numquam, voluptate tenetur corrupti, possimus quod veniam, quos sint necessitatibus.',
+    rule: 'Do not light fire in the passage or guest rooms for heating or cooking.',
   },
   {
-    rule: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores nihil alias facilis veritatis,dolorem numquam saepe nesciunt. Inventore ex nisi numquam, voluptate tenetur corrupti, possimus quod veniam, quos sint necessitatibus.',
+    rule: 'Do not change the position of the gadgets and fixtures in the Hotel or guest rooms without permission.',
   },
   {
-    rule: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores nihil alias facilis veritatis,dolorem numquam saepe nesciunt. Inventore ex nisi numquam, voluptate tenetur corrupti, possimus quod veniam, quos sint necessitatibus.',
+    rule: 'Do not leave your personal belongings in the passages or the lobby.',
   },
 ];
 

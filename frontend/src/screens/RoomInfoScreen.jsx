@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Breadcrumb, Comment, Image, List, Rate, Skeleton } from 'antd';
+import { Breadcrumb, Comment, Image, List, Skeleton } from 'antd';
 import { Button, Section, SideBar, Image as Img } from '../components';
 import { Links, LinkScroll } from '../components/NavAnchor';
 import { Typography } from '../GlobalStyle';
@@ -135,9 +135,7 @@ const RoomInfoScreen = () => {
                       />
                       <LinkScroll
                         to="reviews"
-                        label={`Guest reviews (${
-                          isLoading ? 0 : room?.reviews?.length
-                        })`}
+                        label={`Guest reviews`}
                         spy={true}
                         smooth={true}
                         offset={50}
@@ -150,13 +148,12 @@ const RoomInfoScreen = () => {
                       <Typography as="h2" fontWeight="600" fontSize="1.3rem">
                         {room?.data?.title}
                       </Typography>
-                      <Rate disabled defaultValue={2} />
                     </div>
                     <div className="reserve">
                       {/* <FiHeart className="icon" /> */}
 
                       <Button
-                        label="Reserve"
+                        label="Reserve Room"
                         bg="var(--blue)"
                         hoverBg="var(--yellow)"
                         color="#fff"
@@ -341,19 +338,23 @@ const RoomInfoScreen = () => {
                         <div className="item policy__item">
                           <span className="name">
                             <FiCheckCircle />
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Odit libero culpa totam sequi, perspiciatis
-                            odio ratione dicta quod aliquam officia pariatur
-                            itaque doloribus repellat accusamus ipsam
-                            repellendus atque obcaecati eius?
+                            Do not use the guest rooms for purposes other than
+                            intended without authorization.
                           </span>
                           <span className="name">
                             <FiCheckCircle />
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Odit libero culpa totam sequi, perspiciatis
-                            odio ratione dicta quod aliquam officia pariatur
-                            itaque doloribus repellat accusamus ipsam
-                            repellendus atque obcaecati eius?
+                            Do not light fire in the passage or guest rooms for
+                            heating or cooking.
+                          </span>
+                          <span className="name">
+                            <FiCheckCircle />
+                            Do not leave your personal belongings in the
+                            passages or the lobby.
+                          </span>
+                          <span className="name">
+                            <FiCheckCircle />
+                            Official check-in time is 12PM &amp; Check-out time
+                            is 12PM next day.
                           </span>
                         </div>
                       </div>

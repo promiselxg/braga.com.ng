@@ -38,7 +38,6 @@ const EditRoom = () => {
   const [adults, setAdults] = useState('');
   const [kids, setKids] = useState('');
   const [cancellation, setCancellation] = useState('');
-  const [children, setChildren] = useState('');
   const [room_features, setRoomFeatures] = useState('');
   const [description, setDescription] = useState('');
   const API_URL = 'https://api.braga.com.ng';
@@ -79,7 +78,6 @@ const EditRoom = () => {
     adults,
     kids,
     cancellation,
-    children,
     room_features,
     description,
   };
@@ -140,7 +138,10 @@ const EditRoom = () => {
     };
     const fetSinglRoom = async () => {
       setRoomloading(true);
-      const { data } = await axios.get(`/api/v2/rooms/${url}`, config);
+      const { data } = await axios.get(
+        `${API_URL}/api/v2/rooms/${url}`,
+        config
+      );
       setTitle(data?.data?.title);
       setPrice(data?.data?.price);
       setRoomNumbers(`${data?.data?.roomNumber}`);
@@ -327,19 +328,6 @@ const EditRoom = () => {
                             <option></option>
                             <option value="true">Free Cancellation</option>
                             <option value="false">10% Charge</option>
-                          </select>
-                        </Col>
-                        <Col className="form__group" span={6}>
-                          <div className="label">Allow Children</div>
-                          <select
-                            name="children"
-                            className="form__control"
-                            onChange={(e) => setChildren(e.target.value)}
-                            value={children}
-                          >
-                            <option></option>
-                            <option value="true">YES</option>
-                            <option value="false">NO</option>
                           </select>
                         </Col>
                       </Row>

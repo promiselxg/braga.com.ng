@@ -75,11 +75,13 @@ const CheckoutScreen = () => {
       id: uuidv4(),
     },
   ]);
+
   const location = useLocation();
-  const selectedDays = location?.state?.alldates;
+  let selectedDays = location?.state?.alldates;
   const id = location.pathname.split('/')[2];
   const checkin = moment(checkIn, 'YYYY-MM-DD');
   const checkout = moment(checkOut, 'YYYY-MM-DD');
+  selectedDays = getDatesInRange(checkIn, checkOut);
 
   const duration = search
     ? moment.duration(checkout.diff(checkin)).asDays()
@@ -189,8 +191,10 @@ const CheckoutScreen = () => {
           special_request: specialRequest,
           adults: adult,
           kids: kids,
+          selectedDays,
         },
       };
+      console.log(selectedDays);
       dispatch(startPayment(userData));
       //dispatch(reset());
     }
@@ -423,7 +427,7 @@ const CheckoutScreen = () => {
                             onClick={(e) => setTerms(e.target.checked)}
                           >
                             I acknowledge and accept the{' '}
-                            <Link to="/policy">
+                            <Link to="/terms">
                               Terms and Conditions of Braga Hotels.
                             </Link>
                           </Checkbox>

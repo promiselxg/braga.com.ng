@@ -148,7 +148,7 @@ export const RightWrapper = styled.div`
       cursor: pointer;
     }
     @media screen and (max-width: 760px) {
-      height: 500px;
+      height: 560px;
       position: relative;
     }
   }
@@ -270,6 +270,10 @@ export const RoomWrapper = styled.div`
           .icon {
             display: flex;
             margin-right: 8px;
+          }
+          @media screen and (max-width: 760px) {
+            margin: 10px;
+            font-size: 12px;
           }
         }
       }

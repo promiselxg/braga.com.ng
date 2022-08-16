@@ -7,8 +7,10 @@ const config = {
 };
 //  Get all rooms
 const getAllRooms = async (data) => {
-  const { adult, kids } = data;
-  const response = await axios.get(`${API_URL}/?adult=${adult}&kids=${kids}`);
+  let { adult, kids } = data;
+  adult = adult ? adult : 1;
+  kids = kids ? kids : 0;
+  const response = await axios.get(`${API_URL}?adult=${adult}&kids=${kids}`);
   if (response.data) {
     localStorage.setItem('rooms', JSON.stringify(response.data));
     localStorage.setItem('search', JSON.stringify(data));
@@ -48,7 +50,7 @@ const roomReservation = async (data) => {
 const payment = async (data) => {
   const { roomid } = data;
   const response = await axios.put(
-    `https://localhost:8080/api/v2/reservation/${roomid}/payment`,
+    `http://localhost:8080/api/v2/reservation/${roomid}/payment`,
     data,
     config
   );

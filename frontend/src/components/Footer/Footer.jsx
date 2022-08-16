@@ -57,8 +57,8 @@ const Footer = () => {
                   fontWeight="400"
                   color="#ccc"
                 >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Molestiae, odio.
+                  {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Molestiae, odio. */}
                 </Typography>
                 <div className="social">
                   <NavLink url="/" icon={<FiFacebook />} className="icon" />
