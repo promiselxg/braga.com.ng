@@ -4,12 +4,15 @@ import styled from 'styled-components';
 import { Button } from '../../components';
 import { Container, Typography } from '../../GlobalStyle';
 import NumberFormat from 'react-number-format';
-import { Skeleton } from 'antd';
+//import { Skeleton } from 'antd';
 import useFetch from '../../hooks/useFetch';
-import LazyLoad from 'react-lazyload';
+//import LazyLoad from 'react-lazyload';
 import TextTruncate from 'react-text-truncate';
 import moment from 'moment';
 import getDatesInRange from '../../utils/getDatesInRange';
+import { AdvancedImage, lazyload, responsive } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -74,6 +77,11 @@ const RoomCard = styled.div`
   border-radius: 10px;
   overflow: hidden;
 
+  img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+  }
   @media screen and (min-width: 320px) and (max-width: 768px) {
     margin-bottom: 20px;
     width: 100%;
@@ -82,12 +90,12 @@ const RoomCard = styled.div`
     width: 100%;
   }
 `;
-const CardHeading = styled.div`
-  height: 200px;
-  background: url(${(props) => (props.bg ? props.bg : '')}) no-repeat;
-  background-size: cover;
-  background-position-y: 30%;
-`;
+// const CardHeading = styled.div`
+//   height: 200px;
+//   background: url(${(props) => (props.bg ? props.bg : '')}) no-repeat;
+//   background-size: cover;
+//   background-position-y: 30%;
+// `;
 const CardBody = styled.div`
   background: #fff;
   height: 200px;
@@ -107,7 +115,7 @@ const CardInfo = styled.div`
   }
 `;
 const RoomsSection = () => {
-  const { data, loading } = useFetch(`/rooms?limit=4`);
+  const { data } = useFetch(`/rooms?limit=4`);
   const checkin = moment().format('YYYY-MM-DD');
   const checkout = moment().add(1, 'days').format('YYYY-MM-DD');
   const navigate = useNavigate();
@@ -118,6 +126,13 @@ const RoomsSection = () => {
     return !isFound;
   };
   const alldates = getDatesInRange(checkin, checkout);
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'promiselxg',
+    },
+  });
+
+  //console.log(data);
   return (
     <>
       <Container maxWidth="1000px">
@@ -138,7 +153,7 @@ const RoomsSection = () => {
             {data?.data?.map((room, i) => (
               <RoomCard key={i}>
                 <Link to={`/room/${room._id}`}>
-                  <LazyLoad
+                  {/* <LazyLoad
                     height={200}
                     placeholder={
                       <Skeleton
@@ -148,9 +163,23 @@ const RoomsSection = () => {
                     }
                   >
                     <CardHeading bg={room.imgThumbnail}></CardHeading>
-                  </LazyLoad>
+                  </LazyLoad> */}
+                  <AdvancedImage
+                    cldImg={cld
+                      .image(`rooms/${room?.imageId[0]}.jpg`)
+                      .resize(thumbnail().height(200))}
+                    plugins={[
+                      lazyload({
+                        rootMargin: '10px 20px 10px 30px',
+                        threshold: 0.25,
+                      }),
+                      responsive({ steps: [400, 800, 1400] }),
+                    ]}
+                    width="100%"
+                    height="200px"
+                  />
                 </Link>
-
+                {console.log(room)}
                 <CardBody>
                   <CardTitle>
                     <Link to={`/room/${room?._id}`}>

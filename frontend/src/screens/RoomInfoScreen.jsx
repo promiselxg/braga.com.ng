@@ -3,12 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Breadcrumb, Comment, Image, List, Skeleton } from 'antd';
-import { Button, Section, SideBar, Image as Img } from '../components';
+import { Button, Section, SideBar } from '../components';
 import { Links, LinkScroll } from '../components/NavAnchor';
 import { Typography } from '../GlobalStyle';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 import {
-  ImageWrapper,
   RoomHeading,
   RoomImageWrapper,
   RoomInfo,
@@ -28,19 +29,12 @@ import moment from 'moment';
 const RoomInfoScreen = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  let img1, img2;
+
   const [visible, setVisible] = useState(false);
   const { id } = useParams();
   const { room, isLoading, isError, message } = useSelector(
     (state) => state.roomInfo
   );
-  room?.data?.otherImg.length > 1
-    ? (img1 = room?.data?.otherImg[0])
-    : (img1 = room?.data?.otherImg);
-
-  room?.data?.otherImg.length > 2
-    ? (img2 = room?.data?.otherImg[1])
-    : (img2 = room?.data?.otherImg);
 
   useEffect(() => {
     dispatch(getSingleRoom(id));
@@ -171,31 +165,14 @@ const RoomInfoScreen = () => {
                     <>
                       <RoomImageWrapper>
                         <div className="container">
-                          <div className="left__image">
-                            <ImageWrapper>
-                              <Img
-                                src={img1}
-                                preview={{ visible: false }}
-                                onClick={() => setVisible(true)}
-                              />
-                            </ImageWrapper>
-                            <ImageWrapper>
-                              <Img
-                                src={img2}
-                                preview={{ visible: false }}
-                                onClick={() => setVisible(true)}
-                              />
-                            </ImageWrapper>
-                          </div>
                           <div className="center__image">
-                            <ImageWrapper>
-                              {' '}
-                              <Img
-                                preview={{ visible: false }}
-                                onClick={() => setVisible(true)}
-                                src={room?.data?.imgThumbnail}
-                              />
-                            </ImageWrapper>
+                            <Carousel showIndicators={false}>
+                              {room?.data?.otherImg.map((img, i) => (
+                                <div key={i}>
+                                  <img src={img} alt="img" className="img" />
+                                </div>
+                              ))}
+                            </Carousel>
                           </div>
                         </div>
                         <div style={{ display: 'none' }}>
@@ -304,7 +281,7 @@ const RoomInfoScreen = () => {
                 <div className="room__info__container">
                   <RoomInfoHeader>
                     <Typography as="h2" fontSize="1.5rem" fontWeight="600">
-                      Room Facilities
+                      Room Amenities
                     </Typography>
                   </RoomInfoHeader>
                   <RoomInfoBody>

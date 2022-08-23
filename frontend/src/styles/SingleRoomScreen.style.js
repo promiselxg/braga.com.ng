@@ -29,6 +29,7 @@ export const SinglRoomWrapper = styled.div`
         margin: 0 auto;
       }
     }
+
     @media screen and (max-width: 760px) {
       flex-direction: column;
     }
@@ -73,14 +74,21 @@ export const RoomHeading = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+
   margin: 15px 0;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+  }
   .room__title {
     width: 100%;
     flex: 0.8;
     ${Typography} {
       margin-bottom: 0px;
       text-transform: capitalize;
+    }
+    @media screen and (max-width: 760px) {
+      padding: 10px 0;
     }
   }
   .reserve {
@@ -97,6 +105,9 @@ export const RoomHeading = styled.div`
       &:hover {
         color: var(--yellow) !important;
       }
+    }
+    @media screen and (max-width: 760px) {
+      padding: 10px 0;
     }
   }
 `;
@@ -125,13 +136,13 @@ export const ImageWrapper = styled.div`
 
 export const RoomImageWrapper = styled.div`
   width: 100%;
-  height: 400px;
-  overflow: hidden;
+  height: 550px;
+
   @media screen and (max-width: 760px) {
     height: max-content;
 
-    img {
-      height: 300px !important;
+    #room_facility {
+      background: red;
     }
   }
   .container {
@@ -148,10 +159,10 @@ export const RoomImageWrapper = styled.div`
       }
     }
     .center__image {
-      flex: 0.75;
+      flex: 1;
       width: 100%;
       ${ImageWrapper} {
-        height: 400px;
+        height: 450px;
       }
     }
   }
@@ -170,7 +181,11 @@ export const RoomInfo = styled.div`
       margin-bottom: 0px;
     }
   }
+  @media screen and (max-width: 760px) {
+    padding: 0 20px;
+  }
 `;
+
 export const RoomInfoHeader = styled.div`
   width: 100%;
   display: flex;
@@ -238,6 +253,11 @@ export const RoomInfoBody = styled.div`
     flex: 0 0 100%;
     .facility__item {
       display: flex;
+    }
+    @media screen and (max-width: 760px) {
+      .room__feature {
+        flex-direction: column;
+      }
     }
   }
   .policy {

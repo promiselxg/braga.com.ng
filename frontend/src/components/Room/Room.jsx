@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FiUmbrella, FiWifi } from 'react-icons/fi';
 import { Typography } from '../../GlobalStyle';
-import { Button, Image } from '../index';
+import { Button } from '../index';
 import { Links } from '../NavAnchor';
 import { RoomWrapper } from './Room.style';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -14,10 +14,18 @@ import getDatesInRange from '../../utils/getDatesInRange';
 import TextTruncate from 'react-text-truncate'; // recommend
 import { CgCheckO } from 'react-icons/cg';
 import NumberFormat from 'react-number-format';
+import { AdvancedImage, lazyload, responsive } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 
 const Room = () => {
   const { rooms, isLoading } = useSelector((state) => state.listRooms);
   //const [selectedRooms, setSelectedRooms] = useState([]);
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'promiselxg',
+    },
+  });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   let checkin = searchParams.get('checkin') ? searchParams.get('checkin') : '';
@@ -82,7 +90,18 @@ const Room = () => {
               <div className="container">
                 <div className="room__left">
                   <Link to={`/room/${room?._id}`}>
-                    <Image img={room?.imgThumbnail} alt={room?.title} />
+                    <AdvancedImage
+                      cldImg={cld
+                        .image(`rooms/${room?.imageId[0]}.jpg`)
+                        .resize(thumbnail().height(200))}
+                      plugins={[
+                        lazyload({
+                          rootMargin: '10px 20px 10px 30px',
+                          threshold: 0.25,
+                        }),
+                        responsive({ steps: [400, 800, 1400] }),
+                      ]}
+                    />
                   </Link>
                 </div>
                 <div className="room__center">

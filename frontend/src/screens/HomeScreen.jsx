@@ -9,7 +9,6 @@ import {
   Services,
   About,
   Slider,
-  Blog,
 } from '../components';
 import { Typography } from '../GlobalStyle';
 
@@ -42,7 +41,7 @@ const HomeScreen = () => {
         Our Gallery
       </Typography>
       <Slider />
-      <Typography
+      {/* <Typography
         as="h2"
         fontSize="2rem"
         fontWeight="800"
@@ -50,8 +49,8 @@ const HomeScreen = () => {
         margin="20px 0px 0px 0px"
       >
         Braga News update
-      </Typography>
-      <Blog />
+      </Typography> */}
+      {/* <Blog /> */}
     </>
   );
 };

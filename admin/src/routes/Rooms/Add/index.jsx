@@ -228,13 +228,13 @@ const AddRoom = () => {
                         onChange={handleChange}
                       >
                         <option></option>
-                        <option value="king_size">King Size</option>
-                        <option value="king">King</option>
-                        <option value="double">Double</option>
+                        <option value="king_size">6 x 4</option>
+                        <option value="king">6 x 6</option>
+                        <option value="double">7 x 7</option>
                       </select>
                     </Col>
                     <Col className="form__group" span={6}>
-                      <div className="label">AC</div>
+                      <div className="label">Air Condition</div>
                       <select
                         name="ac"
                         value={ac}
