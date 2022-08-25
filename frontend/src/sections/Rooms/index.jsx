@@ -179,7 +179,7 @@ const RoomsSection = () => {
                     height="200px"
                   />
                 </Link>
-                {console.log(room)}
+
                 <CardBody>
                   <CardTitle>
                     <Link to={`/room/${room?._id}`}>
