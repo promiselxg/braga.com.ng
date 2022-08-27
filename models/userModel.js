@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema(
     role: {
       type: Array,
     },
+    admin: {
+      type: Boolean,
+      default: false,
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     activated: {

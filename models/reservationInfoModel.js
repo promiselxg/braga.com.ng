@@ -38,6 +38,7 @@ const reservationInfoSchema = mongoose.Schema(
     transactionId: {
       type: String,
     },
+    reservation_dates: { type: [Date] },
     reservationId: {
       type: [mongoose.Schema.ObjectId],
       required: true,

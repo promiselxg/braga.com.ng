@@ -5,6 +5,7 @@ const User = require('../models/userModel');
 const Ads = require('../models/adsModel');
 const ROLES = require('../utils/roles');
 const { cloudinary } = require('../utils/cloudinary');
+
 //@desc     Register User
 //@route    POST /api/auth/register
 //@access   Public
@@ -15,7 +16,6 @@ const registerUser = asyncHandler(async (req, res) => {
     let { username, email, roles } = req.body;
     const password = '12345';
     const confirm_password = '12345';
-    console.log(req.body);
     roles.forEach((r) => {
       role.push(parseInt(r));
     });
@@ -77,7 +77,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username });
   if (user && (await bcrypt.compare(password, user.password))) {
     const roles = Object.values(user.role);
-    generateCookieResponse(200, res, user.id, roles);
+    generateCookieResponse(200, res, user.id, roles, user.admin);
   } else {
     res.status(400);
     throw new Error('Incorrect username or passwordd.');
@@ -275,8 +275,8 @@ const uploadImage = asyncHandler(async (req, res) => {
 });
 
 //  Get token from Model and create cookie
-const generateCookieResponse = (statusCode, res, userId, userRole) => {
-  const token = generateToken(userId, userRole);
+const generateCookieResponse = (statusCode, res, userId, userRole, isAdmin) => {
+  const token = generateToken(userId, userRole, isAdmin);
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -292,13 +292,14 @@ const generateCookieResponse = (statusCode, res, userId, userRole) => {
     success: true,
     token,
     id: userId,
+    isAdmin,
   });
 };
 
 //  Generate JWT
-const generateToken = (id, role) => {
-  return JWT.sign({ id, role }, process.env.JWT_SECRET, {
-    expiresIn: '5d',
+const generateToken = (id, role, isAdmin) => {
+  return JWT.sign({ id, role, isAdmin }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
   });
 };
 
