@@ -1,5 +1,5 @@
-import { FiArchive, FiTrash2 } from 'react-icons/fi';
-import { AiFillCar } from 'react-icons/ai';
+import { FiTrash2 } from 'react-icons/fi';
+import { FaSwimmingPool } from 'react-icons/fa';
 import { BiBeer } from 'react-icons/bi';
 import { Banner_1, Banner_2, Banner_3, Banner_4, Banner_5 } from '..';
 export const Roomsx = [
@@ -38,47 +38,41 @@ export const Services = [
     title: '24/7 Room service',
     icon: <FiTrash2 />,
     bg: '#BC009E33',
-    desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
+    desc: 'Braga Hotel rooms types are designed for your comfort and relaxation with beautiful views; our friendly and professional staff are always a phone call away to assist you with anything you may need. The property offers a peaceful, quiet and relaxing ambience. ',
   },
   {
-    title: 'Car Pickup',
-    icon: <AiFillCar />,
-    bg: '#2400FF',
-    desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
+    title: 'Swimming Pool',
+    icon: <FaSwimmingPool />,
+    bg: 'var(--yellow)',
+    desc: 'Just a spice of being an in-house guest is to enjoy swimming experience. Access to the pool for outside guests are at an additional cost.',
   },
   {
-    title: 'Outdoor Bar',
+    title: 'Restaurant',
     icon: <BiBeer />,
     bg: '#F45800',
-    desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
-  },
-  {
-    title: 'Laundry',
-    icon: <FiArchive />,
-    bg: 'var(--yellow)',
-    desc: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit autem sequi dicta sed nihil quaerat voluptatum vitae dolorum rerum neque quod porro minus fugit, quas qui enim exercitationem pariatur corporis.',
+    desc: 'Our Restaurant has a "wow" factor that is hard to dispute. It&apos;s about one of the best restaurant in the city of Nasarawa State. It offers different menu delicacies! Get pampered by our award winning chef as he performs his art with a fusion of culinary traditions that combines different cuisines experience.',
   },
 ];
 
 export const slideBanner = [
   {
     img: Banner_1,
-    text: 'Find pleasure in our bar to stay calm.',
+    text: 'Where Luxury Meet Comfort.',
   },
   {
     img: Banner_2,
-    text: 'Find pleasure in our bar to stay calm.',
+    text: 'Where Luxury Meet Comfort.',
   },
   {
     img: Banner_3,
-    text: 'Find pleasure in our bar to stay calm.',
+    text: 'Where Luxury Meet Comfort.',
   },
   {
     img: Banner_4,
-    text: 'Find pleasure in our bar to stay calm.',
+    text: 'Where Luxury Meet Comfort.',
   },
   {
     img: Banner_5,
-    text: 'Find pleasure in our bar to stay calm.',
+    text: 'Where Luxury Meet Comfort.',
   },
 ];

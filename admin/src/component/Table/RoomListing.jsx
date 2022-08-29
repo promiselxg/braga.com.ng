@@ -4,7 +4,6 @@ import {
   Skeleton,
   Space,
   Tag,
-  Image,
   Modal,
   Input,
   message,
@@ -21,6 +20,7 @@ import useFetch from '../../hooks/useFetch';
 import { Button } from '../../component';
 import { TableWrapper } from '../../routes/Dashboard/Dashboard.styled';
 import FilterComponent from '../FilterComponent';
+import { Tooltip } from 'antd';
 
 const RoomListingWrapper = styled.div`
   border: 1px solid #deebfd;
@@ -74,31 +74,30 @@ const RoomListing = ({ title }) => {
       category: room?.category,
       roomNumber: room?.roomNumber,
       price: room?.slashPrice ? room?.slashPrice : room?.price,
-      img: room?.imgThumbnail,
     })
   );
   const columns = [
-    {
-      name: 'Image',
-      selector: (row) => row.img,
-      cell: (row) => (
-        <>
-          <Space size="middle">
-            <Image
-              src={row.img}
-              alt={row.title}
-              style={{
-                width: '50px',
-                overflow: 'hidden',
-                height: '50px',
-                objectFit: 'cover',
-                borderRadius: '3px',
-              }}
-            />
-          </Space>
-        </>
-      ),
-    },
+    // {
+    //   name: 'Image',
+    //   selector: (row) => row.img,
+    //   cell: (row) => (
+    //     <>
+    //       <Space size="middle">
+    //         <Image
+    //           src={row.img}
+    //           alt={row.title}
+    //           style={{
+    //             width: '50px',
+    //             overflow: 'hidden',
+    //             height: '50px',
+    //             objectFit: 'cover',
+    //             borderRadius: '3px',
+    //           }}
+    //         />
+    //       </Space>
+    //     </>
+    //   ),
+    // },
     {
       name: 'Room Title',
       selector: (row) => row.title,
@@ -154,11 +153,13 @@ const RoomListing = ({ title }) => {
             />
           </div>
           <div>
-            <FiEdit
-              style={{ cursor: 'pointer' }}
-              onClick={() => setIsModalVisible(!isModalVisible)}
-              onMouseDown={() => setRoomId(row.key)}
-            />
+            <Tooltip title="Edit Room Price">
+              <FiEdit
+                style={{ cursor: 'pointer' }}
+                onClick={() => setIsModalVisible(!isModalVisible)}
+                onMouseDown={() => setRoomId(row.key)}
+              />
+            </Tooltip>
           </div>
         </div>
       ),

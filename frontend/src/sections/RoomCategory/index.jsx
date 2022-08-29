@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Section } from '../../components';
+import { Section } from '../../components';
 import styled from 'styled-components';
 import { Typography } from '../../GlobalStyle';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,8 @@ import useFetch from '../../hooks/useFetch';
 import { Skeleton } from 'antd';
 import truncate from 'truncate';
 import LazyLoad from 'react-lazyload';
+import { Image, Transformation } from 'cloudinary-react';
+
 const CategoryWrapper = styled.div`
   height: 100%;
   padding: 80px 0;
@@ -105,8 +107,8 @@ const Category = () => {
               Browse Rooms by Category
             </Typography>
             <Typography as="p" fontSize="0.8rem">
-              We give professional services and top notch entertainment to the
-              best level
+              We give professional services and top-notch experience to the best
+              level.
             </Typography>
           </div>
           <div className="card">
@@ -120,13 +122,18 @@ const Category = () => {
                       <LazyLoad>
                         <div className="card__img">
                           <Image
-                            img={`${
-                              cat?.image_url
-                                ? cat?.image_url
-                                : 'https://images.unsplash.com/photo-1650173419393-a3d85d494399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
-                            }`}
-                            alt={`${cat?.name}`}
-                          />
+                            cloudName="promiselxg"
+                            secure={false}
+                            upload_preset="braga_category"
+                            publicId={`/category/${cat?.imageId[0]}.jpg`}
+                          >
+                            <Transformation
+                              width="400"
+                              height="400"
+                              gravity="south"
+                              crop="fill"
+                            />
+                          </Image>
                         </div>
                       </LazyLoad>
                       <div className="card__name">

@@ -2,7 +2,6 @@ import { FiBook } from 'react-icons/fi';
 import {
   Content,
   DashboardCards,
-  DashboardStats,
   DashboardTableStats,
   DashboardWrapper,
 } from './Dashboard.styled';
@@ -16,7 +15,7 @@ import { Skeleton } from 'antd';
 import { RoomContext } from '../../context/RoomContext';
 import useFetch from '../../hooks/useFetch';
 import NumberFormat from 'react-number-format';
-import { Chart } from '../../component';
+//import { Chart } from '../../component';
 
 const Dashboard = () => {
   const { loading, dispatch } = useContext(RoomContext);
@@ -154,14 +153,14 @@ const Dashboard = () => {
               </div>
             </div>
           </DashboardCards>
-          <DashboardStats>
+          {/* <DashboardStats>
             <div className="dashboard__stats__container">
               <div className="left">
                 <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
               </div>
-              {/* <div className="right"></div> */}
+              <div className="right"></div>
             </div>
-          </DashboardStats>
+          </DashboardStats> */}
           <DashboardTableStats>
             <div className="dashboard__tablestats__container">
               {loading ? (

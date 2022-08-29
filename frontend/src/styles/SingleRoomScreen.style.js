@@ -5,6 +5,15 @@ export const SinglRoomWrapper = styled.div`
   width: 100%;
   margin-top: 10px;
   transition: all 0.3 ease-out;
+  .carousel {
+    .slide {
+      height: 500px !important;
+
+      @media screen and (max-width: 760px) {
+        height: 250px !important;
+      }
+    }
+  }
   .container {
     width: 100%;
     display: flex;
@@ -136,10 +145,10 @@ export const ImageWrapper = styled.div`
 
 export const RoomImageWrapper = styled.div`
   width: 100%;
-  height: 550px;
+  height: 580px;
 
   @media screen and (max-width: 760px) {
-    height: max-content;
+    height: 100% !important;
 
     #room_facility {
       background: red;

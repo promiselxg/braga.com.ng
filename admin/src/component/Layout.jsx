@@ -1,6 +1,4 @@
-import { Avatar } from 'antd';
 import React from 'react';
-import { FiMenu, FiUser } from 'react-icons/fi';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { Sidebar } from './index';
@@ -20,7 +18,7 @@ const LayoutWrapper = styled.section`
     background: #101924;
     border-right-color: #203247;
     transition: 0.5s;
-    overflow: hidden;
+    overflow: scroll;
 
     ul {
       li {
@@ -106,17 +104,6 @@ const Layout = () => {
             <Sidebar />
           </div>
           <div className="main">
-            <div className="dashboard__topbar">
-              <div className="toggle">
-                <FiMenu className="menu__icon" />
-              </div>
-
-              <div className="topbar__rightnav">
-                <div className="topbar__rightnav__item">
-                  <Avatar icon={<FiUser />} className="menu__icon" />
-                </div>
-              </div>
-            </div>
             <Outlet />
           </div>
         </div>

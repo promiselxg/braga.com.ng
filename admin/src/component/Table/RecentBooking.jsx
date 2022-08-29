@@ -20,8 +20,8 @@ const RecentBooking = ({ title }) => {
     React.useState(false);
   const [visible, setVisible] = useState(false);
   const [roomid, setRoomId] = useState('');
-  //const API_URL = 'https://api.braga.com.ng';
-  const API_URL = 'http://localhost:8080';
+  const API_URL = 'https://api.braga.com.ng';
+  //const API_URL = 'http://localhost:8080';
 
   let { loading, roomInfo, room, isLoading, dispatch } =
     useContext(RoomContext);
@@ -38,6 +38,7 @@ const RecentBooking = ({ title }) => {
       amount: booking?.amount,
       status: [booking?.status],
       reference_no: booking?.referenceNo,
+      roomNumber: booking?.roomid?.roomNumber,
     })
   );
 
@@ -76,22 +77,36 @@ const RecentBooking = ({ title }) => {
       name: 'Check-in.',
       selector: (row) => {
         let d = new Date(row.check_in);
-        return moment(d).format('MMM d, YYYY');
+        return moment(d).format('MMM D, YYYY');
       },
     },
     {
       name: 'Check-out.',
       selector: (row) => {
         let d = new Date(row.check_out);
-        return moment(d).format('MMM d, YYYY');
+        return moment(d).format('MMM D, YYYY');
       },
     },
     {
       name: 'Total Days',
       selector: (row) => row.total_days,
+      cell: (row) => (
+        <>
+          <span>{row.total_days}</span>
+        </>
+      ),
     },
     {
-      name: 'Payment Status',
+      name: 'Room',
+      selector: (row) => row.roomNumber,
+      cell: (row) => (
+        <>
+          <span>{row.roomNumber}</span>
+        </>
+      ),
+    },
+    {
+      name: 'Status',
       selector: (row) => row.status,
       cell: (row) => (
         <>

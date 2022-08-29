@@ -16,7 +16,7 @@ const ServicesWrapper = styled.div`
   .container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
     padding-top: 20px;
   }
   @media screen and (min-width: 320px) and (max-width: 768px) {
@@ -25,7 +25,7 @@ const ServicesWrapper = styled.div`
   }
 `;
 const ServicesCard = styled.div`
-  width: 292px;
+  width: 300px;
   min-height: 250px;
   border-radius: 10px;
   overflow: hidden;
@@ -67,7 +67,7 @@ const CardInfo = styled.div`
 `;
 const Services = () => {
   return (
-    <Section>
+    <Section maxWidth="1000px">
       <ServicesWrapper>
         <div className="text">
           <Typography as="h2" fontSize="2rem" fontWeight="800">

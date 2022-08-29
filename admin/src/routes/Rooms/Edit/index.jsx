@@ -143,7 +143,9 @@ const EditRoom = () => {
         config
       );
       setTitle(data?.data?.title);
-      setPrice(data?.data?.price);
+      setPrice(
+        data?.data?.slashPrice ? data?.data?.slashPrice : data?.data?.price
+      );
       setRoomNumbers(`${data?.data?.roomNumber}`);
       setCategory(data?.data?.category?._id);
       setBedSize(data?.data?.bedSize);
@@ -222,7 +224,7 @@ const EditRoom = () => {
                         <Col className="form__group" span={6}>
                           <div className="label">Room No.</div>
                           <input
-                            type="number"
+                            type="text"
                             placeholder="Room No."
                             name="roomNumbers"
                             value={roomNumbers}

@@ -61,9 +61,21 @@ const Footer = () => {
                   Molestiae, odio. */}
                 </Typography>
                 <div className="social">
-                  <NavLink url="/" icon={<FiFacebook />} className="icon" />
-                  <NavLink url="/" icon={<FiTwitter />} className="icon" />
-                  <NavLink url="/" icon={<FiInstagram />} className="icon" />
+                  <NavLink
+                    url="https://www.facebook.com/bragahotels/"
+                    icon={<FiFacebook />}
+                    className="icon"
+                  />
+                  <NavLink
+                    url="https://www.instagram.com/bragahotels/"
+                    icon={<FiTwitter />}
+                    className="icon"
+                  />
+                  <NavLink
+                    url="https://www.twitter.com/bragahotels/"
+                    icon={<FiInstagram />}
+                    className="icon"
+                  />
                   <NavLink
                     url="mailto:info@braga.com.ng"
                     icon={<FiMail />}

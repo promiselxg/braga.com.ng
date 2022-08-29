@@ -14,18 +14,11 @@ import getDatesInRange from '../../utils/getDatesInRange';
 import TextTruncate from 'react-text-truncate'; // recommend
 import { CgCheckO } from 'react-icons/cg';
 import NumberFormat from 'react-number-format';
-import { AdvancedImage, lazyload, responsive } from '@cloudinary/react';
-import { Cloudinary } from '@cloudinary/url-gen';
-import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { Image, Transformation } from 'cloudinary-react';
 
 const Room = () => {
   const { rooms, isLoading } = useSelector((state) => state.listRooms);
   //const [selectedRooms, setSelectedRooms] = useState([]);
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: 'promiselxg',
-    },
-  });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   let checkin = searchParams.get('checkin') ? searchParams.get('checkin') : '';
@@ -90,10 +83,23 @@ const Room = () => {
               <div className="container">
                 <div className="room__left">
                   <Link to={`/room/${room?._id}`}>
-                    <AdvancedImage
+                    <Image
+                      cloudName="promiselxg"
+                      secure={true}
+                      upload_preset="braga_rooms"
+                      publicId={`rooms/${room?.imageId[0]}.jpg`}
+                    >
+                      <Transformation
+                        width="400"
+                        height="400"
+                        gravity="south"
+                        crop="fill"
+                      />
+                    </Image>
+                    {/* <AdvancedImage
                       cldImg={cld
                         .image(`rooms/${room?.imageId[0]}.jpg`)
-                        .resize(thumbnail().height(200))}
+                        .resize(thumbnail().height(300))}
                       plugins={[
                         lazyload({
                           rootMargin: '10px 20px 10px 30px',
@@ -101,7 +107,7 @@ const Room = () => {
                         }),
                         responsive({ steps: [400, 800, 1400] }),
                       ]}
-                    />
+                    /> */}
                   </Link>
                 </div>
                 <div className="room__center">

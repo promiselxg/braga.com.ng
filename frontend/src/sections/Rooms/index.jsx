@@ -10,9 +10,7 @@ import useFetch from '../../hooks/useFetch';
 import TextTruncate from 'react-text-truncate';
 import moment from 'moment';
 import getDatesInRange from '../../utils/getDatesInRange';
-import { AdvancedImage, lazyload, responsive } from '@cloudinary/react';
-import { Cloudinary } from '@cloudinary/url-gen';
-import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { Image, Transformation } from 'cloudinary-react';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -72,11 +70,10 @@ const SectionContainer = styled.div`
 `;
 const RoomCard = styled.div`
   width: 300px;
-  height: 400px;
+  height: 420px;
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   overflow: hidden;
-
   img {
     height: 200px;
     object-fit: cover;
@@ -98,7 +95,7 @@ const RoomCard = styled.div`
 // `;
 const CardBody = styled.div`
   background: #fff;
-  height: 200px;
+  height: 220px;
   padding: 15px 20px;
 
   .discount {
@@ -126,11 +123,6 @@ const RoomsSection = () => {
     return !isFound;
   };
   const alldates = getDatesInRange(checkin, checkout);
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: 'promiselxg',
-    },
-  });
 
   //console.log(data);
   return (
@@ -153,18 +145,20 @@ const RoomsSection = () => {
             {data?.data?.map((room, i) => (
               <RoomCard key={i}>
                 <Link to={`/room/${room._id}`}>
-                  {/* <LazyLoad
-                    height={200}
-                    placeholder={
-                      <Skeleton
-                        active={loading}
-                        style={{ padding: '5px 10px' }}
-                      />
-                    }
+                  <Image
+                    cloudName="promiselxg"
+                    secure={true}
+                    upload_preset="braga_rooms"
+                    publicId={`rooms/${room?.imageId[0]}.jpg`}
                   >
-                    <CardHeading bg={room.imgThumbnail}></CardHeading>
-                  </LazyLoad> */}
-                  <AdvancedImage
+                    <Transformation
+                      width="400"
+                      height="400"
+                      gravity="south"
+                      crop="fill"
+                    />
+                  </Image>
+                  {/* <AdvancedImage
                     cldImg={cld
                       .image(`rooms/${room?.imageId[0]}.jpg`)
                       .resize(thumbnail().height(200))}
@@ -177,7 +171,7 @@ const RoomsSection = () => {
                     ]}
                     width="100%"
                     height="200px"
-                  />
+                  /> */}
                 </Link>
 
                 <CardBody>

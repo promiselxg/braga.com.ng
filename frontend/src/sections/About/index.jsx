@@ -76,7 +76,7 @@ const AboutSection = () => {
       <Section>
         <AboutSectionWrapper>
           <Typography as="h1" fontSize="2rem" fontWeight="800">
-            WELCOME TO BRAGA HOTELS &amp; SUITES
+            WELCOME TO BRAGA HOTEL LIMITED
           </Typography>
           <div className="container">
             <div className="image__wrapper">

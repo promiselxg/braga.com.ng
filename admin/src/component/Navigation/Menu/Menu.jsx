@@ -18,7 +18,9 @@ import {
   FiMail,
   FiAlignCenter,
 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { AiOutlineLogout } from 'react-icons/ai';
+
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Button from '../../Button';
 import axios from 'axios';
@@ -35,6 +37,7 @@ const App = () => {
   const [newUserVisible, setnewUserVisible] = useState(false);
   const [currentUsername, setCurrentUsername] = useState();
   const [newUsername, setNewUsername] = useState();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [passwordField, setPasswordField] = useState({
@@ -54,7 +57,17 @@ const App = () => {
     cheapestPrice: '',
   });
   const [roles, setRoles] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem('userInfo');
+      dispatch({ type: 'LOGOUT' });
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const config = {
     headers: {
@@ -168,6 +181,17 @@ const App = () => {
           <FiPlus />
         ),
       ]
+    ),
+    getItem(
+      <Link
+        to="/"
+        onClick={(e) => e.preventDefault()}
+        onMouseDown={handleLogout}
+      >
+        Log out (Admin)
+      </Link>,
+      'sub22',
+      <AiOutlineLogout />
     ),
   ]; // submenu keys of first level
 

@@ -190,7 +190,7 @@ const AddRoom = () => {
                     <Col className="form__group" span={6}>
                       <div className="label">Room No.</div>
                       <input
-                        type="number"
+                        type="text"
                         placeholder="Room No."
                         name="roomNumbers"
                         value={roomNumbers}

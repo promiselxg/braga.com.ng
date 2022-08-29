@@ -19,7 +19,7 @@ import {
   Right,
   RoomDetails,
 } from '../styles/CheckoutScreen.style';
-import { FiCheckCircle, FiMail, FiPhone, FiPlus, FiUser } from 'react-icons/fi';
+import { FiCheckCircle, FiMail, FiPhone, FiUser } from 'react-icons/fi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HotelRules } from '../utils/Data';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,8 +59,8 @@ const CheckoutScreen = () => {
   const checkOut = search
     ? search.checkOut
     : moment().add(1, 'days').format('YYYY-MM-DD');
-  const adult = search ? search.adult : 1;
-  const kids = search ? search.kids : 0;
+  const adult = search ? search?.adults : 1;
+  const kids = search ? search?.kids : 0;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -98,23 +98,23 @@ const CheckoutScreen = () => {
     publicKey: `${process.env.REACT_APP_PAYSTACK_KEY}`,
   };
 
-  const addNewGuest = () => {
-    let _guestMember = [...guestMember];
-    _guestMember.push({
-      first_name: '',
-      last_name: '',
-      phone: '',
-      email: '',
-      id: uuidv4(),
-    });
-    setGuestMember(_guestMember);
-  };
+  // const addNewGuest = () => {
+  //   let _guestMember = [...guestMember];
+  //   _guestMember.push({
+  //     first_name: '',
+  //     last_name: '',
+  //     phone: '',
+  //     email: '',
+  //     id: uuidv4(),
+  //   });
+  //   setGuestMember(_guestMember);
+  // };
 
-  const removeGuestMember = (id) => {
-    let _guestMember = [...guestMember];
-    _guestMember = _guestMember.filter((guest) => guest.id !== id);
-    setGuestMember(_guestMember);
-  };
+  // const removeGuestMember = (id) => {
+  //   let _guestMember = [...guestMember];
+  //   _guestMember = _guestMember.filter((guest) => guest.id !== id);
+  //   setGuestMember(_guestMember);
+  // };
 
   const handleInputFieldChange = (id, event) => {
     // get input index to be changed
@@ -194,7 +194,7 @@ const CheckoutScreen = () => {
           selectedDays,
         },
       };
-      console.log(selectedDays);
+
       dispatch(startPayment(userData));
       //dispatch(reset());
     }
@@ -361,7 +361,7 @@ const CheckoutScreen = () => {
                                 </p>
                               </div>
                             </div>
-                            <div
+                            {/* <div
                               className="btn"
                               style={{ display: 'flex', margin: '0px 5px' }}
                             >
@@ -394,7 +394,7 @@ const CheckoutScreen = () => {
                                   Remove Guest
                                 </span>
                               )}
-                            </div>
+                            </div> */}
                           </div>
                         ))}
 
@@ -459,7 +459,7 @@ const CheckoutScreen = () => {
                     </Typography>
                     <Typography as="p" fontSize="0.75rem">
                       <TextTruncate
-                        line={1}
+                        line={3}
                         element="span"
                         truncateText="…"
                         text={`${room?.data?.description}`}
@@ -469,13 +469,13 @@ const CheckoutScreen = () => {
                       <div className="checkin">
                         <span>Check-in</span>
                         <Typography as="h2" fontSize="0.8rem" fontWeight="600">
-                          {checkIn}
+                          {moment(checkIn).format('MMM D, YYYY')}
                         </Typography>
                       </div>
                       <div className="checkin">
                         <span>Check-out</span>
                         <Typography as="h2" fontSize="0.8rem" fontWeight="600">
-                          {checkOut}
+                          {moment(checkOut).format('MMM D, YYYY')}
                         </Typography>
                       </div>
                     </div>
@@ -485,15 +485,14 @@ const CheckoutScreen = () => {
                       fontWeight="600"
                       margin="-10px 0 0 0"
                     >
-                      {duration > 1
-                        ? `${duration} Nights Stay`
-                        : `1 Night Stay`}
+                      duration:{' '}
+                      {duration > 1 ? `${duration} Nights` : `1 Night`}
                     </Typography>
                   </CheckoutDetails>
                   <div className="heading">Rooms &amp; Rate</div>
                   <RoomDetails>
                     <p>
-                      Room Details: {adult} adults, {kids} child
+                      Room details: {adult} adults, {kids} children
                     </p>
                     <PriceInfo>
                       <table>
