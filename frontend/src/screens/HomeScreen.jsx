@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import {
   Category,
@@ -11,6 +12,7 @@ import {
   Slider,
 } from '../components';
 import { Typography } from '../GlobalStyle';
+import { getGallery } from '../redux/gallery/gallerySlice';
 
 const HomeScreen = () => {
   const data = {
@@ -29,9 +31,16 @@ const HomeScreen = () => {
     });
   }, [location.path]);
 
+  const { banner, isLoading } = useSelector((state) => state.banner);
+  localStorage.setItem('banner', JSON.stringify(banner));
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getGallery());
+  }, [dispatch]);
+
   return (
     <>
-      <HeroSection />
+      <HeroSection banner={banner} isLoading={isLoading} />
       <Search />
       <About />
       <Category />

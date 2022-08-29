@@ -13,6 +13,9 @@ export const BreadCrumb = styled.div`
       margin-bottom: 30px;
     }
   }
+  @media screen and (max-width: 760px) {
+    padding: 20px 10px;
+  }
 `;
 
 const BlogScreen = () => {

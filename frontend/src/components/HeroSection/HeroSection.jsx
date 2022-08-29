@@ -1,17 +1,20 @@
 import { Container, Typography } from '../../GlobalStyle';
 import { Column, HeroSectionWrapper, SliderWrapper } from './HeroSection.style';
-import { slideBanner } from '../../assets';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import LazyLoad from 'react-lazyload';
+import { Skeleton } from 'antd';
 
-const HeroSection = () => {
+const HeroSection = ({ banner, isLoading }) => {
   return (
     <>
       <HeroSectionWrapper>
         <Container maxWidth="100%">
-          <div style={{ background: '#000' }}>
-            <LazyLoad once>
+          {isLoading ? (
+            <div style={{ padding: '20px' }}>
+              <Skeleton active={isLoading} />
+            </div>
+          ) : (
+            <div style={{ background: '#000' }}>
               <Carousel
                 additionalTransfrom={0}
                 arrows
@@ -61,8 +64,8 @@ const HeroSection = () => {
                 slidesToSlide={1}
                 swipeable
               >
-                {slideBanner?.map((banner, i) => (
-                  <SliderWrapper bg={banner.img} key={i}>
+                {banner?.banner?.map((banner, i) => (
+                  <SliderWrapper bg={banner?.image_url} key={banner?._id}>
                     <Column
                       bg="rgba(0,0,0,0.6)"
                       flex="0.4"
@@ -75,20 +78,18 @@ const HeroSection = () => {
                         color="var(--yellow)"
                         fontWeight="800"
                       >
-                        {banner.text}
+                        {banner?.title}
                       </Typography>
                       <div className="desc">
-                        <Typography as="p">Accessible</Typography>|
-                        <Typography as="p">Reliable</Typography>|
-                        <Typography as="p">Affordable</Typography>
+                        <Typography as="p">{banner?.description}</Typography>
                       </div>
                     </Column>
                     <Column></Column>
                   </SliderWrapper>
                 ))}
               </Carousel>
-            </LazyLoad>
-          </div>
+            </div>
+          )}
         </Container>
       </HeroSectionWrapper>
     </>

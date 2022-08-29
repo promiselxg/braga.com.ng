@@ -67,11 +67,20 @@ const Header = () => {
           </HeaderContainer>
         </Container>
       </HeaderWrapper>
-      <Drawer placement="right" onClose={onClose} visible={visible}>
+      <Drawer placement="left" onClose={onClose} visible={visible}>
         <DrawerWrapper>
-          <Link to="/">Home</Link>
-          <Link to="/rooms">Rooms</Link>
-          <Link to="/about">About Us</Link>
+          <Link to="/" onClick={() => setVisible(!visible)}>
+            Home
+          </Link>
+          <Link to="/rooms" onClick={() => setVisible(!visible)}>
+            Rooms
+          </Link>
+          <Link to="/terms" onClick={() => setVisible(!visible)}>
+            Terms of service
+          </Link>
+          <Link to="/privacy" onClick={() => setVisible(!visible)}>
+            Privacy policy
+          </Link>
         </DrawerWrapper>
       </Drawer>
     </>

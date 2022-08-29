@@ -18,7 +18,7 @@ const AddGallery = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [uploading, setUploading] = useState(false);
-  const API_URL = 'https://api.braga.com.ng';
+  const API_URL = 'https://www.api.braga.com.ng';
 
   const config = {
     headers: {
@@ -77,6 +77,7 @@ const AddGallery = () => {
       const newMedia = {
         title,
         description,
+        value,
         photos: list,
       };
       try {

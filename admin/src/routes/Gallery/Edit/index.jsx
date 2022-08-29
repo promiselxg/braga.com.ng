@@ -79,6 +79,7 @@ const EditGallery = () => {
       const newMedia = {
         title,
         description,
+        value,
         photos: list,
       };
       try {

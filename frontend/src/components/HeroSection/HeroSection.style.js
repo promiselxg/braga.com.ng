@@ -26,8 +26,9 @@ export const SliderWrapper = styled.div`
   width: 100%;
   align-items: center;
   display: flex;
-  background: #000 ${(props) => `url(${props?.bg}) `};
+  background: #000 ${(props) => `url(${props?.bg})`};
   background-size: cover;
+  background-position: 50% 50%;
   height: calc(100vh - 60px);
   justify-content: space-between;
   padding-left: 40px;
