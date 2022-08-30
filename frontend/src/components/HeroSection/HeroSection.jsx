@@ -2,17 +2,17 @@ import { Container, Typography } from '../../GlobalStyle';
 import { Column, HeroSectionWrapper, SliderWrapper } from './HeroSection.style';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Skeleton } from 'antd';
-
-const HeroSection = ({ banner, isLoading }) => {
+//import { Skeleton } from 'antd';
+import { slideBanner } from '../../assets';
+const HeroSection = ({ isLoading }) => {
   return (
     <>
       <HeroSectionWrapper>
         <Container maxWidth="100%">
           {isLoading ? (
-            <div style={{ padding: '20px' }}>
-              <Skeleton active={isLoading} />
-            </div>
+            <div
+              style={{ background: '#000', height: 'cal(100vh - 60px)' }}
+            ></div>
           ) : (
             <div style={{ background: '#000' }}>
               <Carousel
@@ -64,8 +64,8 @@ const HeroSection = ({ banner, isLoading }) => {
                 slidesToSlide={1}
                 swipeable
               >
-                {banner?.banner?.map((banner, i) => (
-                  <SliderWrapper bg={banner?.image_url} key={banner?._id}>
+                {slideBanner?.map((banner, i) => (
+                  <SliderWrapper bg={banner?.img} key={i}>
                     <Column
                       bg="rgba(0,0,0,0.6)"
                       flex="0.4"
@@ -78,10 +78,11 @@ const HeroSection = ({ banner, isLoading }) => {
                         color="var(--yellow)"
                         fontWeight="800"
                       >
-                        {banner?.title}
+                        {banner?.text}
                       </Typography>
                       <div className="desc">
-                        <Typography as="p">{banner?.description}</Typography>
+                        <Typography as="p">Relaxation</Typography>|
+                        <Typography as="p">Luxury</Typography>|
                       </div>
                     </Column>
                     <Column></Column>
