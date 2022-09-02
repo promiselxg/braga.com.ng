@@ -10,10 +10,12 @@ const createNewGallery = asyncHandler(async (req, res) => {
   const files = req.files;
   const urls = [];
   const photos = req.body.photos;
-  const { title, description, banner } = req.body;
+  const { title, description, value } = req.body;
+  console.log(photos);
   try {
     //    check if required fields are empty
     if (!title) {
+      removeUploadedImage(photos?.asset_id.split('/')[1], 'gallery');
       res.status(400);
       throw new Error('Please fill out the required fields');
     }
@@ -41,7 +43,7 @@ const createNewGallery = asyncHandler(async (req, res) => {
         description,
         image_url: urls.map((url) => url.img.secure_url),
         imageId: urls.map((url) => url.img.public_id.split('/')[1]),
-        banner,
+        banner: value,
       });
     } else {
       //create new Room form
@@ -50,7 +52,7 @@ const createNewGallery = asyncHandler(async (req, res) => {
         description,
         image_url: photos.map((url) => url.secure_url),
         imageId: photos.map((url) => url.public_id.split('/')[1]),
-        banner,
+        banner: value,
       });
     }
     return res.status(201).json({
@@ -58,6 +60,7 @@ const createNewGallery = asyncHandler(async (req, res) => {
       message: 'New Gallery added successfully.',
     });
   } catch (error) {
+    removeUploadedImage(photos?.asset_id.split('/')[1], 'gallery');
     res.status(401);
     throw new Error(error);
   }
@@ -92,7 +95,7 @@ const deletGallery = asyncHandler(async (req, res) => {
 
     //  Remove Room Images from cloudinary
     try {
-      await removeUploadedImage(galleryExist.imageId, 'gallery');
+      removeUploadedImage(galleryExist.imageId, 'gallery');
       await Gallery.findByIdAndDelete(id);
       return res.status(200).json({
         response: 'success',
@@ -189,10 +192,27 @@ const updateGallery = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+const getBanner = asyncHandler(async (req, res) => {
+  try {
+    const banner = await Gallery.find({
+      $or: [{ banner: true }],
+    })
+      .select('image_url description title')
+      .limit(6);
+    res.status(200).json({
+      status: true,
+      banner,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
 module.exports = {
   createNewGallery,
   getAllGallery,
   deletGallery,
   updateGallery,
   getSingleGallery,
+  getBanner,
 };

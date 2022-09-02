@@ -5,6 +5,7 @@ const {
   deletGallery,
   updateGallery,
   getSingleGallery,
+  getBanner,
 } = require('../controllers/galleryController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const { queryFilter } = require('../middleware/queryMiddleware');
@@ -23,6 +24,7 @@ router
     createNewGallery
   )
   .get(queryFilter(GalleryModel), getAllGallery);
+router.route('/banner').get(getBanner);
 router
   .route('/:id')
   .get(verifyToken, verifyUserRoles(ROLES.admin), getSingleGallery);

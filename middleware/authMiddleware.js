@@ -10,6 +10,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     try {
       //    Get token from header
       token = authHeader.split(' ')[1];
+
       //    Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       //    Get user from the token
