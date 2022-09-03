@@ -27,15 +27,15 @@ export const SliderWrapper = styled.div`
   align-items: center;
   display: flex;
   background: #000 ${(props) => `url(${props?.bg})`};
-  background-size: cover;
+  background-size: contain;
   background-position: 50% 50%;
   height: calc(100vh - 60px);
   justify-content: space-between;
   padding-left: 40px;
 
   @media screen and (max-width: 760px) {
-    background-position: top center;
-
+    background-position: 50% 50%;
+    background-size: cover;
     ${Column} {
       &:nth-child(1) {
         flex: 0.9 !important;

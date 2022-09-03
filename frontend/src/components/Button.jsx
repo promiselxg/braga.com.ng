@@ -29,6 +29,7 @@ const StyledButton = styled.button`
     transition: all 300ms ease-out;
     background: ${({ hoverBg }) => hoverBg || ''};
     color: ${({ hoverColor }) => hoverColor || ''};
+    border: ${(props) => (props.hoverBorder ? props.hoverBorder : '')};
   }
   :disabled {
     cursor: not-allowed;

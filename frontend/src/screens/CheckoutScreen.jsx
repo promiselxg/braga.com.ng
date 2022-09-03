@@ -546,7 +546,7 @@ const CheckoutScreen = () => {
                             !guestMember[0].last_name ||
                             !guestMember[0].phone ||
                             !guestMember[0].email ||
-                            !isAvailable(room.data)
+                            !isAvailable(room?.data)
                           }
                           onClick={HandlePayment}
                         />
@@ -561,7 +561,7 @@ const CheckoutScreen = () => {
                             !guestMember[0].last_name ||
                             !guestMember[0].phone ||
                             !guestMember[0].email ||
-                            !isAvailable(room.data)
+                            !isAvailable(room?.data)
                           }
                           onClick={HandleSubmit}
                         />

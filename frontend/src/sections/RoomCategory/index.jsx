@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section } from '../../components';
+import { Button, Section } from '../../components';
 import styled from 'styled-components';
 import { Typography } from '../../GlobalStyle';
 import { Link } from 'react-router-dom';
@@ -143,6 +143,28 @@ const Category = () => {
                     </Card>
                   </Link>
                 ))}
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    margin: '30px 0 -30px 0',
+                  }}
+                >
+                  <Link to="/categories">
+                    <Button
+                      label="view all categories"
+                      color="#fff"
+                      bg="transparent"
+                      hoverBg="var(--blue)"
+                      hoverColor="#fff"
+                      border="1px solid #fff"
+                      hoverBorder="1px solid var(--blue)"
+                      borderRadius="10px"
+                      fontWeight="600"
+                    />
+                  </Link>
+                </div>
               </>
             )}
           </div>

@@ -14,6 +14,7 @@ import {
   SingleBlogScreen,
   Terms,
   Privacy,
+  Categories,
 } from './screens';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomeScreen />} />
           <Route path="/rooms" element={<RoomScreen />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/room/:id" element={<RoomInfoScreen />} />
           <Route path="/rooms/:category" element={<RoomCategoryScreen />} />
           <Route path="/rooms/:roomid/book" element={<CheckOutScreen />} />
