@@ -39,7 +39,7 @@ const Dashboard = () => {
       dispatch({ type: 'ROOM_INFO_START' });
       try {
         const res = await axios.get(
-          `${API_URL}/api/v2/reservation/booking?limit=10&status=success`,
+          `${API_URL}/api/v2/reservation/booking?status=success`,
           config
         );
         if (res.data.success) {
@@ -72,7 +72,7 @@ const Dashboard = () => {
             <div className="dashboard__overview__info">
               <div className="left">
                 <h2>Dashboard Overview</h2>
-                <p>Welcome to Braga hotels.</p>
+                <p>Welcome to Braga hotel.</p>
               </div>
               {/* <div className="right">
                 <Button>

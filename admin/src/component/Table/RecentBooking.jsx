@@ -4,6 +4,7 @@ import { Skeleton, Space, Tag, Modal } from 'antd';
 import DataTable from 'react-data-table-component';
 import moment from 'moment';
 import { FiEye } from 'react-icons/fi';
+import { useLocation } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import { RoomContext } from '../../context/RoomContext';
 //import Image from '../Image';
@@ -20,6 +21,8 @@ const RecentBooking = ({ title }) => {
     React.useState(false);
   const [visible, setVisible] = useState(false);
   const [roomid, setRoomId] = useState('');
+  const [sort, setSort] = useState('');
+  const [hideSort, setHideSort] = useState(false);
   const API_URL = 'https://api.braga.com.ng';
   //const API_URL = 'http://localhost:8080';
 
@@ -202,6 +205,49 @@ const RecentBooking = ({ title }) => {
       />
     );
   }, [filterText, resetPaginationToggle]);
+
+  const handleSort = (e) => {
+    let Sort = '';
+    if (e.target.value === '') {
+      Sort = ``;
+      setSort(e.target.value);
+    } else {
+      Sort = `?status=${e.target.value}`;
+      setSort(e.target.value);
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
+      },
+    };
+    const SortRooking = async () => {
+      dispatch({ type: 'ROOM_SORT_START' });
+      try {
+        const res = await axios.get(
+          `${API_URL}/api/v2/reservation/booking${Sort}`,
+          config
+        );
+        if (res.data.success) {
+          dispatch({ type: 'ROOM_SORT_SUCCESS', payload: res.data });
+        } else {
+          dispatch({
+            type: 'ROOM_SORT_FAILURE',
+          });
+        }
+      } catch (err) {
+        dispatch({ type: 'ROOM_SORT_FAILURE', payload: err.response.data });
+      }
+    };
+    SortRooking();
+  };
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setHideSort(true);
+    }
+  }, [location.pathname]);
   return (
     <>
       <TableWrapper>
@@ -215,6 +261,16 @@ const RecentBooking = ({ title }) => {
           <Skeleton active={loading} />
         ) : (
           <>
+            {!hideSort && (
+              <div style={{ marginBottom: '20px' }}>
+                Sort By:&nbsp;
+                <select name="sort" onChange={handleSort} value={sort}>
+                  <option value="">All</option>
+                  <option value="success">Success</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+            )}
             <DataTable
               columns={columns}
               data={filteredItems}
