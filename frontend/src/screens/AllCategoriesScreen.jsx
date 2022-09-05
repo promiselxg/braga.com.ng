@@ -1,8 +1,9 @@
 import { Breadcrumb, Skeleton } from 'antd';
 import React, { useEffect } from 'react';
-import { Image, Section, SideBar } from '../components';
+import { Section, SideBar } from '../components';
 import { Links } from '../components/NavAnchor';
 import { Link } from 'react-router-dom';
+import { Image, Transformation } from 'cloudinary-react';
 import {
   LeftWrapper,
   RightWrapper,
@@ -64,7 +65,7 @@ const AllCategoriesScreen = () => {
                   </Typography>
                 </div>
                 {loading ? (
-                  <Skeleton />
+                  <Skeleton active={loading} />
                 ) : (
                   <>
                     <RoomCardWrapper>
@@ -77,9 +78,18 @@ const AllCategoriesScreen = () => {
                             <Link to={`/rooms/${category._id}`}>
                               <RoomCardImg>
                                 <Image
-                                  img={category?.image_url[0]}
-                                  alt={category?.type}
-                                />
+                                  cloudName="promiselxg"
+                                  secure={true}
+                                  upload_preset="braga_category"
+                                  publicId={`category/${category?.imageId[0]}.jpg`}
+                                >
+                                  <Transformation
+                                    width="400"
+                                    height="400"
+                                    gravity="south"
+                                    crop="fill"
+                                  />
+                                </Image>
                               </RoomCardImg>
                               <RoomCardBody>
                                 <div

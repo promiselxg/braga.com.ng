@@ -110,7 +110,7 @@ const EditRoom = () => {
       };
       try {
         const response = await axios.put(
-          `${API_URL}/api/v2/rooms/${url}`,
+          `${API_URL}/api/v2/rooms/${url}/edit`,
           newRoom,
           config
         );
@@ -139,7 +139,7 @@ const EditRoom = () => {
     const fetSinglRoom = async () => {
       setRoomloading(true);
       const { data } = await axios.get(
-        `${API_URL}/api/v2/rooms/${url}`,
+        `${API_URL}/api/v2/rooms/${url}/edit`,
         config
       );
       setTitle(data?.data?.title);

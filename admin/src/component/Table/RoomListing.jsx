@@ -200,7 +200,7 @@ const RoomListing = ({ title }) => {
                               showLoaderOnConfirm: true,
                               preConfirm: async () => {
                                 const response = await axios.delete(
-                                  `${API_URL}/api/v2/rooms/${row.key}`,
+                                  `${API_URL}/api/v2/rooms/${row.key}/edit`,
                                   config
                                 );
                                 return response;

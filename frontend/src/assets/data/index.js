@@ -50,7 +50,7 @@ export const Services = [
     title: 'Restaurant',
     icon: <BiBeer />,
     bg: '#F45800',
-    desc: 'Our Restaurant has a "wow" factor that is hard to dispute. It&apos;s about one of the best restaurant in the city of Nasarawa State. It offers different menu delicacies! Get pampered by our award winning chef as he performs his art with a fusion of culinary traditions that combines different cuisines experience.',
+    desc: 'Our Restaurant has a "wow" factor that is hard to dispute. It is one of the best restaurant in the city of Nasarawa State. It offers different menu delicacies!. Get pampered by our award winning chef as he performs his art with a fusion of culinary traditions that combines different cuisines experience.',
   },
 ];
 

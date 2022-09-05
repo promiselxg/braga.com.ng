@@ -92,11 +92,11 @@ const AboutSection = () => {
                 The Most Preferred Hotel in West Africa
               </Typography>
               <Typography as="p" fontSize="0.7rem">
-                Braga Hotel is a modern, elegant and home of hospitality. it is
-                perfect for romantic get away, vacationand relaxation.
+                Braga Hotel is a modern, elegant and home of hospitality. It is
+                perfect for romantic get away, vacation and relaxation.
               </Typography>
               <Typography as="p" fontSize="0.7rem">
-                The rooms are new,well-lit and inviting. While you enjoy a
+                The rooms are new, well-lit and inviting. While you enjoy a
                 cocktail by the swimming pool you will be stunned by the
                 breathtaking view of art designs and good music. Our Resturants
                 serves both local and international dishes.
