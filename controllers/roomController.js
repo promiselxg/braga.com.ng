@@ -63,18 +63,20 @@ const createRoom = asyncHandler(async (req, res) => {
         $and: [{ roomNumber: roomNumbers }],
       });
       if (roomExist) {
+        removeUploadedImage(photoId, 'rooms');
         res.status(400);
         throw new Error(
           `Room ${title} already exist in the selected category.`
         );
       }
       if (roomNumberExist) {
+        removeUploadedImage(photoId, 'rooms');
         res.status(400);
         throw new Error(
           `Room Number ${roomNumberExist} already exist in the selected category.`
         );
       }
-      removeUploadedImage(roomExist.imageId, 'rooms');
+
       //create new Room
       const room = await Room.create({
         title,
@@ -103,15 +105,18 @@ const createRoom = asyncHandler(async (req, res) => {
             message: 'New room successfully added to the inventory.',
           });
         } catch (error) {
+          removeUploadedImage(photoId, 'rooms');
           res.status(400);
           throw new Error('Error occured');
         }
       }
     } else {
+      removeUploadedImage(photoId, 'rooms');
       res.status(400);
       throw new Error('Invalid Request');
     }
   } catch (error) {
+    removeUploadedImage(photoId, 'rooms');
     res.status(400);
     throw new Error(error);
   }

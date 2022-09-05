@@ -27,8 +27,8 @@ router
   );
 router
   .route('/:id')
-  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateRoomPrice)
-  .get(getSingleRoom);
+  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateRoomPrice);
+
 router
   .route('/:roomid/edit')
   .put(
@@ -37,7 +37,7 @@ router
     uploadFile.array('files', 10),
     updateRoom
   )
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteRoom)
-  .get(getSingleRoom);
+  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteRoom);
+router.route('/:roomid').get(getSingleRoom);
 router.route('/category/:catid').get(getRoomsByCategory);
 module.exports = router;

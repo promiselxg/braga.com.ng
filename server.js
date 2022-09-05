@@ -13,20 +13,11 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 //  protect against HTTP Parameter Pollution attacks
 const hpp = require('hpp');
-//  Rate Limit
-const rateLimit = require('express-rate-limit');
 dotenv.config();
 const cors = require('cors');
 const colors = require('colors');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 
 // DB connection
 connectDB();
@@ -42,7 +33,6 @@ app.use(mongoSanitize());
 app.use(helmet());
 app.use(xss());
 app.use(hpp());
-app.use(limiter);
 
 // //  Routes
 app.use('/api/v2/rooms', RoomRoutes);
