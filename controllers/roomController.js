@@ -10,6 +10,7 @@ const Review = require('../models/reviewsModel');
 //  Create new Room
 const createRoom = asyncHandler(async (req, res) => {
   const urls = req.files || req.body.photos;
+  const photoId = urls.map((url) => url.public_id.split('/')[1]);
   try {
     if (req.body.title !== '') {
       const {
@@ -33,11 +34,13 @@ const createRoom = asyncHandler(async (req, res) => {
 
       //    check if required fields are empty
       if (!title || !description || !category || !price || !bed_size) {
+        removeUploadedImage(photoId, 'rooms');
         res.status(400);
         throw new Error('Please fill out the required fields');
       }
       //  check if category id exist
       if (!(await Category.findById(category))) {
+        removeUploadedImage(photoId, 'rooms');
         res.status(400);
         throw new Error('Category ID does not exist.');
       }
@@ -71,6 +74,7 @@ const createRoom = asyncHandler(async (req, res) => {
           `Room Number ${roomNumberExist} already exist in the selected category.`
         );
       }
+      removeUploadedImage(roomExist.imageId, 'rooms');
       //create new Room
       const room = await Room.create({
         title,
@@ -116,6 +120,7 @@ const createRoom = asyncHandler(async (req, res) => {
 const updateRoom = asyncHandler(async (req, res) => {
   const { roomid } = req.params;
   const urls = req.files || req.body.photos;
+  const photoId = urls.map((url) => url.public_id.split('/')[1]);
   if (!roomid) {
     res.status(400);
     throw new Error('Invalid Room ID.');
@@ -123,6 +128,7 @@ const updateRoom = asyncHandler(async (req, res) => {
   //  check if room id exist
   const roomExist = await Room.findById(roomid);
   if (!roomExist) {
+    removeUploadedImage(photoId, 'rooms');
     res.status(400);
     throw new Error('The requested room does not exist.');
   }
@@ -162,6 +168,7 @@ const updateRoom = asyncHandler(async (req, res) => {
       }
       //  check if category id exist
       if (!(await Category.findById(category))) {
+        removeUploadedImage(photoId, 'rooms');
         res.status(400);
         throw new Error('Category ID does not exist.');
       }
@@ -301,7 +308,6 @@ const getSingleRoom = asyncHandler(async (req, res) => {
 //  Update Single Room Price
 const updateRoomPrice = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log(req.body.slashPrice);
   try {
     if (!(await Room.findById(id))) {
       return res.status(404).json({

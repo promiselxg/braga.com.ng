@@ -44,15 +44,6 @@ app.use(xss());
 app.use(hpp());
 app.use(limiter);
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
-
 // //  Routes
 app.use('/api/v2/rooms', RoomRoutes);
 app.use('/api/v2/reviews', ReviewsRoutes);

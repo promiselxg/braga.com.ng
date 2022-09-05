@@ -27,9 +27,10 @@ router
   );
 router
   .route('/:id')
-  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateRoomPrice);
+  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateRoomPrice)
+  .get(getSingleRoom);
 router
-  .route('/:roomid')
+  .route('/:roomid/edit')
   .put(
     verifyToken,
     verifyUserRoles(ROLES.admin),

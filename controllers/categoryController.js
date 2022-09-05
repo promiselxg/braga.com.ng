@@ -50,6 +50,7 @@ const updateCategory = asyncHandler(async (req, res) => {
   const photos = req.body.photos;
   const photoId = photos.map((url) => url.public_id.split('/')[1]);
   if (!id) {
+    removeUploadedImage(photoId, 'category');
     res.status(400);
     throw new Error('Invalid request.');
   }
@@ -61,6 +62,8 @@ const updateCategory = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error('This ID does not exist.');
     }
+    removeUploadedImage(category.imageId, 'category');
+
     await Category.findByIdAndUpdate(
       id,
       {
@@ -74,34 +77,42 @@ const updateCategory = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
+
     return res.status(200).json({
       status: 'success',
       message: 'Category successfully updated.',
     });
   } catch (error) {
+    removeUploadedImage(photoId, 'category');
+    res.status(400);
     throw new Error(error);
   }
 });
 //  Delete Category
 const deleteCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const photoId = photos.map((url) => url.public_id.split('/')[1]);
   if (!id) {
     res.status(400);
     throw new Error('Invalid Request.');
   }
   try {
     // check if ID exist
-    if (!(await Category.findById(id))) {
+    const category = await Category.findById(id);
+    if (!category) {
+      removeUploadedImage(photoId, 'category');
       res.status(401);
       throw new Error('Request ID does not exist.');
     }
-    //  delete user account
+    //  delete category
+    removeUploadedImage(category.imageId, 'category');
     if (await Category.findByIdAndDelete(id)) {
       res
         .status(200)
         .json({ status: 'success', message: 'Category successfully removed' });
     }
   } catch (error) {
+    removeUploadedImage(photoId, 'category');
     res.status(400);
     throw new Error(error);
   }
