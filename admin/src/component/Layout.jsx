@@ -95,6 +95,7 @@ const LayoutWrapper = styled.section`
     }
   }
 `;
+
 const Layout = () => {
   return (
     <>

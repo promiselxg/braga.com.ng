@@ -1,20 +1,25 @@
 import axios from 'axios';
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 // import { AuthContext } from "../../context/AuthContext";
 import './login.css';
 
 const Login = () => {
+  const { loading, error, user, dispatch } = useContext(AuthContext);
+  useEffect(() => {
+    const verifyToken = () => {
+      if (user) {
+        window.location = '/';
+      }
+    };
+    verifyToken();
+  }, [user, dispatch]);
+
   const API_URL = 'https://api.braga.com.ng';
   const [credentials, setCredentials] = useState({
     Username: undefined,
     password: undefined,
   });
-
-  const { loading, error, dispatch } = useContext(AuthContext);
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -27,7 +32,7 @@ const Login = () => {
       const res = await axios.post(`${API_URL}/api/v2/auth/login`, credentials);
       if (res.data.success) {
         dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.token });
-        navigate('/');
+        window.location = '/';
       } else {
         dispatch({
           type: 'LOGIN_FAILURE',

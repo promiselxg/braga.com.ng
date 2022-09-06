@@ -4,7 +4,7 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import { Menu, Modal, Input, Col, Row, Image, message } from 'antd';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   FiCalendar,
   FiHome,
@@ -37,7 +37,13 @@ const App = () => {
   const [newUserVisible, setnewUserVisible] = useState(false);
   const [currentUsername, setCurrentUsername] = useState();
   const [newUsername, setNewUsername] = useState();
+  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+  const [showAdminBoard, setShowAdminBoard] = useState(false);
+
   const navigate = useNavigate();
+  const [roles, setRoles] = useState([]);
+  const { user, dispatch } = useContext(AuthContext);
+  const decoded = jwt_decode(user);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [passwordField, setPasswordField] = useState({
@@ -56,9 +62,6 @@ const App = () => {
     type: '',
     cheapestPrice: '',
   });
-  const [roles, setRoles] = useState([]);
-  const { user, dispatch } = useContext(AuthContext);
-
   const handleLogout = async () => {
     try {
       localStorage.removeItem('userInfo');
@@ -68,7 +71,6 @@ const App = () => {
       console.log(error);
     }
   };
-
   const config = {
     headers: {
       Authorization: `Bearer ${JSON.parse(localStorage.getItem('userInfo'))}`,
@@ -172,7 +174,8 @@ const App = () => {
           '16',
           <FiKey />
         ),
-        getItem(<Link to="/users">All Users</Link>, '015', <FiUser />),
+        showAdminBoard &&
+          getItem(<Link to="/users">All Users</Link>, '015', <FiUser />),
         getItem(
           <a href="/" onMouseDown={() => setnewUserVisible(!newUserVisible)}>
             New User
@@ -188,7 +191,7 @@ const App = () => {
         onClick={(e) => e.preventDefault()}
         onMouseDown={handleLogout}
       >
-        Log out (Admin)
+        Log out ( {`${decoded?.username}`.toLowerCase()} )
       </Link>,
       'sub22',
       <AiOutlineLogout />
@@ -376,6 +379,20 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    const decode = () => {
+      if (user) {
+        setShowModeratorBoard(decoded.role.includes(1500));
+        setShowAdminBoard(decoded.role.includes(2200));
+      } else {
+        setShowModeratorBoard(false);
+        setShowAdminBoard(false);
+      }
+    };
+    decode();
+  }, [user, decoded]);
+
+  console.log(`${showAdminBoard} ${showModeratorBoard}`);
   return (
     <>
       <Menu
@@ -493,8 +510,8 @@ const App = () => {
           onChange={handleSelect}
           multiple
         >
-          <option value="2200">Receptionist</option>
-          <option value="1500">Administrator</option>
+          <option value="1500">Receptionist</option>
+          <option value="2200">Administrator</option>
         </select>
         <br />
         <label htmlFor="email">Email (optional)</label>

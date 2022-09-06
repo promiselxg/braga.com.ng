@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { useContext } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Layout from './component/Layout';
 import { AuthContext } from './context/AuthContext';
+import jwtDecode from 'jwt-decode';
 import {
   AddBlogPost,
   AddGallery,
@@ -23,13 +25,26 @@ import {
 } from './routes';
 
 function App() {
+  const { user, dispatch } = useContext(AuthContext);
+  useEffect(() => {
+    const verifyToken = () => {
+      if (user) {
+        const token = JSON.parse(localStorage.getItem('userInfo'));
+        if (jwtDecode(token)?.exp < Date.now() / 1000) {
+          localStorage.removeItem('userInfo');
+          dispatch({ type: 'LOGOUT' });
+        }
+      }
+    };
+    verifyToken();
+  }, [user, dispatch]);
   const ProtectedRoute = ({ children }) => {
-    const { user } = useContext(AuthContext);
     if (!user) {
-      return <Navigate to="/login" />;
+      window.location = '/login';
     }
     return children;
   };
+
   return (
     <Routes>
       <Route path="login" element={<Login />} />

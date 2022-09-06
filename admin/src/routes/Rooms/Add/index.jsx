@@ -12,7 +12,7 @@ import useFetch from '../../../hooks/useFetch';
 import axios from 'axios';
 
 const AddRoom = () => {
-  const API_URL = 'https://api.braga.com.ng';
+  const API_URL = 'http://localhost:8080';
   const [selectedImages, setselectedImages] = useState([]);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
