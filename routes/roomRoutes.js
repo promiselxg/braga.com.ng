@@ -21,7 +21,7 @@ router
   .route('/new')
   .post(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     createRoom
   );
@@ -33,11 +33,11 @@ router
   .route('/:roomid/edit')
   .put(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     updateRoom
   )
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteRoom);
+  .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deleteRoom);
 router.route('/:roomid').get(getSingleRoom);
 router.route('/category/:catid').get(getRoomsByCategory);
 module.exports = router;

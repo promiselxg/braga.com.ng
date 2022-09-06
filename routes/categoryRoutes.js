@@ -24,7 +24,7 @@ router
   );
 router
   .route('/:id')
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteCategory)
+  .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deleteCategory)
   .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), updateCategory)
   .get(singleCategory);
 

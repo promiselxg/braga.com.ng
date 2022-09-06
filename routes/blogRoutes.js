@@ -18,7 +18,7 @@ router
   .route('/')
   .post(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     createNewBlog
   )
@@ -28,11 +28,11 @@ router
   .route('/:id')
   .put(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     updateBlog
   )
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deletePost)
+  .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deletePost)
   .get(getSingleBlogPost);
 
 module.exports = router;

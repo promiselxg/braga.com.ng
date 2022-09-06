@@ -32,7 +32,7 @@ router
   .route('/upload')
   .post(
     verifyToken,
-    verifyUserRoles(Role.admin),
+    verifyUserRoles(Role.user, Role.admin),
     uploadFile.single('file'),
     uploadImage
   );

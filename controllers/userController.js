@@ -71,16 +71,18 @@ const loginUser = asyncHandler(async (req, res) => {
 
   //  check user credentials
   if (!username || !password) {
-    res.status(400);
-    throw new Error('Please enter your username or password');
+    return res.status(400).json({
+      message: 'Please enter your username or password.',
+    });
   }
   const user = await User.findOne({ username });
   if (user && (await bcrypt.compare(password, user.password))) {
     const roles = Object.values(user.role);
-    generateCookieResponse(200, res, user.id, roles, user.admin);
+    generateCookieResponse(200, res, user.id, roles, user.admin, username);
   } else {
-    res.status(400);
-    throw new Error('Incorrect username or password.');
+    return res.status(400).json({
+      message: 'Incorrect username or password.',
+    });
   }
 });
 
@@ -275,8 +277,15 @@ const uploadImage = asyncHandler(async (req, res) => {
 });
 
 //  Get token from Model and create cookie
-const generateCookieResponse = (statusCode, res, userId, userRole, isAdmin) => {
-  const token = generateToken(userId, userRole, isAdmin);
+const generateCookieResponse = (
+  statusCode,
+  res,
+  userId,
+  userRole,
+  isAdmin,
+  username
+) => {
+  const token = generateToken(userId, userRole, isAdmin, username);
   const options = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -293,13 +302,14 @@ const generateCookieResponse = (statusCode, res, userId, userRole, isAdmin) => {
     token,
     id: userId,
     isAdmin,
+    username,
   });
 };
 
 //  Generate JWT
-const generateToken = (id, role, isAdmin) => {
-  return JWT.sign({ id, role, isAdmin }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+const generateToken = (id, role, isAdmin, username) => {
+  return JWT.sign({ id, role, isAdmin, username }, process.env.JWT_SECRET, {
+    expiresIn: '5d',
   });
 };
 

@@ -19,7 +19,7 @@ router
   .route('/')
   .post(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     createNewGallery
   )
@@ -27,13 +27,13 @@ router
 router.route('/banner').get(getBanner);
 router
   .route('/:id')
-  .get(verifyToken, verifyUserRoles(ROLES.admin), getSingleGallery);
+  .get(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), getSingleGallery);
 router
   .route('/:id')
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deletGallery)
+  .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deletGallery)
   .put(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     uploadFile.array('files', 10),
     updateGallery
   );

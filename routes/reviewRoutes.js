@@ -16,10 +16,10 @@ const router = express.Router();
 router.route('/').get(queryFilter(Reviews), getAllReviews);
 router
   .route('/:id')
-  .get(verifyToken, verifyUserRoles(ROLES.admin), getSingleReview);
+  .get(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), getSingleReview);
 router.route('/:roomid').post(verifyToken, addReview);
 router
   .route('/:roomid/:id')
-  .delete(verifyToken, verifyUserRoles(ROLES.admin), deleteReview)
-  .put(verifyToken, verifyUserRoles(ROLES.admin), approveReview);
+  .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deleteReview)
+  .put(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), approveReview);
 module.exports = router;

@@ -20,7 +20,7 @@ router
   .route('/')
   .get(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     queryFilter(reservationModel),
     getAllReservations
   );
@@ -28,13 +28,17 @@ router
   .route('/booking')
   .get(
     verifyToken,
-    verifyUserRoles(ROLES.admin),
+    verifyUserRoles(ROLES.user, ROLES.admin),
     queryFilter(ReservationInfoModel, 'roomid'),
     getAllBookings
   );
 router
   .route('/:id')
-  .put(verifyToken, verifyUserRoles(ROLES.admin), updateReservationPayment);
+  .put(
+    verifyToken,
+    verifyUserRoles(ROLES.user, ROLES.admin),
+    updateReservationPayment
+  );
 router
   .route('/:roomid')
   .post(roomReservation)
@@ -45,6 +49,10 @@ router
   );
 router
   .route('/cancel/:reservationid/:roomid')
-  .put(verifyToken, verifyUserRoles(ROLES.admin), cancelReservation);
+  .put(
+    verifyToken,
+    verifyUserRoles(ROLES.user, ROLES.admin),
+    cancelReservation
+  );
 router.route('/:roomid/payment').put(completePayment);
 module.exports = router;
