@@ -38,13 +38,14 @@ const registerUser = asyncHandler(async (req, res) => {
     //  hash user password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
+    const isAdmin = role.includes(2200);
     //  create new user
     const user = await User.create({
       username,
       email,
       password: hashedPassword,
       role,
+      admin: isAdmin,
       //token: generateToken(user._id, user.isAdmin),
     });
     if (user) {

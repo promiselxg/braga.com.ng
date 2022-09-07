@@ -37,6 +37,7 @@ router
     uploadFile.array('files', 10),
     updateRoom
   )
+  .get(getSingleRoom)
   .delete(verifyToken, verifyUserRoles(ROLES.user, ROLES.admin), deleteRoom);
 router.route('/:roomid').get(getSingleRoom);
 router.route('/category/:catid').get(getRoomsByCategory);
