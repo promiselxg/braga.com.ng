@@ -176,13 +176,14 @@ const App = () => {
         ),
         showAdminBoard &&
           getItem(<Link to="/users">All Users</Link>, '015', <FiUser />),
-        getItem(
-          <a href="/" onMouseDown={() => setnewUserVisible(!newUserVisible)}>
-            New User
-          </a>,
-          '016',
-          <FiPlus />
-        ),
+        showAdminBoard &&
+          getItem(
+            <a href="/" onMouseDown={() => setnewUserVisible(!newUserVisible)}>
+              New User
+            </a>,
+            '016',
+            <FiPlus />
+          ),
       ]
     ),
     getItem(
